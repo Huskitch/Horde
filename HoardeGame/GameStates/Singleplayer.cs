@@ -23,6 +23,8 @@ namespace HoardeGame.GameStates
         private Rectangle _minimap;
         private Rectangle _minimapInner;
 
+        private EntityPlayer player;
+
         public SinglePlayer(ContentManager content, SpriteBatch batch, GraphicsDevice device, GameWindow window)
         {
             graphicsDevice = device;
@@ -34,11 +36,13 @@ namespace HoardeGame.GameStates
             GuiBase.Font = ResourceManager.Font("BasicFont");
 
             camera = new Camera();
-            camera.Position = new Vector2(400, 400);
             camera.Zoom = 2f;
 
             dungeon = new DungeonLevel();
             dungeon.GenerateLevel(64, 64, 40);
+
+            player = new EntityPlayer();
+            player.Position = new Vector2(400, 400);
 
             _minimap = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
             _minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);
@@ -92,6 +96,8 @@ namespace HoardeGame.GameStates
 
             DoCheck(gameTime, new Point(state.X, state.Y), Main.JustPressed());
 
+            player.Update(gameTime);
+            camera.Position = player.Position;
             dungeon.Update(gameTime);
         }
 
@@ -101,7 +107,8 @@ namespace HoardeGame.GameStates
 
             // GAME SPRITEBATCH
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.Transformation(graphicsDevice));
-            dungeon.Draw(spriteBatch);
+                dungeon.Draw(spriteBatch);
+                player.Draw(spriteBatch);
             spriteBatch.End();
 
             // GUI SPRITEBATCH
