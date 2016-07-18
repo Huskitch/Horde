@@ -81,6 +81,10 @@ namespace HoardeGame
             textures.Add("BasicButtonHover", content.Load<Texture2D>("Art/buttonHover"));
 
             textures.Add("BasicProgressBar", content.Load<Texture2D>("Art/progressBar"));
+
+            textures.Add("TestCard", content.Load<Texture2D>("Art/testCard"));
+
+            textures.Add("CommonCard", content.Load<Texture2D>("Art/commonCard"));
         }
 
         /// <summary>
