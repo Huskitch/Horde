@@ -1,4 +1,5 @@
 ﻿using HoardeGame.GameStates;
+using HoardeGame.GUI;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -38,7 +39,6 @@ namespace HoardeGame
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            spriteBatch = new SpriteBatch(GraphicsDevice);
             stateManager.Push(new SinglePlayer(Content, spriteBatch, GraphicsDevice, Window));
         }
 

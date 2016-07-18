@@ -41,7 +41,7 @@ namespace HoardeGame
 
         public static void LoadFonts(ContentManager content)
         {
-
+            fonts.Add("BasicFont", content.Load<SpriteFont>("BasicFont"));
         }
 
         public static void LoadSounds(ContentManager content)
