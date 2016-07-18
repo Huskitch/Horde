@@ -12,6 +12,7 @@ namespace HoardeGame.Entities
     {
         public Vector2 Position;
         public Vector2 Velocity;
+        public float Speed;
 
         public EntityBase()
         {
