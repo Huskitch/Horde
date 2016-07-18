@@ -5,8 +5,8 @@ namespace HoardeGame.Level
 {
     static class Minimap
     {
-        public static Color FloorColor = Color.FromNonPremultiplied(113, 88, 71, 255);
-        public static Color WallColor = Color.FromNonPremultiplied(194, 137, 64, 255);
+        public static Color FloorColor = new Color(113, 88, 71);
+        public static Color WallColor = new Color(194, 137, 64);
 
         public static Texture2D CurrentMinimap;
 

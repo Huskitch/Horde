@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using HoardeGame.Entities;
+using HoardeGame.Gameplay;
 using HoardeGame.Graphics.Rendering;
 using HoardeGame.GUI;
 using HoardeGame.Level;
@@ -22,6 +24,7 @@ namespace HoardeGame.GameStates
         private ProgressBar _bar;
         private Rectangle _minimap;
         private Rectangle _minimapInner;
+        private Card _testCard;
 
         private EntityPlayer player;
         private EntityGem gem;
@@ -34,16 +37,26 @@ namespace HoardeGame.GameStates
             ResourceManager.Init(graphicsDevice);
             ResourceManager.LoadContent(content);
 
+            CardManager.Init();
+            CardManager.LoadXmlFile("CARDS.xml");
+            CardManager.LoadBackgrounds();
+
+            _testCard = CardManager.GetCard("testCard");
+
             GuiBase.Font = ResourceManager.Font("BasicFont");
 
-            camera = new Camera();
-            camera.Zoom = 2f;
+            camera = new Camera
+            {
+                Zoom = 2f
+            };
 
             dungeon = new DungeonLevel();
             dungeon.GenerateLevel(64, 64, 40);
 
-            player = new EntityPlayer();
-            player.Position = new Vector2(400, 400);
+            player = new EntityPlayer
+            {
+                Position = new Vector2(400, 400)
+            };
 
             gem = new EntityGem();
             gem.Position = new Vector2(400, 400);
@@ -119,12 +132,17 @@ namespace HoardeGame.GameStates
             spriteBatch.End();
 
             // GUI SPRITEBATCH
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone);
                 DoDraw(gameTime, spriteBatch, interp);
 
-                //MINIMAP
-                spriteBatch.Draw(ResourceManager.Texture("OneByOneEmpty"), _minimap, Color.Gray);
-                spriteBatch.Draw(Minimap.CurrentMinimap, _minimapInner, Color.White);
+                //CARD
+                _testCard.Draw(new Vector2(10, 150), 1f, gameTime, spriteBatch, interp);
+            spriteBatch.End();
+
+            //MINIMAP SPRITEBATCH
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+            spriteBatch.Draw(ResourceManager.Texture("OneByOneEmpty"), _minimap, Color.Gray);
+            spriteBatch.Draw(Minimap.CurrentMinimap, _minimapInner, Color.White);
             spriteBatch.End();
         }
     }

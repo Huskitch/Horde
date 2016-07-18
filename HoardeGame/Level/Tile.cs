@@ -9,8 +9,8 @@ namespace HoardeGame.Level
 {
     public class Tile
     {
-        private Vector2 Position;
-        private Vector2 Scale;
+        public Vector2 Position { get; private set; }
+        public Vector2 Scale { get; private set; }
         private Texture2D Texture;
 
         public Tile(Vector2 pos, Vector2 scale, Texture2D texture)

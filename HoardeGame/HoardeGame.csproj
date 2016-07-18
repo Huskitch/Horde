@@ -45,6 +45,8 @@
     <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\EntityGem.cs" />
     <Compile Include="Entities\EntityPlayer.cs" />
+    <Compile Include="Gameplay\Card.cs" />
+    <Compile Include="Gameplay\CardManager.cs" />
     <Compile Include="GameStates\SinglePlayer.cs" />
     <Compile Include="Graphics\Rendering\AnimatedSprite.cs" />
     <Compile Include="Graphics\Rendering\Camera.cs" />
