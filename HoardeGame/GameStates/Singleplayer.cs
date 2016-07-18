@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using FarseerPhysics;
 using HoardeGame.Entities;
 using HoardeGame.Gameplay;
 using HoardeGame.Graphics.Rendering;
@@ -26,8 +27,6 @@ namespace HoardeGame.GameStates
         private Rectangle _minimapInner;
         private Card _testCard;
 
-        private EntityPlayer player;
-
         public SinglePlayer(ContentManager content, SpriteBatch batch, GraphicsDevice device, GameWindow window)
         {
             graphicsDevice = device;
@@ -37,7 +36,7 @@ namespace HoardeGame.GameStates
             ResourceManager.LoadContent(content);
 
             CardManager.Init();
-            CardManager.LoadXmlFile("CARDS.xml");
+            CardManager.LoadXmlFile("Content/CARDS.xml");
             CardManager.LoadBackgrounds();
 
             _testCard = CardManager.GetCard("testCard");
@@ -52,10 +51,7 @@ namespace HoardeGame.GameStates
             dungeon = new DungeonLevel();
             dungeon.GenerateLevel(64, 64, 40);
 
-            player = new EntityPlayer
-            {
-                Position = new Vector2(400, 400)
-            };
+            dungeon.AddEntity<EntityPlayer>();
 
             _minimap = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
             _minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);
@@ -109,9 +105,8 @@ namespace HoardeGame.GameStates
 
             DoCheck(gameTime, new Point(state.X, state.Y), Main.JustPressed());
 
-            player.Update(gameTime);
-            camera.Position = player.Position;
             dungeon.Update(gameTime);
+            camera.Position = ConvertUnits.ToDisplayUnits(EntityPlayer.Player.Position);
         }
 
         public override void Draw(GameTime gameTime, float interp)
@@ -121,7 +116,6 @@ namespace HoardeGame.GameStates
             // GAME SPRITEBATCH
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.Transformation(graphicsDevice));
                 dungeon.Draw(spriteBatch);
-                player.Draw(spriteBatch);
             spriteBatch.End();
 
             // GUI SPRITEBATCH

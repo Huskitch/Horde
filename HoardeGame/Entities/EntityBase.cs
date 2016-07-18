@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FarseerPhysics.Dynamics;
+using HoardeGame.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,18 +7,18 @@ namespace HoardeGame.Entities
 {
     public abstract class EntityBase
     {
-        public Vector2 Position;
-        public Vector2 Velocity;
-        public float Speed;
+        public DungeonLevel Level;
+        public Vector2 Position => Body.Position;
+        public Vector2 Velocity => Body.LinearVelocity;
+        public Body Body;
 
-        public EntityBase()
+        public EntityBase(World world)
         {
-            
         }
 
         public virtual void Update(GameTime gameTime)
         {
-            
+
         }
 
         public virtual void Draw(SpriteBatch spriteBatch)
