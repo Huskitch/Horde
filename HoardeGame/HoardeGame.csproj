@@ -76,10 +76,8 @@
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <MonoGameContentReference Include="Content\Content.mgcb" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
+    <None Include="Content\Content.mgcb" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Art\" />
