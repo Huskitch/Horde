@@ -1,4 +1,5 @@
 ﻿using System;
+using HoardeGame.Graphics.Rendering;
 using HoardeGame.GUI;
 using HoardeGame.Level;
 using Microsoft.Xna.Framework;
@@ -16,6 +17,7 @@ namespace HoardeGame.GameStates
         private Label _helloWorldLabel;
         private Button _helloWorldButton;
 
+        private Camera camera;
         private DungeonLevel dungeon;
 
         public SinglePlayer(ContentManager content, SpriteBatch batch, GraphicsDevice device, GameWindow window)
@@ -27,6 +29,10 @@ namespace HoardeGame.GameStates
             ResourceManager.LoadContent(content);
 
             GuiBase.Font = ResourceManager.Font("BasicFont");
+
+            camera = new Camera();
+            camera.Position = new Vector2(400, 400);
+            camera.Zoom = 2f;
 
             dungeon = new DungeonLevel();
             dungeon.GenerateLevel(64, 64, 40);
@@ -70,7 +76,7 @@ namespace HoardeGame.GameStates
             graphicsDevice.Clear(Color.Black);
 
             // GAME SPRITEBATCH
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.Transformation(graphicsDevice));
             dungeon.Draw(spriteBatch);
             spriteBatch.End();
 
