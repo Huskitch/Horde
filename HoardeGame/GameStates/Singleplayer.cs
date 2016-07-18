@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using HoardeGame.Entities;
 using HoardeGame.Graphics.Rendering;
 using HoardeGame.GUI;
 using HoardeGame.Level;
@@ -14,10 +16,11 @@ namespace HoardeGame.GameStates
         private SpriteBatch spriteBatch;
         private GraphicsDevice graphicsDevice;
 
+        private Label _helloWorldLabel;
+        private Button _helloWorldButton;
+
         private Camera camera;
         private DungeonLevel dungeon;
-
-        private ProgressBar _bar;
 
         public SinglePlayer(ContentManager content, SpriteBatch batch, GraphicsDevice device, GameWindow window)
         {
@@ -39,13 +42,13 @@ namespace HoardeGame.GameStates
 
         public override void Start()
         {
-            new Label(this, "helloWorldLabel")
+            _helloWorldLabel = new Label(this, nameof(_helloWorldLabel))
             {
                 Position = new Vector2(10, 10),
                 Text = "Hello world!"
             };
 
-            new Button(this, "helloWorldButton")
+            _helloWorldButton = new Button(this, nameof(_helloWorldButton))
             {
                 Position = new Vector2(10, 30),
                 TargetRectangle = new Rectangle(10, 30, 128, 32),
@@ -59,25 +62,11 @@ namespace HoardeGame.GameStates
                     Environment.Exit(0);
                 }
             };
-
-            _bar = new ProgressBar(this, "helloWorldProgressBar")
-            {
-                Position = new Vector2(10, 70),
-                ProgressBarTexture = ResourceManager.Texture("BasicProgressBar"),
-                BarHeight = 23,
-                BarStart = new Vector2(1, 1),
-                BarWidth = 63,
-                TargetRectangle = new Rectangle(10, 70, 65, 25),
-                Color = Color.Blue,
-                Progress = 1f
-            };
         }
 
         public override void Update(GameTime gameTime)
         {
             MouseState state = Mouse.GetState();
-
-            _bar.Progress = gameTime.TotalGameTime.Milliseconds / 1000f;
 
             DoCheck(gameTime, new Point(state.X, state.Y), state.LeftButton == ButtonState.Pressed);
 
