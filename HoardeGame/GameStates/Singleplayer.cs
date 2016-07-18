@@ -43,6 +43,10 @@ namespace HoardeGame.GameStates
             _helloWorldButton = new Button(this, nameof(_helloWorldButton))
             {
                 Position = new Vector2(10, 30),
+                TargetRectangle = new Rectangle(10, 30, 128, 32),
+                TextOffset = new Vector2(10,5),
+                ButtonTexture = ResourceManager.Texture("BasicButton"),
+                ButtonTextureOver = ResourceManager.Texture("BasicButtonHover"),
                 Text = "Click me!",
                 OverColor = Color.Red,
                 OnClick = () =>
@@ -66,12 +70,12 @@ namespace HoardeGame.GameStates
             graphicsDevice.Clear(Color.Black);
 
             // GAME SPRITEBATCH
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
             dungeon.Draw(spriteBatch);
             spriteBatch.End();
 
             // GUI SPRITEBATCH
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone);
             DoDraw(gameTime, spriteBatch, interp);
             spriteBatch.End();
         }

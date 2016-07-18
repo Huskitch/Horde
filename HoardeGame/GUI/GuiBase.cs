@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using HoardeGame.State;
+﻿using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 

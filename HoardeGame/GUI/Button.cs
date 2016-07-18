@@ -24,6 +24,11 @@ namespace HoardeGame.GUI
         private string _text = "";
 
         /// <summary>
+        /// Offset for the displayed text
+        /// </summary>
+        public Vector2 TextOffset = Vector2.Zero;
+
+        /// <summary>
         /// Color that the button changes color to when the user hovers over the button
         /// </summary>
         public Color OverColor = Color.Red;
@@ -32,6 +37,21 @@ namespace HoardeGame.GUI
         /// Background texture of the button
         /// </summary>
         public Texture2D ButtonTexture;
+
+        /// <summary>
+        /// Bacgkround texture of the button when the user hovers over the control
+        /// </summary>
+        public Texture2D ButtonTextureOver;
+
+        /// <summary>
+        /// Background texture 
+        /// </summary>
+        public Texture2D ButtonTextureDisabled;
+
+        /// <summary>
+        /// Target rectangle for the texture
+        /// </summary>
+        public Rectangle TargetRectangle;
 
         /// <summary>
         /// Creates new button
@@ -84,7 +104,7 @@ namespace HoardeGame.GUI
 
             _color = Color;
 
-            if (!_button.Contains(point))
+            if (!_button.Contains(point - new Point((int) TextOffset.X, (int) TextOffset.Y)) && !TargetRectangle.Contains(point))
             {
                 return;
             }
@@ -129,8 +149,11 @@ namespace HoardeGame.GUI
 
             if (Visibility == HiddenState.Disabled) _color = DisabledColor;
 
-            if (ButtonTexture != null) spriteBatch.Draw(ButtonTexture, new Vector2(_button.X, _button.Y), Color.White);
-            spriteBatch.DrawString(Font, _text, new Vector2(_button.X, _button.Y), _color);
+            if (Visibility == HiddenState.Disabled && ButtonTextureDisabled != null) spriteBatch.Draw(ButtonTextureDisabled, TargetRectangle, Color.White);
+            else if (_color == OverColor && ButtonTextureOver != null) spriteBatch.Draw(ButtonTextureOver, TargetRectangle, Color.White);
+            else if (ButtonTexture != null) spriteBatch.Draw(ButtonTexture, TargetRectangle, Color.White);
+
+            if (_text != "") spriteBatch.DrawString(Font, _text, new Vector2(_button.X, _button.Y) + TextOffset, _color);
         }
     }
 }
