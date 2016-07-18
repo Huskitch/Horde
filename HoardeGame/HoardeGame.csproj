@@ -46,6 +46,7 @@
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\GuiBase.cs" />
     <Compile Include="GUI\Label.cs" />
+    <Compile Include="GUI\ProgressBar.cs" />
     <Compile Include="Level\DungeonLevel.cs" />
     <Compile Include="Level\LevelGenerator.cs" />
     <Compile Include="Level\Tile.cs" />
