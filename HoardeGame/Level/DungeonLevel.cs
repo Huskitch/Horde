@@ -26,6 +26,11 @@ namespace HoardeGame.Level
             mapTiles = new List<Tile>();
         }
 
+        public int[,] GetMap()
+        {
+            return map;
+        }
+
         public void GenerateLevel(int width, int height, int percentWalls)
         {
             mapWidth = width;

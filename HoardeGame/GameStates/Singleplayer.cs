@@ -20,6 +20,8 @@ namespace HoardeGame.GameStates
         private DungeonLevel dungeon;
 
         private ProgressBar _bar;
+        private Rectangle _minimap;
+        private Rectangle _minimapInner;
 
         public SinglePlayer(ContentManager content, SpriteBatch batch, GraphicsDevice device, GameWindow window)
         {
@@ -37,6 +39,11 @@ namespace HoardeGame.GameStates
 
             dungeon = new DungeonLevel();
             dungeon.GenerateLevel(64, 64, 40);
+
+            _minimap = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
+            _minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);
+
+            Minimap.GenerateMinimap(device, dungeon.GetMap());
         }
 
         public override void Start()
@@ -98,8 +105,12 @@ namespace HoardeGame.GameStates
             spriteBatch.End();
 
             // GUI SPRITEBATCH
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone);
-            DoDraw(gameTime, spriteBatch, interp);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
+                DoDraw(gameTime, spriteBatch, interp);
+
+                //MINIMAP
+                spriteBatch.Draw(ResourceManager.Texture("OneByOneEmpty"), _minimap, Color.Gray);
+                spriteBatch.Draw(Minimap.CurrentMinimap, _minimapInner, Color.White);
             spriteBatch.End();
         }
     }

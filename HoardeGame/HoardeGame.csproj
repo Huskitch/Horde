@@ -52,6 +52,7 @@
     <Compile Include="GUI\ProgressBar.cs" />
     <Compile Include="Level\DungeonLevel.cs" />
     <Compile Include="Level\LevelGenerator.cs" />
+    <Compile Include="Level\Minimap.cs" />
     <Compile Include="Level\Tile.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="Program.cs" />
