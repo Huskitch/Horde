@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using HoardeGame.GUI;
+using HoardeGame.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,6 +17,8 @@ namespace HoardeGame.GameStates
         private Label _helloWorldLabel;
         private Button _helloWorldButton;
 
+        private DungeonLevel dungeon;
+
         public SinglePlayer(ContentManager content, SpriteBatch batch, GraphicsDevice device, GameWindow window)
         {
             graphicsDevice = device;
@@ -25,6 +28,9 @@ namespace HoardeGame.GameStates
             ResourceManager.LoadContent(content);
 
             GuiBase.Font = ResourceManager.Font("BasicFont");
+
+            dungeon = new DungeonLevel();
+            dungeon.GenerateLevel(64, 64, 40);
         }
 
         public override void Start()
@@ -52,16 +58,22 @@ namespace HoardeGame.GameStates
             MouseState state = Mouse.GetState();
 
             DoCheck(gameTime, new Point(state.X, state.Y), state.LeftButton == ButtonState.Pressed);
+
+            dungeon.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime, float interp)
         {
             graphicsDevice.Clear(Color.Black);
 
-            spriteBatch.Begin();
+            // GAME SPRITEBATCH
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
+            dungeon.Draw(spriteBatch);
+            spriteBatch.End();
 
+            // GUI SPRITEBATCH
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
             DoDraw(gameTime, spriteBatch, interp);
-
             spriteBatch.End();
         }
     }

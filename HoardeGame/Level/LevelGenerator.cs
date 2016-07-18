@@ -7,25 +7,30 @@ namespace HoardeGame.Level
 {
     public class LevelGenerator
     {
-        Random rng = new Random();
+        Random rand = new Random();
 
-        private int[,] map;
-        private int mapWidth;
-        private int mapHeight;
-        private int wallPercent;
+        public int[,] Map;
+
+        public int MapWidth { get; set; }
+        public int MapHeight { get; set; }
+        public int PercentAreWalls { get; set; }
 
         public LevelGenerator()
         {
+            MapWidth = 64;
+            MapHeight = 64;
+            PercentAreWalls = 45;
 
+            RandomFillMap();
         }
 
         public void MakeCaverns()
         {
-            for (int column = 0, row = 0; row <= mapHeight - 1; row++)
+            for (int column = 0, row = 0; row <= MapHeight - 1; row++)
             {
-                for (column = 0; column <= mapWidth - 1; column++)
+                for (column = 0; column <= MapWidth - 1; column++)
                 {
-                    map[column, row] = PlaceWallLogic(column, row);
+                    Map[column, row] = PlaceWallLogic(column, row);
                 }
             }
         }
@@ -35,7 +40,7 @@ namespace HoardeGame.Level
             int numWalls = GetAdjacentWalls(x, y, 1, 1);
 
 
-            if (map[x, y] == 1)
+            if (Map[x, y] == 1)
             {
                 if (numWalls >= 4)
                 {
@@ -92,12 +97,12 @@ namespace HoardeGame.Level
                 return true;
             }
 
-            if (map[x, y] == 1)
+            if (Map[x, y] == 1)
             {
                 return true;
             }
 
-            if (map[x, y] == 0)
+            if (Map[x, y] == 0)
             {
                 return false;
             }
@@ -110,49 +115,60 @@ namespace HoardeGame.Level
             {
                 return true;
             }
-            else if (x > mapWidth - 1 || y > mapHeight - 1)
+            else if (x > MapWidth - 1 || y > MapHeight - 1)
             {
                 return true;
             }
             return false;
         }
 
+        public void BlankMap()
+        {
+            for (int column = 0, row = 0; row < MapHeight; row++)
+            {
+                for (column = 0; column < MapWidth; column++)
+                {
+                    Map[column, row] = 0;
+                }
+            }
+        }
+
         public void RandomFillMap()
         {
-            map = new int[mapWidth, mapHeight];
+            Map = new int[MapWidth, MapHeight];
 
             int mapMiddle = 0;
-            for (int column = 0, row = 0; row < mapHeight; row++)
+            for (int column = 0, row = 0; row < MapHeight; row++)
             {
-                for (column = 0; column < mapWidth; column++)
+                for (column = 0; column < MapWidth; column++)
                 {
                     if (column == 0)
                     {
-                        map[column, row] = 1;
+                        Map[column, row] = 1;
                     }
                     else if (row == 0)
                     {
-                        map[column, row] = 1;
+                        Map[column, row] = 1;
                     }
-                    else if (column == mapWidth - 1)
+                    else if (column == MapWidth - 1)
                     {
-                        map[column, row] = 1;
+                        Map[column, row] = 1;
                     }
-                    else if (row == mapHeight - 1)
+                    else if (row == MapHeight - 1)
                     {
-                        map[column, row] = 1;
+                        Map[column, row] = 1;
                     }
                     else
                     {
-                        mapMiddle = (mapHeight / 2);
+                        mapMiddle = (MapHeight / 2);
 
                         if (row == mapMiddle)
                         {
-                            map[column, row] = 0;
+                            Map[column, row] = 0;
                         }
                         else
                         {
-                            map[column, row] = RandomPercent(wallPercent);
+                            Map[column, row] = RandomPercent(PercentAreWalls);
                         }
                     }
                 }
@@ -161,11 +177,20 @@ namespace HoardeGame.Level
 
         int RandomPercent(int percent)
         {
-            if (percent >= rng.Next(1, 101))
+            if (percent >= rand.Next(1, 101))
             {
                 return 1;
             }
             return 0;
+        }
+
+        public LevelGenerator(int mapWidth, int mapHeight, int[,] map, int percentWalls = 40)
+        {
+            this.MapWidth = mapWidth;
+            this.MapHeight = mapHeight;
+            this.PercentAreWalls = percentWalls;
+            this.Map = new int[this.MapWidth, this.MapHeight];
+            this.Map = map;
         }
     }
 }

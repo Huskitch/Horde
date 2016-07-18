@@ -36,7 +36,8 @@ namespace HoardeGame
 
         public static void LoadTextures(ContentManager content)
         {
-
+            textures.Add("BasicFloor", content.Load<Texture2D>("Art/basicfloor"));
+            textures.Add("BasicWall", content.Load<Texture2D>("Art/basicwall"));
         }
 
         public static void LoadFonts(ContentManager content)
