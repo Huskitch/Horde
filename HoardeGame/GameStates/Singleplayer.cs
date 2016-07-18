@@ -52,6 +52,7 @@ namespace HoardeGame.GameStates
             dungeon.GenerateLevel(64, 64, 40);
 
             dungeon.AddEntity<EntityPlayer>();
+            dungeon.AddEntity<EntityBat>();
 
             _minimap = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
             _minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);
