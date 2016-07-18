@@ -85,11 +85,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-<<<<<<< HEAD
     <None Include="Content\Content.mgcb" />
-=======
     <None Include="packages.config" />
->>>>>>> 8f93a3a59b1cf5a17b38f88a45a90d2282ef411b
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Art\" />

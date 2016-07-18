@@ -3,6 +3,7 @@ using FarseerPhysics;
 using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
+using HoardeGame.Graphics.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -16,12 +17,17 @@ namespace HoardeGame.Entities
         /// </summary>
         public static EntityPlayer Player;
 
+        private AnimatedSprite animator;
+
         public EntityPlayer(World world) : base(world)
         {
             Body = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(10), 1f, ConvertUnits.ToSimUnits(new Vector2(400, 400)));
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
+
+            animator = new AnimatedSprite(ResourceManager.Texture("PlayerSheet"));
+            animator.AddAnimation("WalkLeft", 32, 0, 5, 150);
 
             Player = this;
         }
@@ -47,7 +53,9 @@ namespace HoardeGame.Entities
                 velocity.X--;
             }
 
-            Body.ApplyForce(velocity * 100);
+            Body.ApplyForce(velocity * 50);
+
+            animator.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -56,7 +64,7 @@ namespace HoardeGame.Entities
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
 
-            spriteBatch.Draw(ResourceManager.Texture("PlayerTemp"), new Rectangle((int)screenPos.X + 1, (int)screenPos.Y + 8, 32, 32), new Rectangle(0, 0, 32, 32), Color.White);
+            animator.DrawAnimation("WalkLeft", screenPos, spriteBatch);
             base.Draw(spriteBatch);
         }
     }

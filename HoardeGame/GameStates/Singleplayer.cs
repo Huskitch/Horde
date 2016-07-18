@@ -53,9 +53,6 @@ namespace HoardeGame.GameStates
 
             dungeon.AddEntity<EntityPlayer>();
 
-	        EntityGem gem = dungeon.AddEntity<EntityGem>() as EntityGem;
-            gem.Body.Position = ConvertUnits.ToSimUnits(new Vector2(400, 400));
-
             _minimap = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
             _minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);
 
