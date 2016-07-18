@@ -55,7 +55,6 @@ namespace HoardeGame.Entities
         public override void Draw(SpriteBatch spriteBatch)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            Debug.WriteLine(screenPos);
 
             spriteBatch.Draw(ResourceManager.Texture("PlayerTemp"), new Rectangle((int)screenPos.X + 1, (int)screenPos.Y + 8, 32, 32), new Rectangle(0, 0, 32, 32), Color.White);
             base.Draw(spriteBatch);

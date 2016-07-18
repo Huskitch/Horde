@@ -45,18 +45,20 @@ namespace HoardeGame.Level
 
             levelGen.MapWidth = mapWidth;
             levelGen.MapHeight = mapHeight;
-            levelGen.PercentAreWalls = percentWalls;
+            levelGen.PercentAreWalls = percWalls;
             levelGen.MakeCaverns();
             map = levelGen.Map;
 
             LoadTiles();
         }
 
-        internal void AddEntity<T>()
+        internal EntityBase AddEntity<T>()
         {
             EntityBase entity = (EntityBase) Activator.CreateInstance(typeof(T), _world);
             entity.Level = this;
             _entities.Add(entity);
+
+            return entity;
         }
 
         public void RemoveEntity(EntityBase entity)

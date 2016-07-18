@@ -39,7 +39,6 @@ namespace HoardeGame.Level
         {
             int numWalls = GetAdjacentWalls(x, y, 1, 1);
 
-
             if (Map[x, y] == 1)
             {
                 if (numWalls >= 4)
@@ -50,7 +49,6 @@ namespace HoardeGame.Level
                 {
                     return 0;
                 }
-
             }
             else
             {
