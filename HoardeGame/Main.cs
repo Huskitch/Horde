@@ -1,4 +1,6 @@
-﻿using HoardeGame.GameStates;
+﻿using System.Collections.Generic;
+using System.Linq;
+using HoardeGame.GameStates;
 using HoardeGame.GUI;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
@@ -12,6 +14,11 @@ namespace HoardeGame
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private StateManager stateManager;
+
+        public static KeyboardState KState;
+        public static KeyboardState LastKState;
+        public static MouseState LastMState;
+        public static MouseState MState;
 
         public Main()
         {
@@ -27,6 +34,24 @@ namespace HoardeGame
 
             Window.Title = "HORDE PROTOTYPE";
             IsMouseVisible = true;
+        }
+
+        public bool JustPressed(bool leftMouse = true)
+        {
+            if (leftMouse)
+                return LastMState.LeftButton == ButtonState.Released & MState.LeftButton == ButtonState.Pressed;
+
+            return LastMState.RightButton == ButtonState.Released & MState.RightButton == ButtonState.Pressed;
+        }
+
+        public bool JustKeyDown(Keys key)
+        {
+            return LastKState.IsKeyDown(key) == false & KState.IsKeyDown(key);
+        }
+
+        public List<Keys> JustKeysDown()
+        {
+            return KState.GetPressedKeys().Where(keyState => LastKState.IsKeyUp(keyState)).ToList();
         }
 
         protected override void Initialize()
@@ -50,6 +75,12 @@ namespace HoardeGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            LastMState = MState;
+            MState = Mouse.GetState();
+
+            LastKState = KState;
+            KState = Keyboard.GetState();
 
             stateManager.Update(gameTime);
 

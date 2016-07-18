@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -35,13 +36,15 @@ namespace HoardeGame
         /// <summary>
         /// Current graphics device
         /// </summary>
-        private static GraphicsDevice device;
+        private static GraphicsDevice _device;
 
         /// <summary>
         /// Initializes the resource manager and prepares it for loading
         /// </summary>
-        public static void Init()
+        public static void Init(GraphicsDevice device)
         {
+            _device = device;
+
             textures = new Dictionary<string, Texture2D>();
             fonts = new Dictionary<string, SpriteFont>();
             sounds = new Dictionary<string, SoundEffect>();
@@ -66,11 +69,18 @@ namespace HoardeGame
         /// <param name="content">MonoGame content manager</param>
         public static void LoadTextures(ContentManager content)
         {
+            Texture2D oneByOne = new Texture2D(_device, 1, 1);
+            oneByOne.SetData(new[] {new Color(255,255,255)});
+
+            textures.Add("OneByOneEmpty", oneByOne);
+
             textures.Add("BasicFloor", content.Load<Texture2D>("Art/basicfloor"));
             textures.Add("BasicWall", content.Load<Texture2D>("Art/basicwall"));
 
             textures.Add("BasicButton", content.Load<Texture2D>("Art/button"));
             textures.Add("BasicButtonHover", content.Load<Texture2D>("Art/buttonHover"));
+
+            textures.Add("BasicProgressBar", content.Load<Texture2D>("Art/progressBar"));
         }
 
         /// <summary>
@@ -107,7 +117,7 @@ namespace HoardeGame
         /// <returns></returns>
         public static Texture2D Texture(string key)
         {
-            return textures[key];
+            return !textures.ContainsKey(key) ? null : textures[key];
         }
 
         /// <summary>
@@ -117,7 +127,7 @@ namespace HoardeGame
         /// <returns></returns>
         public static SpriteFont Font(string key)
         {
-            return fonts[key];
+            return !fonts.ContainsKey(key) ? null : fonts[key];
         }
 
         /// <summary>
@@ -127,7 +137,7 @@ namespace HoardeGame
         /// <returns></returns>
         public static SoundEffect SoundEffect(string key)
         {
-            return sounds[key];
+            return !sounds.ContainsKey(key) ? null : sounds[key];
         }
 
         /// <summary>
@@ -137,7 +147,7 @@ namespace HoardeGame
         /// <returns></returns>
         public static Song Song(string key)
         {
-            return songs[key];
+            return !songs.ContainsKey(key) ? null : songs[key];
         }
     }
 }
