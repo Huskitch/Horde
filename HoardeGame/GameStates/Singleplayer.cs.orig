@@ -27,6 +27,15 @@ namespace HoardeGame.GameStates
         private Rectangle _minimapInner;
         private Card _testCard;
 
+<<<<<<< HEAD
+||||||| merged common ancestors
+        private EntityPlayer player;
+
+=======
+        private EntityPlayer player;
+        private EntityGem gem;
+
+>>>>>>> 395f8cca02d43b3e1d310fe3edcf02d364e44086
         public SinglePlayer(ContentManager content, SpriteBatch batch, GraphicsDevice device, GameWindow window)
         {
             graphicsDevice = device;
@@ -53,8 +62,8 @@ namespace HoardeGame.GameStates
 
             dungeon.AddEntity<EntityPlayer>();
 
-	        EntityGem gem = dungeon.AddEntity<EntityGem>() as EntityGem;
-            gem.Body.Position = ConvertUnits.ToSimUnits(new Vector2(400, 400));
+            gem = new EntityGem();
+            gem.Position = new Vector2(400, 400);
 
             _minimap = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
             _minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);
@@ -108,6 +117,15 @@ namespace HoardeGame.GameStates
 
             DoCheck(gameTime, new Point(state.X, state.Y), Main.JustPressed());
 
+<<<<<<< HEAD
+||||||| merged common ancestors
+            player.Update(gameTime);
+            camera.Position = player.Position;
+=======
+            player.Update(gameTime);
+            gem.Update(gameTime);
+            camera.Position = player.Position;
+>>>>>>> 395f8cca02d43b3e1d310fe3edcf02d364e44086
             dungeon.Update(gameTime);
             camera.Position = ConvertUnits.ToDisplayUnits(EntityPlayer.Player.Position);
         }
@@ -119,6 +137,14 @@ namespace HoardeGame.GameStates
             // GAME SPRITEBATCH
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.Transformation(graphicsDevice));
                 dungeon.Draw(spriteBatch);
+<<<<<<< HEAD
+||||||| merged common ancestors
+                player.Draw(spriteBatch);
+=======
+                player.Draw(spriteBatch);
+            gem.Draw(spriteBatch);
+
+>>>>>>> 395f8cca02d43b3e1d310fe3edcf02d364e44086
             spriteBatch.End();
 
             // GUI SPRITEBATCH

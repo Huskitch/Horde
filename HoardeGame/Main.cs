@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FarseerPhysics;
 using HoardeGame.GameStates;
 using HoardeGame.GUI;
 using HoardeGame.State;
@@ -34,6 +35,8 @@ namespace HoardeGame
 
             Window.Title = "HORDE PROTOTYPE";
             IsMouseVisible = true;
+
+            ConvertUnits.SetDisplayUnitToSimUnitRatio(32f);
         }
 
         public static bool JustPressed(bool leftMouse = true)

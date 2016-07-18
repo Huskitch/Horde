@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Cards xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Card ID="testCard">
+	<Name>Increase Damage</Name>
+    <TextureName>TestCard</TextureName>
+    <Rarity>Common</Rarity>
+    <Type>IncreaseDamage</Type>
+    <Description>Increase your damage 2x</Description>
+    <Price>
+      <int>0</int>
+      <int>3</int>
+      <int>4</int>
+    </Price>
+  </Card>
+  <Card ID="testCard2">
+	<Name>Increase Speed</Name>
+    <TextureName>TestCard2</TextureName>
+    <Rarity>Rare</Rarity>
+    <Type>IncreaseSpeed</Type>
+    <Description>Increase your speed 2x</Description>
+    <Price>
+      <int>4</int>
+      <int>1</int>
+      <int>4</int>
+    </Price>
+  </Card>
+</Cards>

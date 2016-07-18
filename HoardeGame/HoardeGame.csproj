@@ -45,6 +45,7 @@
     <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\EntityGem.cs" />
     <Compile Include="Entities\EntityPlayer.cs" />
+    <Compile Include="Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="Gameplay\Card.cs" />
     <Compile Include="Gameplay\CardManager.cs" />
     <Compile Include="GameStates\SinglePlayer.cs" />
@@ -66,6 +67,10 @@
     <Compile Include="State\StateManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="FarseerPhysics MonoGame, Version=3.5.0.40766, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FarseerPhysics.MonoGame.Unofficial.3.5.0\lib\FarseerPhysics MonoGame.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
     </Reference>
@@ -73,11 +78,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\CARDS.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+<<<<<<< HEAD
     <None Include="Content\Content.mgcb" />
+=======
+    <None Include="packages.config" />
+>>>>>>> 8f93a3a59b1cf5a17b38f88a45a90d2282ef411b
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Art\" />
