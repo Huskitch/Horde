@@ -50,7 +50,9 @@ namespace HoardeGame.GameStates
                 OverColor = Color.Red,
                 OnClick = () =>
                 {
-                    Environment.Exit(0);
+                    Random rnd = new Random();
+
+                    _bar.Color = new Color(new Vector3((float) rnd.NextDouble(), (float) rnd.NextDouble(), (float) rnd.NextDouble()));
                 }
             };
 
@@ -73,7 +75,7 @@ namespace HoardeGame.GameStates
 
             _bar.Progress = gameTime.TotalGameTime.Milliseconds / 1000f;
 
-            DoCheck(gameTime, new Point(state.X, state.Y), state.LeftButton == ButtonState.Pressed);
+            DoCheck(gameTime, new Point(state.X, state.Y), Main.JustPressed());
 
             dungeon.Update(gameTime);
         }

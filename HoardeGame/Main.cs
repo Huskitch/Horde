@@ -36,7 +36,7 @@ namespace HoardeGame
             IsMouseVisible = true;
         }
 
-        public bool JustPressed(bool leftMouse = true)
+        public static bool JustPressed(bool leftMouse = true)
         {
             if (leftMouse)
                 return LastMState.LeftButton == ButtonState.Released & MState.LeftButton == ButtonState.Pressed;
@@ -44,12 +44,12 @@ namespace HoardeGame
             return LastMState.RightButton == ButtonState.Released & MState.RightButton == ButtonState.Pressed;
         }
 
-        public bool JustKeyDown(Keys key)
+        public static bool JustKeyDown(Keys key)
         {
             return LastKState.IsKeyDown(key) == false & KState.IsKeyDown(key);
         }
 
-        public List<Keys> JustKeysDown()
+        public static List<Keys> JustKeysDown()
         {
             return KState.GetPressedKeys().Where(keyState => LastKState.IsKeyUp(keyState)).ToList();
         }
