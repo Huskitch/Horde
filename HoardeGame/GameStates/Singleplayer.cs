@@ -17,6 +17,9 @@ namespace HoardeGame.GameStates
         {
             graphicsDevice = device;
             spriteBatch = batch;
+
+            ResourceManager.Init();
+            ResourceManager.LoadContent(content);
         }
 
         public override void Update(GameTime gameTime)
