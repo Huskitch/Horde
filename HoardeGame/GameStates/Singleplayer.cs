@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using HoardeGame.Entities;
+using HoardeGame.Graphics.Rendering;
 using HoardeGame.GUI;
 using HoardeGame.Level;
 using Microsoft.Xna.Framework;
@@ -13,6 +16,7 @@ namespace HoardeGame.GameStates
         private SpriteBatch spriteBatch;
         private GraphicsDevice graphicsDevice;
 
+        private Camera camera;
         private DungeonLevel dungeon;
 
         private ProgressBar _bar;
@@ -26,6 +30,10 @@ namespace HoardeGame.GameStates
             ResourceManager.LoadContent(content);
 
             GuiBase.Font = ResourceManager.Font("BasicFont");
+
+            camera = new Camera();
+            camera.Position = new Vector2(400, 400);
+            camera.Zoom = 2f;
 
             dungeon = new DungeonLevel();
             dungeon.GenerateLevel(64, 64, 40);
@@ -85,7 +93,7 @@ namespace HoardeGame.GameStates
             graphicsDevice.Clear(Color.Black);
 
             // GAME SPRITEBATCH
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null);
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.Transformation(graphicsDevice));
             dungeon.Draw(spriteBatch);
             spriteBatch.End();
 
