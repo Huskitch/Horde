@@ -44,14 +44,18 @@ namespace HoardeGame.GameStates
 
             GuiBase.Font = ResourceManager.Font("BasicFont");
 
-            camera = new Camera();
-            camera.Zoom = 2f;
+            camera = new Camera
+            {
+                Zoom = 2f
+            };
 
             dungeon = new DungeonLevel();
             dungeon.GenerateLevel(64, 64, 40);
 
-            player = new EntityPlayer();
-            player.Position = new Vector2(400, 400);
+            player = new EntityPlayer
+            {
+                Position = new Vector2(400, 400)
+            };
 
             _minimap = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
             _minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);

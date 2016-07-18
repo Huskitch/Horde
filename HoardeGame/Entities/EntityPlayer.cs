@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -11,31 +6,36 @@ namespace HoardeGame.Entities
 {
     public class EntityPlayer : EntityBase
     {
-        private KeyboardState keyboardState;
+        /// <summary>
+        /// Singleton of player
+        /// </summary>
+        public static EntityPlayer Player;
 
         public EntityPlayer()
         {
+            //This makes the character jitter a bit
             Speed = 1.5f;
+
+            Player = this;
         }
 
         public override void Update(GameTime gameTime)
         {
-            keyboardState = Keyboard.GetState();
             Velocity = Vector2.Zero;
 
-            if (keyboardState.IsKeyDown(Keys.S))
+            if (Main.KState.IsKeyDown(Keys.S))
             {
                 Velocity.Y++;
             }
-            if (keyboardState.IsKeyDown(Keys.W))
+            if (Main.KState.IsKeyDown(Keys.W))
             {
                 Velocity.Y--;
             }
-            if (keyboardState.IsKeyDown(Keys.D))
+            if (Main.KState.IsKeyDown(Keys.D))
             {
                 Velocity.X++;
             }
-            if (keyboardState.IsKeyDown(Keys.A))
+            if (Main.KState.IsKeyDown(Keys.A))
             {
                 Velocity.X--;
             }

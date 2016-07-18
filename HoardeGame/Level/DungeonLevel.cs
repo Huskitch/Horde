@@ -47,6 +47,21 @@ namespace HoardeGame.Level
             LoadTiles();
         }
 
+        public Tile GetTile(Vector2 position)
+        {
+            for (int x = 0; x < mapWidth; x++)
+            {
+                for (int y = 0; y < mapHeight; y++)
+                {
+                    var tile = mapTiles[x + y * mapWidth];
+                    if (new Rectangle((int) tile.Position.X, (int) tile.Position.Y, (int) tile.Scale.X, (int) tile.Scale.Y).Contains(position)) return tile;
+
+                }
+            }
+
+            return null;
+        }
+
         public void LoadTiles()
         {
             for (int x = 0; x < mapWidth; x++)
