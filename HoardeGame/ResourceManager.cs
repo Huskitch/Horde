@@ -77,6 +77,8 @@ namespace HoardeGame
             textures.Add("BasicFloor", content.Load<Texture2D>("Art/basicfloor"));
             textures.Add("BasicWall", content.Load<Texture2D>("Art/basicwall"));
             textures.Add("PlayerTemp", content.Load<Texture2D>("Art/PlayerTemp"));
+            textures.Add("PlayerSheet", content.Load<Texture2D>("Art/PlayerSheet"));
+            textures.Add("GemAnimation", content.Load<Texture2D>("Art/gemAnimation"));
 
             textures.Add("BasicButton", content.Load<Texture2D>("Art/button"));
             textures.Add("BasicButtonHover", content.Load<Texture2D>("Art/buttonHover"));

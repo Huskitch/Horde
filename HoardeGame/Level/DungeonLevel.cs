@@ -40,7 +40,7 @@ namespace HoardeGame.Level
 
             levelGen.MapWidth = mapWidth;
             levelGen.MapHeight = mapHeight;
-            levelGen.PercentAreWalls = percentWalls;
+            levelGen.PercentAreWalls = percWalls;
             levelGen.MakeCaverns();
             map = levelGen.Map;
 

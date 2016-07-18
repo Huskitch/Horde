@@ -24,6 +24,7 @@ namespace HoardeGame.GameStates
         private Rectangle _minimapInner;
 
         private EntityPlayer player;
+        private EntityGem gem;
 
         public SinglePlayer(ContentManager content, SpriteBatch batch, GraphicsDevice device, GameWindow window)
         {
@@ -43,6 +44,9 @@ namespace HoardeGame.GameStates
 
             player = new EntityPlayer();
             player.Position = new Vector2(400, 400);
+
+            gem = new EntityGem();
+            gem.Position = new Vector2(400, 400);
 
             _minimap = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
             _minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);
@@ -97,6 +101,7 @@ namespace HoardeGame.GameStates
             DoCheck(gameTime, new Point(state.X, state.Y), Main.JustPressed());
 
             player.Update(gameTime);
+            gem.Update(gameTime);
             camera.Position = player.Position;
             dungeon.Update(gameTime);
         }
@@ -109,6 +114,8 @@ namespace HoardeGame.GameStates
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.Transformation(graphicsDevice));
                 dungeon.Draw(spriteBatch);
                 player.Draw(spriteBatch);
+            gem.Draw(spriteBatch);
+
             spriteBatch.End();
 
             // GUI SPRITEBATCH
