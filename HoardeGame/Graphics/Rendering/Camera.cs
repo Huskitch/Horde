@@ -39,6 +39,7 @@ namespace HoardeGame.Graphics.Rendering
         /// <param name="amount">Translation <see cref="Vector2"/></param>
         public void Translate(Vector2 amount)
         {
+            Position += amount;
         }
 
         /// <summary>
@@ -48,6 +49,7 @@ namespace HoardeGame.Graphics.Rendering
         /// <param name="x">Parameter of the lerp function</param>
         public void Focus(Vector2 target, float x)
         {
+            Position = Vector2.Lerp(Position, target, x);
         }
 
         /// <summary>
