@@ -9,20 +9,23 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.GUI
 {
+    /// <summary>
+    /// UI text control
+    /// </summary>
     public class Label : GuiBase
     {
         /// <summary>
         /// Collision box of the label for clicking
         /// </summary>
-        private Rectangle _label;
+        private Rectangle label;
 
         /// <summary>
         /// Currently displayed text
         /// </summary>
-        private string _text;
+        private string text;
 
         /// <summary>
-        /// Creates new label
+        /// Initializes a new instance of the <see cref="Label"/> class.
         /// </summary>
         /// <param name="state">State to which this label belongs</param>
         /// <param name="id">ID of this control for debugging</param>
@@ -32,28 +35,36 @@ namespace HoardeGame.GUI
         }
 
         /// <summary>
-        /// Gets / sets the position of the label
+        /// Gets or sets the position of the label
         /// </summary>
         public new Vector2 Position
         {
+            get
+            {
+                return new Vector2(label.X, label.Y);
+            }
+
             set
             {
-                _label.X = (int) value.X;
-                _label.Y = (int) value.Y;
+                label.X = (int)value.X;
+                label.Y = (int)value.Y;
             }
-            get { return new Vector2(_label.X, _label.Y); }
         }
 
         /// <summary>
-        /// Sets the text of this label and resizes the collision box
+        /// Gets or sets the text of this label and resizes the collision box
         /// </summary>
         public string Text
         {
-            get { return _text; }
+            get
+            {
+                return text;
+            }
+
             set
             {
-                _label.Width = (int) Font.MeasureString(value).X;
-                _text = value;
+                label.Width = (int)Font.MeasureString(value).X;
+                text = value;
             }
         }
 
@@ -65,9 +76,15 @@ namespace HoardeGame.GUI
         /// <param name="click">Whether the user clicked this frame</param>
         public override void Check(GameTime gameTime, Point point, bool click)
         {
-            if (Visibility == HiddenState.Hidden | Visibility == HiddenState.Disabled) return;
+            if (Visibility == HiddenState.Hidden | Visibility == HiddenState.Disabled)
+            {
+                return;
+            }
 
-            if (!_label.Contains(point)) return;
+            if (!label.Contains(point))
+            {
+                return;
+            }
 
             try
             {
@@ -78,7 +95,10 @@ namespace HoardeGame.GUI
                 Debug.WriteLine("Error: " + ID + ": OnMouseOver: " + Text.ToLower());
             }
 
-            if (!click) return;
+            if (!click)
+            {
+                return;
+            }
 
             try
             {
@@ -98,9 +118,12 @@ namespace HoardeGame.GUI
         /// <param name="interpolation">No idea</param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, float interpolation)
         {
-            if (Visibility == HiddenState.Hidden) return;
+            if (Visibility == HiddenState.Hidden)
+            {
+                return;
+            }
 
-            spriteBatch.DrawString(Font, _text, Position, Visibility == HiddenState.Disabled ? DisabledColor : Color);
+            spriteBatch.DrawString(Font, text, Position, Visibility == HiddenState.Disabled ? DisabledColor : Color);
         }
     }
 }

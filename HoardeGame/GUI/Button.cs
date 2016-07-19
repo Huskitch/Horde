@@ -10,57 +10,60 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.GUI
 {
+    /// <summary>
+    /// UI button
+    /// </summary>
     public class Button : GuiBase
     {
         /// <summary>
         /// Collision box of the button for clicking
         /// </summary>
-        private Rectangle _button;
+        private Rectangle button;
 
         /// <summary>
         /// Current colour of the button
         /// </summary>
-        private Color _color;
+        private Color color;
 
         /// <summary>
         /// Currently displayed text
         /// </summary>
-        private string _text = "";
+        private string text = string.Empty;
 
         /// <summary>
-        /// Offset for the displayed text
+        /// Gets or sets the offset for the displayed text
         /// </summary>
-        public Vector2 TextOffset = Vector2.Zero;
+        public Vector2 TextOffset { get; set; } = Vector2.Zero;
 
         /// <summary>
-        /// Color that the button changes color to when the user hovers over the button
+        /// Gets or sets the <see cref="Color"/> that the button changes color to when the user hovers over the button
         /// </summary>
-        public Color OverColor = Color.Red;
+        public Color OverColor { get; set; } = Color.Red;
 
         /// <summary>
-        /// Background texture of the button
+        /// Gets or sets the background <see cref="Texture2D"/> of the button
         /// </summary>
-        public Texture2D ButtonTexture;
+        public Texture2D ButtonTexture { get; set; }
 
         /// <summary>
-        /// Bacgkround texture of the button when the user hovers over the control
+        /// Gets or sets the bacgkround <see cref="Texture2D"/> of the button when the user hovers over the control
         /// </summary>
-        public Texture2D ButtonTextureOver;
+        public Texture2D ButtonTextureOver { get; set; }
 
         /// <summary>
-        /// Background texture 
+        /// Gets or sets the background <see cref="Texture2D"/>  of the button when the button is disabled
         /// </summary>
-        public Texture2D ButtonTextureDisabled;
+        public Texture2D ButtonTextureDisabled { get; set; }
 
         /// <summary>
-        /// Target rectangle for the texture
+        /// Gets or sets the target <see cref="Rectangle"/> for the <see cref="Texture2D"/>
         /// </summary>
-        public Rectangle TargetRectangle;
+        public Rectangle TargetRectangle { get; set; }
 
         /// <summary>
-        /// Creates new button
+        /// Initializes a new instance of the <see cref="Button"/> class.
         /// </summary>
-        /// <param name="state">State to which this button belongs</param>
+        /// <param name="state"><see cref="GameState"/> to which this button belongs</param>
         /// <param name="id">ID of this control for debugging</param>
         /// <param name="noSub">Whether to subscribe to events in gamestate</param>
         public Button(GameState state, string id, bool noSub = false) : base(state, id, noSub)
@@ -68,36 +71,36 @@ namespace HoardeGame.GUI
         }
 
         /// <summary>
-        /// Gets / sets the position of the button
+        /// Gets or sets the position of the button
         /// </summary>
         public new Vector2 Position
         {
             get
             {
-                return new Vector2(_button.X, _button.Y);
+                return new Vector2(button.X, button.Y);
             }
 
             set
             {
-                _button.X = (int) value.X;
-                _button.Y = (int) value.Y;
+                button.X = (int)value.X;
+                button.Y = (int)value.Y;
             }
         }
 
         /// <summary>
-        /// Sets the text of this button and resizes the collision box
+        /// Gets or sets the text of this button and resizes the collision box
         /// </summary>
         public string Text
         {
             get
             {
-                return _text;
+                return text;
             }
 
             set
             {
-                _text = value;
-                _button = new Rectangle((int) Position.X, (int) Position.Y, (int)Font.MeasureString(value).X, (int)Font.MeasureString(value).Y);
+                text = value;
+                button = new Rectangle((int)Position.X, (int)Position.Y, (int)Font.MeasureString(value).X, (int)Font.MeasureString(value).Y);
             }
         }
 
@@ -109,20 +112,27 @@ namespace HoardeGame.GUI
         /// <param name="click">Whether the user clicked this frame</param>
         public override void Check(GameTime gameTime, Point point, bool click)
         {
-            if (Visibility == HiddenState.Hidden | Visibility == HiddenState.Disabled) return;
-
-            CustomUpdate(gameTime, point, click);
-
-            _color = Color;
-
-            if (!_button.Contains(point - new Point((int) TextOffset.X, (int) TextOffset.Y)) && !TargetRectangle.Contains(point))
+            if (Visibility == HiddenState.Hidden | Visibility == HiddenState.Disabled)
             {
                 return;
             }
 
-            _color = OverColor;
+            CustomUpdate?.Invoke(gameTime, point, click);
 
-            if (!click) return;
+            color = Color;
+
+            if (!button.Contains(point - new Point((int)TextOffset.X, (int)TextOffset.Y)) && !TargetRectangle.Contains(point))
+            {
+                return;
+            }
+
+            color = OverColor;
+
+            if (!click)
+            {
+                return;
+            }
+
             try
             {
                 OnClick.Invoke();
@@ -142,11 +152,14 @@ namespace HoardeGame.GUI
         /// <param name="interpolation">No idea</param>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, float interpolation)
         {
-            if (Visibility == HiddenState.Hidden) return;
+            if (Visibility == HiddenState.Hidden)
+            {
+                return;
+            }
 
-            CustomDraw(gameTime, spriteBatch, interpolation);
+            CustomDraw?.Invoke(gameTime, spriteBatch, interpolation);
 
-            if (_color == OverColor & Visibility == HiddenState.Visible)
+            if (color == OverColor & Visibility == HiddenState.Visible)
             {
                 try
                 {
@@ -158,13 +171,28 @@ namespace HoardeGame.GUI
                 }
             }
 
-            if (Visibility == HiddenState.Disabled) _color = DisabledColor;
+            if (Visibility == HiddenState.Disabled)
+            {
+                color = DisabledColor;
+            }
 
-            if (Visibility == HiddenState.Disabled && ButtonTextureDisabled != null) spriteBatch.Draw(ButtonTextureDisabled, TargetRectangle, Color.White);
-            else if (_color == OverColor && ButtonTextureOver != null) spriteBatch.Draw(ButtonTextureOver, TargetRectangle, Color.White);
-            else if (ButtonTexture != null) spriteBatch.Draw(ButtonTexture, TargetRectangle, Color.White);
+            if (Visibility == HiddenState.Disabled && ButtonTextureDisabled != null)
+            {
+                spriteBatch.Draw(ButtonTextureDisabled, TargetRectangle, Color.White);
+            }
+            else if (color == OverColor && ButtonTextureOver != null)
+            {
+                spriteBatch.Draw(ButtonTextureOver, TargetRectangle, Color.White);
+            }
+            else if (ButtonTexture != null)
+            {
+                spriteBatch.Draw(ButtonTexture, TargetRectangle, Color.White);
+            }
 
-            if (_text != "") spriteBatch.DrawString(Font, _text, new Vector2(_button.X, _button.Y) + TextOffset, _color);
+            if (text != string.Empty)
+            {
+                spriteBatch.DrawString(Font, text, new Vector2(button.X, button.Y) + TextOffset, color);
+            }
         }
     }
 }

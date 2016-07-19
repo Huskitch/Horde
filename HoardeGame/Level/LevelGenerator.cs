@@ -6,16 +6,36 @@ using System;
 
 namespace HoardeGame.Level
 {
+    /// <summary>
+    /// Cavern level generator
+    /// </summary>
     public class LevelGenerator
     {
-        Random rand = new Random();
+        /// <summary>
+        /// Gets or sets the level data
+        /// </summary>
+        public int[,] Map { get; set; }
 
-        public int[,] Map;
-
+        /// <summary>
+        /// Gets or sets the width of the level
+        /// </summary>
         public int MapWidth { get; set; }
+
+        /// <summary>
+        /// Gets or sets the height of the level
+        /// </summary>
         public int MapHeight { get; set; }
+
+        /// <summary>
+        /// Gets or sets the percentile of walls in generated levels
+        /// </summary>
         public int PercentAreWalls { get; set; }
 
+        private readonly Random rand = new Random();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LevelGenerator"/> class.
+        /// </summary>
         public LevelGenerator()
         {
             MapWidth = 64;
@@ -25,6 +45,9 @@ namespace HoardeGame.Level
             RandomFillMap();
         }
 
+        /// <summary>
+        /// Creates caverns on the level
+        /// </summary>
         public void MakeCaverns()
         {
             for (int column = 0, row = 0; row <= MapHeight - 1; row++)
@@ -36,7 +59,13 @@ namespace HoardeGame.Level
             }
         }
 
-        public int PlaceWallLogic(int x, int y)
+        /// <summary>
+        /// Determines whether to place a wall on tile with coordinates [X, Y]
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <returns>Whether a wall should be placed</returns>
+        private int PlaceWallLogic(int x, int y)
         {
             int numWalls = GetAdjacentWalls(x, y, 1, 1);
 
@@ -46,6 +75,7 @@ namespace HoardeGame.Level
                 {
                     return 1;
                 }
+
                 if (numWalls < 2)
                 {
                     return 0;
@@ -58,88 +88,95 @@ namespace HoardeGame.Level
                     return 1;
                 }
             }
+
             return 0;
         }
 
-        public int GetAdjacentWalls(int x, int y, int scopeX, int scopeY)
+        /// <summary>
+        /// Counts walls around a specified tile within a specified scope
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <param name="scopeX">Width of the scope</param>
+        /// <param name="scopeY">Height of the scope</param>
+        /// <returns>Number of adjacent walls</returns>
+        private int GetAdjacentWalls(int x, int y, int scopeX, int scopeY)
         {
             int startX = x - scopeX;
             int startY = y - scopeY;
             int endX = x + scopeX;
             int endY = y + scopeY;
 
-            int iX = startX;
-            int iY = startY;
-
             int wallCounter = 0;
 
-            for (iY = startY; iY <= endY; iY++)
+            for (int searchY = startY; searchY <= endY; searchY++)
             {
-                for (iX = startX; iX <= endX; iX++)
+                for (int searchX = startX; searchX <= endX; searchX++)
                 {
-                    if (!(iX == x && iY == y))
+                    if (!(searchX == x && searchY == y))
                     {
-                        if (IsWall(iX, iY))
+                        if (IsWall(searchX, searchY))
                         {
                             wallCounter += 1;
                         }
                     }
                 }
             }
+
             return wallCounter;
         }
 
-        bool IsWall(int x, int y)
+        /// <summary>
+        /// Determines whether a tile is a wall or not
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <returns>Whether is a wall</returns>
+        private bool IsWall(int x, int y)
         {
-            if (IsOutOfBounds(x, y))
-            {
-                return true;
-            }
-
-            if (Map[x, y] == 1)
-            {
-                return true;
-            }
-
-            if (Map[x, y] == 0)
-            {
-                return false;
-            }
-            return false;
+            return IsOutOfBounds(x, y) || Map[x, y] == 1;
         }
 
-        bool IsOutOfBounds(int x, int y)
+        /// <summary>
+        /// Determines if a tile is outside of the level
+        /// </summary>
+        /// <param name="x">X coordinate</param>
+        /// <param name="y">Y coordinate</param>
+        /// <returns>Whether is outside the level</returns>
+        private bool IsOutOfBounds(int x, int y)
         {
             if (x < 0 || y < 0)
             {
                 return true;
             }
-            else if (x > MapWidth - 1 || y > MapHeight - 1)
-            {
-                return true;
-            }
-            return false;
+
+            return x > MapWidth - 1 || y > MapHeight - 1;
         }
 
-        public void BlankMap()
+        /// <summary>
+        /// Clears out the level
+        /// </summary>
+        private void BlankMap()
         {
-            for (int column = 0, row = 0; row < MapHeight; row++)
+            for (int row = 0; row < MapHeight; row++)
             {
-                for (column = 0; column < MapWidth; column++)
+                for (int column = 0; column < MapWidth; column++)
                 {
                     Map[column, row] = 0;
                 }
             }
         }
 
-        public void RandomFillMap()
+        /// <summary>
+        /// Randomly fills in the map
+        /// </summary>
+        private void RandomFillMap()
         {
             Map = new int[MapWidth, MapHeight];
 
-            int mapMiddle = 0;
-            for (int column = 0, row = 0; row < MapHeight; row++)
+            for (int row = 0; row < MapHeight; row++)
             {
-                for (column = 0; column < MapWidth; column++)
+                for (int column = 0; column < MapWidth; column++)
                 {
                     if (column == 0)
                     {
@@ -159,7 +196,7 @@ namespace HoardeGame.Level
                     }
                     else
                     {
-                        mapMiddle = (MapHeight / 2);
+                        var mapMiddle = MapHeight / 2;
 
                         if (row == mapMiddle)
                         {
@@ -174,22 +211,35 @@ namespace HoardeGame.Level
             }
         }
 
-        int RandomPercent(int percent)
+        /// <summary>
+        /// Returns 1 or 0 based on a percentile chance
+        /// </summary>
+        /// <param name="percent">Chance that this method will return 1</param>
+        /// <returns>1 or 0</returns>
+        private int RandomPercent(int percent)
         {
             if (percent >= rand.Next(1, 101))
             {
                 return 1;
             }
+
             return 0;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LevelGenerator"/> class.
+        /// </summary>
+        /// <param name="mapWidth">Width of the level</param>
+        /// <param name="mapHeight">Height of the level</param>
+        /// <param name="map">Preexisting level data</param>
+        /// <param name="percentWalls">Percent of walls</param>
         public LevelGenerator(int mapWidth, int mapHeight, int[,] map, int percentWalls = 40)
         {
-            this.MapWidth = mapWidth;
-            this.MapHeight = mapHeight;
-            this.PercentAreWalls = percentWalls;
-            this.Map = new int[this.MapWidth, this.MapHeight];
-            this.Map = map;
+            MapWidth = mapWidth;
+            MapHeight = mapHeight;
+            PercentAreWalls = percentWalls;
+            Map = new int[MapWidth, MapHeight];
+            Map = map;
         }
     }
 }

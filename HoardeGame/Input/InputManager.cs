@@ -19,7 +19,7 @@ namespace HoardeGame.Input
         public static KeyboardState KeyboardState { get; private set; }
 
         /// <summary>
-        /// Gets last frame's <see cref="KeyboardState"/> 
+        /// Gets last frame's <see cref="KeyboardState"/>
         /// </summary>
         public static KeyboardState LastKeyboardState { get; private set; }
 

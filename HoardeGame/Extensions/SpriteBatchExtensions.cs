@@ -32,7 +32,7 @@ namespace HoardeGame.Extensions
                 angle = MathHelper.TwoPi - angle;
             }
 
-            spriteBatch.Draw(ResourceManager.Texture("OneByOneEmpty"), r, null, color, angle, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(ResourceManager.GetTexture("OneByOneEmpty"), r, null, color, angle, Vector2.Zero, SpriteEffects.None, 0);
         }
 
         /// <summary>

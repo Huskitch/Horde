@@ -48,7 +48,7 @@ namespace HoardeGame.Gameplay
 
             foreach (var card in cards)
             {
-                card.Texture = ResourceManager.Texture(card.TextureName);
+                card.Texture = ResourceManager.GetTexture(card.TextureName);
                 CardManager.cards.Add(card.ID, card);
             }
 
@@ -74,7 +74,7 @@ namespace HoardeGame.Gameplay
         /// </summary>
         public static void LoadBackgrounds()
         {
-            backgrounds.Add(CardRarity.Common, ResourceManager.Texture("CommonCard"));
+            backgrounds.Add(CardRarity.Common, ResourceManager.GetTexture("CommonCard"));
 
             // _backgrounds.Add(CardRarity.Rare, ResourceManager.Texture("RareCard"));
             // _backgrounds.Add(CardRarity.Epic, ResourceManager.Texture("EpicCard"));

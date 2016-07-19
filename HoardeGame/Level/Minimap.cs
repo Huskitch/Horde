@@ -7,13 +7,25 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.Level
 {
-    static class Minimap
+    /// <summary>
+    /// Generator of minimaps
+    /// </summary>
+    internal static class Minimap
     {
-        public static Color FloorColor = new Color(113, 88, 71);
-        public static Color WallColor = new Color(194, 137, 64);
+        /// <summary>
+        /// Gets the currently generated minimap
+        /// </summary>
+        public static Texture2D CurrentMinimap { get; private set; }
 
-        public static Texture2D CurrentMinimap;
+        private static readonly Color FloorColor = new Color(113, 88, 71);
+        private static readonly Color WallColor = new Color(194, 137, 64);
 
+        /// <summary>
+        /// Generates a new minimap <see cref="Texture2D"/>
+        /// </summary>
+        /// <param name="device"><see cref="GraphicsDevice"/> used for creating the <see cref="Texture2D"/></param>
+        /// <param name="map">Data to generate the <see cref="Texture2D"/> from</param>
+        /// <returns><see cref="Texture2D"/> of the minimap</returns>
         public static Texture2D GenerateMinimap(GraphicsDevice device, int[,] map)
         {
             CurrentMinimap?.Dispose();
@@ -23,7 +35,6 @@ namespace HoardeGame.Level
 
             Texture2D minimap = new Texture2D(device, width, height);
 
-            //RIP MEMORY
             Color[] colorData = new Color[width * height];
             for (int i = 0; i < colorData.Length; i++)
             {

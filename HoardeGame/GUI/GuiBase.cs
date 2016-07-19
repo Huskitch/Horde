@@ -13,8 +13,19 @@ namespace HoardeGame.GUI
     /// </summary>
     public enum HiddenState
     {
+        /// <summary>
+        /// Element is visible and will render regularly
+        /// </summary>
         Visible,
+
+        /// <summary>
+        /// Element is visible but will be grayed out
+        /// </summary>
         Disabled,
+
+        /// <summary>
+        /// Element will not render at all
+        /// </summary>
         Hidden
     }
 
@@ -26,16 +37,16 @@ namespace HoardeGame.GUI
     /// <summary>
     /// Delegate used for overriding draw of a control
     /// </summary>
-    /// <param name="gameTime">Current game time</param>
-    /// <param name="spriteBatch">Current spirtebatch to use for drawing</param>
+    /// <param name="gameTime"><see cref="GameTime"/></param>
+    /// <param name="spriteBatch">Current <see cref="SpriteBatch"/> to use for drawing</param>
     /// <param name="interpolation">No idea</param>
     public delegate void CustomDrawDelegate(GameTime gameTime, SpriteBatch spriteBatch, float interpolation);
 
     /// <summary>
     /// Delegate used for overriding update of a control
     /// </summary>
-    /// <param name="gameTime">Current gametime</param>
-    /// <param name="clickPoint">Point where the mouse is located</param>
+    /// <param name="gameTime"><see cref="GameTime"/></param>
+    /// <param name="clickPoint"><see cref="Point"/> where the mouse is located</param>
     /// <param name="click">Whether the user clicked this frame</param>
     public delegate void CustomUpdateDelegate(GameTime gameTime, Point clickPoint, bool click);
 
@@ -45,58 +56,58 @@ namespace HoardeGame.GUI
     public class GuiBase
     {
         /// <summary>
-        /// Font that is used in all controls
+        /// Gets or sets the font that is used in all controls
         /// </summary>
-        public static SpriteFont Font;
+        public static SpriteFont Font { get; set; }
 
         /// <summary>
-        /// ID of this control for debugging purposes
+        /// Gets the ID of this control for debugging purposes
         /// </summary>
-        public readonly string ID;
+        public string ID { get; private set; }
 
         /// <summary>
-        /// Position of the control
+        /// Gets or sets the position of the control
         /// This value is passed directly to the spribatch so the position may not always be the same
         /// </summary>
-        public Vector2 Position;
+        public Vector2 Position { get; set; }
 
         /// <summary>
-        /// Colour of the control
+        /// Gets or sets the <see cref="Microsoft.Xna.Framework.Color"/> of the control
         /// </summary>
-        public Color Color = Color.White;
+        public Color Color { get; set; } = Color.White;
 
         /// <summary>
-        /// Color of the control when it's disabled / grayed out
+        /// Gets or sets the <see cref="Microsoft.Xna.Framework.Color"/> of the control when it's disabled / grayed out
         /// </summary>
-        public Color DisabledColor = Color.Gray;
+        public Color DisabledColor { get; set; } = Color.Gray;
 
         /// <summary>
-        /// Current visibility state of the control
+        /// Gets or sets the visibility state of the control
         /// </summary>
-        public HiddenState Visibility = HiddenState.Visible;
+        public HiddenState Visibility { get; set; } = HiddenState.Visible;
 
         /// <summary>
-        /// Custom handler for clicking
+        /// Gets or sets the handler for clicking
         /// </summary>
-        public ButtonDelegate OnClick = () => { };
+        public ButtonDelegate OnClick { get; set; }
 
         /// <summary>
-        /// Custom handler for hovering
+        /// Gets or sets the handler for hovering
         /// </summary>
-        public ButtonDelegate OnMouseOver = () => { };
+        public ButtonDelegate OnMouseOver { get; set; }
 
         /// <summary>
-        /// Custom handler for drawing
+        /// Gets or sets the handler for drawing
         /// </summary>
-        public CustomDrawDelegate CustomDraw = (time, spriteBatch, interpolation) => { };
+        public CustomDrawDelegate CustomDraw { get; set; }
 
         /// <summary>
-        /// Custom handle for update / click check
+        /// Gets or sets the handler for update / click check
         /// </summary>
-        public CustomUpdateDelegate CustomUpdate = (time, point, click) => { };
+        public CustomUpdateDelegate CustomUpdate { get; set; }
 
         /// <summary>
-        /// Creates a new empty GUI element
+        /// Initializes a new instance of the <see cref="GuiBase"/> class.
         /// This should never happen
         /// </summary>
         /// <param name="state">State to which this control belongs</param>
@@ -106,7 +117,10 @@ namespace HoardeGame.GUI
         {
             ID = id;
 
-            if (noSub) return;
+            if (noSub)
+            {
+                return;
+            }
 
             state.OnCheck += Check;
             state.OnDraw += Draw;

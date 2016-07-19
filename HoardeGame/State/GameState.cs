@@ -39,28 +39,6 @@ namespace HoardeGame.State
         public event GuiDrawEventHandler OnDraw;
 
         /// <summary>
-        /// Checks and invokes the OnCheck event
-        /// </summary>
-        /// <param name="gameTime">Current gametime</param>
-        /// <param name="point">Point where the mouse is located</param>
-        /// <param name="click">Whether the user clicked this frame</param>
-        protected virtual void DoCheck(GameTime gameTime, Point point, bool click)
-        {
-            OnCheck?.Invoke(gameTime, point, click);
-        }
-
-        /// <summary>
-        /// Checks and invokes teh OnDraw event
-        /// </summary>
-        /// <param name="gameTime">Current gametime</param>
-        /// <param name="spriteBatch">Current spirtebatch to use for drawing</param>
-        /// <param name="interpolation">No idea</param>
-        protected virtual void DoDraw(GameTime gameTime, SpriteBatch spriteBatch, float interpolation)
-        {
-            OnDraw?.Invoke(gameTime, spriteBatch, interpolation);
-        }
-
-        /// <summary>
         /// Start this GameState
         /// </summary>
         public virtual void Start()
@@ -103,6 +81,28 @@ namespace HoardeGame.State
         /// <param name="interpolation">Interpolation</param>
         public virtual void Draw(GameTime gameTime, float interpolation)
         {
+        }
+
+        /// <summary>
+        /// Checks and invokes the OnCheck event
+        /// </summary>
+        /// <param name="gameTime">Current gametime</param>
+        /// <param name="point">Point where the mouse is located</param>
+        /// <param name="click">Whether the user clicked this frame</param>
+        protected virtual void DoCheck(GameTime gameTime, Point point, bool click)
+        {
+            OnCheck?.Invoke(gameTime, point, click);
+        }
+
+        /// <summary>
+        /// Checks and invokes teh OnDraw event
+        /// </summary>
+        /// <param name="gameTime">Current gametime</param>
+        /// <param name="spriteBatch">Current spirtebatch to use for drawing</param>
+        /// <param name="interpolation">No idea</param>
+        protected virtual void DoDraw(GameTime gameTime, SpriteBatch spriteBatch, float interpolation)
+        {
+            OnDraw?.Invoke(gameTime, spriteBatch, interpolation);
         }
     }
 }

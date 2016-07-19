@@ -25,7 +25,7 @@ namespace HoardeGame.Entities
         {
             Body = BodyFactory.CreateCircle(world, 4, 1);
 
-            animator = new AnimatedSprite(ResourceManager.Texture("GemAnimation"));
+            animator = new AnimatedSprite(ResourceManager.GetTexture("GemAnimation"));
             animator.AddAnimation("Bounce", 12, 0, 7, 150);
         }
 

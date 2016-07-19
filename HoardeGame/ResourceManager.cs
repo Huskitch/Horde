@@ -14,37 +14,37 @@ namespace HoardeGame
     /// <summary>
     /// Caches resources for the game
     /// </summary>
-    public class ResourceManager
+    public static class ResourceManager
     {
         /// <summary>
-        /// Dictionary of all loaded textures
+        /// Dictionary of all loaded <see cref="Texture2D"/>
         /// </summary>
         private static Dictionary<string, Texture2D> textures;
 
         /// <summary>
-        /// Dictionary of all loaded fonts
+        /// Dictionary of all loaded <see cref="SpriteFont"/>
         /// </summary>
         private static Dictionary<string, SpriteFont> fonts;
 
         /// <summary>
-        /// Dictionary of all loaded sounds
+        /// Dictionary of all loaded <see cref="SoundEffect"/>
         /// </summary>
         private static Dictionary<string, SoundEffect> sounds;
 
         /// <summary>
-        /// Dictionary of all loaded songs
+        /// Dictionary of all loaded <see cref="Song"/>
         /// </summary>
         private static Dictionary<string, Song> songs;
 
         /// <summary>
-        /// Current graphics device
+        /// Current <see cref="GraphicsDevice"/>
         /// </summary>
         private static GraphicsDevice device;
 
         /// <summary>
         /// Initializes the resource manager and prepares it for loading
         /// </summary>
-        /// <param name="graphicsDevice"></param>
+        /// <param name="graphicsDevice"><see cref="GraphicsDevice"/></param>
         public static void Init(GraphicsDevice graphicsDevice)
         {
             device = graphicsDevice;
@@ -58,7 +58,7 @@ namespace HoardeGame
         /// <summary>
         /// Loads all content
         /// </summary>
-        /// <param name="content">MonoGame content manager</param>
+        /// <param name="content"><see cref="ContentManager"/></param>
         public static void LoadContent(ContentManager content)
         {
             LoadTextures(content);
@@ -68,9 +68,9 @@ namespace HoardeGame
         }
 
         /// <summary>
-        /// Loads all textures
+        /// Loads all <see cref="Texture2D"/>
         /// </summary>
-        /// <param name="content">MonoGame content manager</param>
+        /// <param name="content"><see cref="ContentManager"/></param>
         public static void LoadTextures(ContentManager content)
         {
             Texture2D oneByOne = new Texture2D(device, 1, 1);
@@ -96,72 +96,68 @@ namespace HoardeGame
         }
 
         /// <summary>
-        /// Loads all fonts
+        /// Loads all <see cref="SpriteFont"/>
         /// </summary>
-        /// <param name="content">MonoGame content manager</param>
+        /// <param name="content"><see cref="ContentManager"/></param>
         public static void LoadFonts(ContentManager content)
         {
             fonts.Add("BasicFont", content.Load<SpriteFont>("BasicFont"));
         }
 
         /// <summary>
-        /// Loads all sounds
+        /// Loads all <see cref="SoundEffect"/>
         /// </summary>
-        /// <param name="content">MonoGame content manager</param>
+        /// <param name="content"><see cref="ContentManager"/></param>
         public static void LoadSounds(ContentManager content)
         {
-
         }
 
         /// <summary>
-        /// Loads all songs
+        /// Loads all <see cref="Song"/>
         /// </summary>
-        /// <param name="content">MonoGame content manager</param>
+        /// <param name="content"><see cref="ContentManager"/>r</param>
         public static void LoadSongs(ContentManager content)
         {
-
         }
 
         /// <summary>
-        /// Gets a texture with provided key
+        /// Gets a <see cref="Texture2D"/> with provided key
         /// </summary>
-        /// <param name="key">Name of the texture</param>
-        /// <returns></returns>
-        public static Texture2D Texture(string key)
+        /// <param name="key">Name of the <see cref="Texture2D"/></param>
+        /// <returns><see cref="Texture2D"/> with matching key or null</returns>
+        public static Texture2D GetTexture(string key)
         {
             return !textures.ContainsKey(key) ? null : textures[key];
         }
 
         /// <summary>
-        /// Gets a font with provided key
+        /// Gets a <see cref="SpriteFont"/> with provided key
         /// </summary>
-        /// <param name="key">Name of the font</param>
-        /// <returns></returns>
-        public static SpriteFont Font(string key)
+        /// <param name="key">Name of the <see cref="SpriteFont"/></param>
+        /// <returns><see cref="SpriteFont"/> with matching key or null</returns>
+        public static SpriteFont GetFont(string key)
         {
             return !fonts.ContainsKey(key) ? null : fonts[key];
         }
 
         /// <summary>
-        /// Gets a sound effect with provided key
+        /// Gets a <see cref="SoundEffect"/> with provided key
         /// </summary>
-        /// <param name="key">Name of the sound effect</param>
-        /// <returns></returns>
-        public static SoundEffect SoundEffect(string key)
+        /// <param name="key">Name of the <see cref="SoundEffect"/></param>
+        /// <returns><see cref="SoundEffect"/> with matching key or null</returns>
+        public static SoundEffect GetSoundEffect(string key)
         {
             return !sounds.ContainsKey(key) ? null : sounds[key];
         }
 
         /// <summary>
-        /// Gets a song with provided key
+        /// Gets a <see cref="Song"/> with provided key
         /// </summary>
-        /// <param name="key">Name of the song</param>
-        /// <returns></returns>
-        public static Song Song(string key)
+        /// <param name="key">Name of the <see cref="Song"/></param>
+        /// <returns><see cref="Song"/> with matching key or null</returns>
+        public static Song GetSong(string key)
         {
             return !songs.ContainsKey(key) ? null : songs[key];
         }
     }
 }
-
-

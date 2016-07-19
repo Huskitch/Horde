@@ -36,7 +36,7 @@ namespace HoardeGame.Entities
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
 
-            animator = new AnimatedSprite(ResourceManager.Texture("PlayerSheet"));
+            animator = new AnimatedSprite(ResourceManager.GetTexture("PlayerSheet"));
             animator.AddAnimation("Down", 32, 0, 5, 150);
             animator.AddAnimation("Left", 32, 2, 5, 150);
             animator.AddAnimation("Right", 32, 7, 5, 150);

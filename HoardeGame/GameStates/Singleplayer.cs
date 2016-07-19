@@ -24,16 +24,17 @@ namespace HoardeGame.GameStates
     /// </summary>
     public class SinglePlayer : GameState
     {
+        private readonly Rectangle minimap;
+        private readonly Rectangle minimapInner;
+        private readonly Card testCard;
+
         private readonly SpriteBatch spriteBatch;
         private readonly GraphicsDevice graphicsDevice;
 
-        private Camera camera;
-        private DungeonLevel dungeon;
+        private readonly Camera camera;
+        private readonly DungeonLevel dungeon;
 
         private ProgressBar bar;
-        private Rectangle minimap;
-        private Rectangle minimapInner;
-        private Card testCard;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SinglePlayer"/> class.
@@ -56,7 +57,7 @@ namespace HoardeGame.GameStates
 
             testCard = CardManager.GetCard("testCard");
 
-            GuiBase.Font = ResourceManager.Font("BasicFont");
+            GuiBase.Font = ResourceManager.GetFont("BasicFont");
 
             camera = new Camera
             {
@@ -88,9 +89,9 @@ namespace HoardeGame.GameStates
             {
                 Position = new Vector2(10, 30),
                 TargetRectangle = new Rectangle(10, 30, 128, 32),
-                TextOffset = new Vector2(10,5),
-                ButtonTexture = ResourceManager.Texture("BasicButton"),
-                ButtonTextureOver = ResourceManager.Texture("BasicButtonHover"),
+                TextOffset = new Vector2(10, 5),
+                ButtonTexture = ResourceManager.GetTexture("BasicButton"),
+                ButtonTextureOver = ResourceManager.GetTexture("BasicButtonHover"),
                 Text = "Click me!",
                 OverColor = Color.Red,
                 OnClick = () =>
@@ -104,7 +105,7 @@ namespace HoardeGame.GameStates
             bar = new ProgressBar(this, "helloWorldProgressBar")
             {
                 Position = new Vector2(10, 70),
-                ProgressBarTexture = ResourceManager.Texture("BasicProgressBar"),
+                ProgressBarTexture = ResourceManager.GetTexture("BasicProgressBar"),
                 BarHeight = 23,
                 BarStart = new Vector2(1, 1),
                 BarWidth = 63,
@@ -150,7 +151,7 @@ namespace HoardeGame.GameStates
             // MINIMAP SPRITEBATCH
             using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone))
             {
-                spriteBatch.Draw(ResourceManager.Texture("OneByOneEmpty"), minimap, Color.Gray);
+                spriteBatch.Draw(ResourceManager.GetTexture("OneByOneEmpty"), minimap, Color.Gray);
                 spriteBatch.Draw(Minimap.CurrentMinimap, minimapInner, Color.White);
             }
         }

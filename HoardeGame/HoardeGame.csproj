@@ -54,6 +54,7 @@
     <Compile Include="Gameplay\CardManager.cs" />
     <Compile Include="GameStates\SinglePlayer.cs" />
     <Compile Include="Graphics\Rendering\AnimatedSprite.cs" />
+    <Compile Include="Graphics\Rendering\Animation.cs" />
     <Compile Include="Graphics\Rendering\Camera.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\GuiBase.cs" />
@@ -90,7 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Content\Content.mgcb" />
+    <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="HoardeGame.ruleset" />
     <None Include="packages.config" />
     <AdditionalFiles Include="stylecop.json" />
