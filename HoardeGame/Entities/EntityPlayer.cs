@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System.Collections.Generic;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
@@ -23,7 +24,10 @@ namespace HoardeGame.Entities
         /// </summary>
         public static EntityPlayer Player { get; private set; }
 
+        public List<EntityBullet> Bullets;
+
         private AnimatedSprite animator;
+        private World worldInstance;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
@@ -36,11 +40,18 @@ namespace HoardeGame.Entities
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
 
+            Bullets = new List<EntityBullet>();
+
+            worldInstance = world;
+
+            Health = 10;
+
             animator = new AnimatedSprite(ResourceManager.GetTexture("PlayerSheet"));
-            animator.AddAnimation("Down", 32, 0, 5, 150);
-            animator.AddAnimation("Left", 32, 2, 5, 150);
-            animator.AddAnimation("Right", 32, 7, 5, 150);
-            animator.AddAnimation("Up", 32, 5, 5, 150);
+            animator.AddAnimation("Down", 32, 0, 5, 100);
+            animator.AddAnimation("Left", 32, 2, 5, 100);
+            animator.AddAnimation("Right", 32, 7, 5, 100);
+            animator.AddAnimation("Up", 32, 5, 5, 100);
+            animator.AddAnimation("Idle", 32, 8, 5, 100);
 
             Player = this;
         }
@@ -74,6 +85,9 @@ namespace HoardeGame.Entities
 
             animator.Update(gameTime);
 
+            foreach (EntityBullet bullet in Bullets)
+                bullet.Update(gameTime);
+
             base.Update(gameTime);
         }
 
@@ -98,6 +112,13 @@ namespace HoardeGame.Entities
             {
                 animator.DrawAnimation("Right", screenPos, spriteBatch);
             }
+            else
+            {
+                animator.DrawAnimation("Idle", screenPos, spriteBatch);
+            }
+
+            foreach (EntityBullet bullet in Bullets)
+                bullet.Draw(spriteBatch);
 
             base.Draw(spriteBatch);
         }

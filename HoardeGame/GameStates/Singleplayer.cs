@@ -69,6 +69,7 @@ namespace HoardeGame.GameStates
 
             dungeon.AddEntity<EntityPlayer>();
             dungeon.AddEntity<EntityBat>();
+            dungeon.AddEntity<EntityChest>();
 
             minimap = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
             minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);

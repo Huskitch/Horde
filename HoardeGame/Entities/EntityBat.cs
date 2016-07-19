@@ -29,6 +29,8 @@ namespace HoardeGame.Entities
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
 
+            Health = 3;
+
             animator = new AnimatedSprite(ResourceManager.GetTexture("BatSheet"));
             animator.AddAnimation("Flap", 32, 0, 2, 100);
         }

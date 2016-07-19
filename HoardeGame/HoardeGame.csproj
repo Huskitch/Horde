@@ -47,6 +47,8 @@
   <ItemGroup>
     <Compile Include="Entities\EntityBase.cs" />
     <Compile Include="Entities\EntityBat.cs" />
+    <Compile Include="Entities\EntityBullet.cs" />
+    <Compile Include="Entities\EntityChest.cs" />
     <Compile Include="Entities\EntityGem.cs" />
     <Compile Include="Entities\EntityPlayer.cs" />
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />

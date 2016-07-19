@@ -20,6 +20,11 @@ namespace HoardeGame.Entities
         public DungeonLevel Level { get; set; }
 
         /// <summary>
+        /// Get or set the health of the entity
+        /// </summary>
+        public int Health { get; set; }
+
+        /// <summary>
         /// Gets or sets the physics body of the entity
         /// </summary>
         public Body Body { get; set; }

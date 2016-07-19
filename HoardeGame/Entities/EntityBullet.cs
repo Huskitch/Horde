@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using FarseerPhysics;
+using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace HoardeGame.Entities
+{
+    public class EntityBullet : EntityBase
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HoardeGame.Entities.EntityChest"/> class.
+        /// </summary>
+        /// <param name="world"><see cref="World"/> to place this entity in</param>
+        public EntityBullet(World world, Vector2 startPos, Vector2 direction) : base(world)
+        {
+            Body = BodyFactory.CreateRectangle(world, ConvertUnits.ToSimUnits(5), ConvertUnits.ToSimUnits(5), 1f,
+                ConvertUnits.ToSimUnits(startPos));
+
+            Body.BodyType = BodyType.Dynamic;
+            Body.LinearDamping = 0f;
+        }
+
+        /// <inheritdoc/>
+        public override void Update(GameTime gameTime)
+        {
+
+        }
+
+        /// <inheritdoc/>
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
+            spriteBatch.Draw(ResourceManager.GetTexture("Bullet"), Position, Color.White);
+        }
+    }
+}
