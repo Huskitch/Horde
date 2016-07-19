@@ -15,6 +15,8 @@ namespace HoardeGame.Graphics.Rendering
     {
         private readonly Texture2D sheet;
         private readonly Dictionary<string, Animation> animations;
+        private Animation lastUsedAnimation;
+        private Animation defaultAnimation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AnimatedSprite"/> class.
@@ -39,6 +41,27 @@ namespace HoardeGame.Graphics.Rendering
             animations.Add(name, new Animation(frameSize, layer, numFrames, speed));
         }
 
+        public void SetDefaultAnimation(string name)
+        {
+            defaultAnimation = animations[name];
+        }
+
+        public void DrawLastUsedAnimation(Vector2 position, SpriteBatch spriteBatch)
+        {
+            Animation selectedAnim;
+
+            if (lastUsedAnimation == null)
+            {
+                selectedAnim = defaultAnimation;
+            }
+            else
+            {
+                selectedAnim = lastUsedAnimation;
+            }
+
+            spriteBatch.Draw(sheet, new Rectangle((int)position.X, (int)position.Y, selectedAnim.FrameSize, selectedAnim.FrameSize), selectedAnim.AnimRect, Color.White);
+        }
+
         /// <summary>
         /// Draws an <see cref="Animation"/>
         /// </summary>
@@ -48,6 +71,7 @@ namespace HoardeGame.Graphics.Rendering
         public void DrawAnimation(string animation, Vector2 position, SpriteBatch spriteBatch)
         {
             Animation selectedAnim = animations[animation];
+            lastUsedAnimation = selectedAnim;
             spriteBatch.Draw(sheet, new Rectangle((int)position.X, (int)position.Y, selectedAnim.FrameSize, selectedAnim.FrameSize), selectedAnim.AnimRect, Color.White);
         }
 

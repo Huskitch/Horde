@@ -56,6 +56,7 @@ namespace HoardeGame.Entities
             animator.AddAnimation("NorthWest", 32, 3, 5, 100);
             animator.AddAnimation("NorthEast", 32, 5, 5, 100);
             animator.AddAnimation("Idle", 32, 8, 5, 100);
+            animator.SetDefaultAnimation("Idle");
 
             Player = this;
         }
@@ -134,7 +135,7 @@ namespace HoardeGame.Entities
             }
             else
             {
-                animator.DrawAnimation("Idle", screenPos, spriteBatch);
+                animator.DrawLastUsedAnimation(screenPos, spriteBatch);
             }
 
             foreach (EntityBullet bullet in Bullets)
