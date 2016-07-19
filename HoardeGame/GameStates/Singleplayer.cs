@@ -76,8 +76,8 @@ namespace HoardeGame.GameStates
             minimap = new Minimap();
             minimap.Generate(graphicsDevice, dungeon.GetMap());
 
-            minimapRectangle = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
-            minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);
+            minimapRectangle = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 280, graphicsDevice.PresentationParameters.BackBufferHeight - 280, 260, 260);
+            minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 278, graphicsDevice.PresentationParameters.BackBufferHeight - 278, 256, 256);
         }
 
         /// <inheritdoc/>
