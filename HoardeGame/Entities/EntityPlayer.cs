@@ -37,7 +37,10 @@ namespace HoardeGame.Entities
             Body.FixedRotation = true;
 
             animator = new AnimatedSprite(ResourceManager.Texture("PlayerSheet"));
-            animator.AddAnimation("WalkLeft", 32, 0, 5, 150);
+            animator.AddAnimation("Down", 32, 0, 5, 150);
+            animator.AddAnimation("Left", 32, 2, 5, 150);
+            animator.AddAnimation("Right", 32, 7, 5, 150);
+            animator.AddAnimation("Up", 32, 5, 5, 150);
 
             Player = this;
         }
@@ -79,7 +82,23 @@ namespace HoardeGame.Entities
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
 
-            animator.DrawAnimation("WalkLeft", screenPos, spriteBatch);
+            if (Main.KState.IsKeyDown(Keys.W))
+            {
+                animator.DrawAnimation("Up", screenPos, spriteBatch);
+            }
+            else if (Main.KState.IsKeyDown(Keys.S))
+            {
+                animator.DrawAnimation("Down", screenPos, spriteBatch);
+            }
+            else if (Main.KState.IsKeyDown(Keys.A))
+            {
+                animator.DrawAnimation("Left", screenPos, spriteBatch);
+            }
+            else if (Main.KState.IsKeyDown(Keys.D))
+            {
+                animator.DrawAnimation("Right", screenPos, spriteBatch);
+            }
+
             base.Draw(spriteBatch);
         }
     }
