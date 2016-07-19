@@ -24,8 +24,6 @@ namespace HoardeGame.GameStates
     /// </summary>
     public class SinglePlayer : GameState
     {
-        private readonly Rectangle minimap;
-        private readonly Rectangle minimapInner;
         private readonly Card testCard;
 
         private readonly SpriteBatch spriteBatch;
@@ -33,6 +31,9 @@ namespace HoardeGame.GameStates
 
         private readonly Camera camera;
         private readonly DungeonLevel dungeon;
+        private readonly Minimap minimap;
+        private readonly Rectangle minimapRectangle;
+        private readonly Rectangle minimapInner;
 
         private ProgressBar bar;
 
@@ -61,7 +62,8 @@ namespace HoardeGame.GameStates
 
             camera = new Camera
             {
-                Zoom = 2f
+                Zoom = 2f,
+                Size = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight)
             };
 
             dungeon = new DungeonLevel();
@@ -70,10 +72,11 @@ namespace HoardeGame.GameStates
             dungeon.AddEntity<EntityPlayer>();
             dungeon.AddEntity<EntityBat>();
 
-            minimap = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
-            minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);
+            minimap = new Minimap();
+            minimap.Generate(graphicsDevice, dungeon.GetMap());
 
-            Minimap.GenerateMinimap(graphicsDevice, dungeon.GetMap());
+            minimapRectangle = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
+            minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);
         }
 
         /// <inheritdoc/>
@@ -151,8 +154,7 @@ namespace HoardeGame.GameStates
             // MINIMAP SPRITEBATCH
             using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone))
             {
-                spriteBatch.Draw(ResourceManager.GetTexture("OneByOneEmpty"), minimap, Color.Gray);
-                spriteBatch.Draw(Minimap.CurrentMinimap, minimapInner, Color.White);
+                minimap.Draw(spriteBatch, minimapRectangle, minimapInner, camera);
             }
         }
     }

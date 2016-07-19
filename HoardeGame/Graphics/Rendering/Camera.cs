@@ -24,6 +24,11 @@ namespace HoardeGame.Graphics.Rendering
         public Vector2 Position { get; set; }
 
         /// <summary>
+        /// Gets or sets the size of the viewport
+        /// </summary>
+        public Vector2 Size { get; set; }
+
+        /// <summary>
         /// Gets or sets the rotation this <see cref="Camera"/>
         /// </summary>
         public float Rotation { get; set; }
