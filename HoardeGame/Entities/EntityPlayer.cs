@@ -82,19 +82,19 @@ namespace HoardeGame.Entities
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
 
-            if (Main.KState.IsKeyDown(Keys.W))
+            if (InputManager.KeyboardState.IsKeyDown(Keys.W))
             {
                 animator.DrawAnimation("Up", screenPos, spriteBatch);
             }
-            else if (Main.KState.IsKeyDown(Keys.S))
+            else if (InputManager.KeyboardState.IsKeyDown(Keys.S))
             {
                 animator.DrawAnimation("Down", screenPos, spriteBatch);
             }
-            else if (Main.KState.IsKeyDown(Keys.A))
+            else if (InputManager.KeyboardState.IsKeyDown(Keys.A))
             {
                 animator.DrawAnimation("Left", screenPos, spriteBatch);
             }
-            else if (Main.KState.IsKeyDown(Keys.D))
+            else if (InputManager.KeyboardState.IsKeyDown(Keys.D))
             {
                 animator.DrawAnimation("Right", screenPos, spriteBatch);
             }
