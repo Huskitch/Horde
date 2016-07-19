@@ -27,18 +27,20 @@ namespace HoardeGame.Entities
 
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 0f;
+            Body.ApplyForce(direction * 10);
         }
 
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
+
         }
 
         /// <inheritdoc/>
         public override void Draw(SpriteBatch spriteBatch)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            spriteBatch.Draw(ResourceManager.GetTexture("Bullet"), Position, Color.White);
+            spriteBatch.Draw(ResourceManager.GetTexture("Bullet"), screenPos, Color.White);
         }
     }
 }

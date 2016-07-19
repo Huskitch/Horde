@@ -31,6 +31,15 @@ namespace HoardeGame.Entities
 
         private AnimatedSprite animator;
         private World worldInstance;
+        private enum Directions
+        {
+            NORTH,
+            EAST,
+            SOUTH,
+            WEST
+        }
+
+        private Directions dir;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
@@ -71,22 +80,36 @@ namespace HoardeGame.Entities
 
             if (InputManager.KeyboardState.IsKeyDown(Keys.S))
             {
+                dir = Directions.SOUTH;
                 velocity.Y++;
             }
 
             if (InputManager.KeyboardState.IsKeyDown(Keys.W))
             {
+                dir = Directions.NORTH;
                 velocity.Y--;
             }
 
             if (InputManager.KeyboardState.IsKeyDown(Keys.D))
             {
+                dir = Directions.EAST;
                 velocity.X++;
             }
 
             if (InputManager.KeyboardState.IsKeyDown(Keys.A))
             {
+                dir = Directions.WEST;
                 velocity.X--;
+            }
+
+            if (InputManager.KeyboardState.IsKeyDown(Keys.Space))
+            {
+                Vector2 direction = Vector2.Zero;
+
+                if (dir == Directions.NORTH)
+                    direction = new Vector2(0, -1);
+
+                Bullets.Add(new EntityBullet(worldInstance, ConvertUnits.ToDisplayUnits(Position), direction));
             }
 
             Body.ApplyForce(velocity * 50);
