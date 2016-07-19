@@ -27,7 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <CodeAnalysisRuleSet>HoardeGame.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>hoardegame.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>bin\Windows\Debug\HoardeGame.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
@@ -39,7 +39,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <CodeAnalysisRuleSet>HoardeGame.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>hoardegame.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>

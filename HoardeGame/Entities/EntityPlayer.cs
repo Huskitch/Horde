@@ -24,7 +24,10 @@ namespace HoardeGame.Entities
         /// </summary>
         public static EntityPlayer Player { get; private set; }
 
-        public List<EntityBullet> Bullets;
+        /// <summary>
+        /// Gets a list of bullets shot by player
+        /// </summary>
+        public List<EntityBullet> Bullets { get; private set; }
 
         private AnimatedSprite animator;
         private World worldInstance;
@@ -91,7 +94,9 @@ namespace HoardeGame.Entities
             animator.Update(gameTime);
 
             foreach (EntityBullet bullet in Bullets)
+            {
                 bullet.Update(gameTime);
+            }
 
             base.Update(gameTime);
         }
@@ -139,7 +144,9 @@ namespace HoardeGame.Entities
             }
 
             foreach (EntityBullet bullet in Bullets)
+            {
                 bullet.Draw(spriteBatch);
+            }
 
             base.Draw(spriteBatch);
         }

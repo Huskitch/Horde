@@ -1,14 +1,18 @@
-﻿using FarseerPhysics;
+﻿// <copyright file="EntityChest.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
+using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
-using HoardeGame.Entities;
-using HoardeGame.Graphics.Rendering;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-
 namespace HoardeGame.Entities
 {
+    /// <summary>
+    /// Chest entity
+    /// </summary>
     public class EntityChest : EntityBase
     {
         /// <summary>
@@ -17,8 +21,7 @@ namespace HoardeGame.Entities
         /// <param name="world"><see cref="World"/> to place this entity in</param>
         public EntityChest(World world) : base(world)
         {
-            Body = BodyFactory.CreateRectangle(world, ConvertUnits.ToSimUnits(25), ConvertUnits.ToSimUnits(25), 1f,
-                ConvertUnits.ToSimUnits(new Vector2(450, 500)));
+            Body = BodyFactory.CreateRectangle(world, ConvertUnits.ToSimUnits(25), ConvertUnits.ToSimUnits(25), 1f, ConvertUnits.ToSimUnits(new Vector2(450, 500)));
 
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 70f;
@@ -30,7 +33,6 @@ namespace HoardeGame.Entities
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
-
         }
 
         /// <inheritdoc/>

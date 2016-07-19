@@ -41,11 +41,20 @@ namespace HoardeGame.Graphics.Rendering
             animations.Add(name, new Animation(frameSize, layer, numFrames, speed));
         }
 
+        /// <summary>
+        /// Sets the default animation
+        /// </summary>
+        /// <param name="name">Name</param>
         public void SetDefaultAnimation(string name)
         {
             defaultAnimation = animations[name];
         }
 
+        /// <summary>
+        /// Draw the last used animation
+        /// </summary>
+        /// <param name="position">Position where to draw the <see cref="Animation"/></param>
+        /// <param name="spriteBatch"><see cref="SpriteFont"/> to draw the animation with</param>
         public void DrawLastUsedAnimation(Vector2 position, SpriteBatch spriteBatch)
         {
             Animation selectedAnim;
