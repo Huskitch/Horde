@@ -47,10 +47,14 @@ namespace HoardeGame.Entities
             Health = 10;
 
             animator = new AnimatedSprite(ResourceManager.GetTexture("PlayerSheet"));
-            animator.AddAnimation("Down", 32, 0, 5, 100);
-            animator.AddAnimation("Left", 32, 2, 5, 100);
-            animator.AddAnimation("Right", 32, 7, 5, 100);
-            animator.AddAnimation("Up", 32, 5, 5, 100);
+            animator.AddAnimation("South", 32, 0, 5, 100);
+            animator.AddAnimation("West", 32, 2, 5, 100);
+            animator.AddAnimation("East", 32, 6, 5, 100);
+            animator.AddAnimation("North", 32, 4, 5, 100);
+            animator.AddAnimation("SouthWest", 32, 1, 5, 100);
+            animator.AddAnimation("SouthEast", 32, 7, 5, 100);
+            animator.AddAnimation("NorthWest", 32, 3, 5, 100);
+            animator.AddAnimation("NorthEast", 32, 5, 5, 100);
             animator.AddAnimation("Idle", 32, 8, 5, 100);
 
             Player = this;
@@ -96,21 +100,37 @@ namespace HoardeGame.Entities
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
 
-            if (InputManager.KeyboardState.IsKeyDown(Keys.W))
+            if (InputManager.KeyboardState.IsKeyDown(Keys.S) && InputManager.KeyboardState.IsKeyDown(Keys.A))
             {
-                animator.DrawAnimation("Up", screenPos, spriteBatch);
+                animator.DrawAnimation("SouthWest", screenPos, spriteBatch);
+            }
+            else if (InputManager.KeyboardState.IsKeyDown(Keys.W) && InputManager.KeyboardState.IsKeyDown(Keys.A))
+            {
+                animator.DrawAnimation("NorthWest", screenPos, spriteBatch);
+            }
+            else if (InputManager.KeyboardState.IsKeyDown(Keys.D) && InputManager.KeyboardState.IsKeyDown(Keys.S))
+            {
+                animator.DrawAnimation("SouthEast", screenPos, spriteBatch);
+            }
+            else if (InputManager.KeyboardState.IsKeyDown(Keys.W) && InputManager.KeyboardState.IsKeyDown(Keys.D))
+            {
+                animator.DrawAnimation("NorthEast", screenPos, spriteBatch);
+            }
+            else if (InputManager.KeyboardState.IsKeyDown(Keys.W))
+            {
+                animator.DrawAnimation("North", screenPos, spriteBatch);
             }
             else if (InputManager.KeyboardState.IsKeyDown(Keys.S))
             {
-                animator.DrawAnimation("Down", screenPos, spriteBatch);
+                animator.DrawAnimation("South", screenPos, spriteBatch);
             }
             else if (InputManager.KeyboardState.IsKeyDown(Keys.A))
             {
-                animator.DrawAnimation("Left", screenPos, spriteBatch);
+                animator.DrawAnimation("West", screenPos, spriteBatch);
             }
             else if (InputManager.KeyboardState.IsKeyDown(Keys.D))
             {
-                animator.DrawAnimation("Right", screenPos, spriteBatch);
+                animator.DrawAnimation("East", screenPos, spriteBatch);
             }
             else
             {

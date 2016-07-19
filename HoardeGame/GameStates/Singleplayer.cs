@@ -62,7 +62,7 @@ namespace HoardeGame.GameStates
 
             camera = new Camera
             {
-                Zoom = 2f,
+                Zoom = 2.4f,
                 Size = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight)
             };
 
