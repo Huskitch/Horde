@@ -1,12 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿// <copyright file="SinglePlayer.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
+using System;
 using FarseerPhysics;
 using HoardeGame.Entities;
+using HoardeGame.Extensions;
 using HoardeGame.Gameplay;
 using HoardeGame.Graphics.Rendering;
 using HoardeGame.GUI;
+using HoardeGame.Input;
 using HoardeGame.Level;
+using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,23 +19,33 @@ using Microsoft.Xna.Framework.Input;
 
 namespace HoardeGame.GameStates
 {
-    public class SinglePlayer : State.GameState
+    /// <summary>
+    /// Singleplayer gamestate
+    /// </summary>
+    public class SinglePlayer : GameState
     {
-        private SpriteBatch spriteBatch;
-        private GraphicsDevice graphicsDevice;
+        private readonly SpriteBatch spriteBatch;
+        private readonly GraphicsDevice graphicsDevice;
 
         private Camera camera;
         private DungeonLevel dungeon;
 
-        private ProgressBar _bar;
-        private Rectangle _minimap;
-        private Rectangle _minimapInner;
-        private Card _testCard;
+        private ProgressBar bar;
+        private Rectangle minimap;
+        private Rectangle minimapInner;
+        private Card testCard;
 
-        public SinglePlayer(ContentManager content, SpriteBatch batch, GraphicsDevice device, GameWindow window)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SinglePlayer"/> class.
+        /// </summary>
+        /// <param name="content"><see cref="ContentManager"/> to load resources with</param>
+        /// <param name="spriteBatch"><see cref="SpriteBatch"/> to draw with</param>
+        /// <param name="graphicsDevice"><see cref="GraphicsDevice"/> to draw with</param>
+        /// <param name="window"><see cref="GameWindow"/> to draw in</param>
+        public SinglePlayer(ContentManager content, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, GameWindow window)
         {
-            graphicsDevice = device;
-            spriteBatch = batch;
+            this.graphicsDevice = graphicsDevice;
+            this.spriteBatch = spriteBatch;
 
             ResourceManager.Init(graphicsDevice);
             ResourceManager.LoadContent(content);
@@ -39,7 +54,7 @@ namespace HoardeGame.GameStates
             CardManager.LoadXmlFile("Content/CARDS.xml");
             CardManager.LoadBackgrounds();
 
-            _testCard = CardManager.GetCard("testCard");
+            testCard = CardManager.GetCard("testCard");
 
             GuiBase.Font = ResourceManager.Font("BasicFont");
 
@@ -53,12 +68,13 @@ namespace HoardeGame.GameStates
 
             dungeon.AddEntity<EntityPlayer>();
 
-            _minimap = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
-            _minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);
+            minimap = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 260, graphicsDevice.PresentationParameters.BackBufferHeight - 260, 260, 260);
+            minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 258, graphicsDevice.PresentationParameters.BackBufferHeight - 258, 256, 256);
 
-            Minimap.GenerateMinimap(device, dungeon.GetMap());
+            Minimap.GenerateMinimap(graphicsDevice, dungeon.GetMap());
         }
 
+        /// <inheritdoc/>
         public override void Start()
         {
             new Label(this, "helloWorldLabel")
@@ -80,11 +96,11 @@ namespace HoardeGame.GameStates
                 {
                     Random rnd = new Random();
 
-                    _bar.Color = new Color(new Vector3((float) rnd.NextDouble(), (float) rnd.NextDouble(), (float) rnd.NextDouble()));
+                    bar.Color = new Color(new Vector3((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble()));
                 }
             };
 
-            _bar = new ProgressBar(this, "helloWorldProgressBar")
+            bar = new ProgressBar(this, "helloWorldProgressBar")
             {
                 Position = new Vector2(10, 70),
                 ProgressBarTexture = ResourceManager.Texture("BasicProgressBar"),
@@ -97,40 +113,45 @@ namespace HoardeGame.GameStates
             };
         }
 
+        /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
             MouseState state = Mouse.GetState();
 
-            _bar.Progress = gameTime.TotalGameTime.Milliseconds / 1000f;
+            bar.Progress = gameTime.TotalGameTime.Milliseconds / 1000f;
 
-            DoCheck(gameTime, new Point(state.X, state.Y), Main.JustPressed());
+            DoCheck(gameTime, new Point(state.X, state.Y), InputManager.LeftClicked);
 
             dungeon.Update(gameTime);
             camera.Position = ConvertUnits.ToDisplayUnits(EntityPlayer.Player.Position);
         }
 
+        /// <inheritdoc/>
         public override void Draw(GameTime gameTime, float interp)
         {
             graphicsDevice.Clear(Color.Black);
 
             // GAME SPRITEBATCH
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.Transformation(graphicsDevice));
+            using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.Transformation(graphicsDevice)))
+            {
                 dungeon.Draw(spriteBatch);
-            spriteBatch.End();
+            }
 
             // GUI SPRITEBATCH
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone);
+            using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone))
+            {
                 DoDraw(gameTime, spriteBatch, interp);
 
-                //CARD
-                _testCard.Draw(new Vector2(10, 150), 1f, gameTime, spriteBatch, interp);
-            spriteBatch.End();
+                // CARD
+                testCard.Draw(new Vector2(10, 150), 1f, gameTime, spriteBatch, interp);
+            }
 
-            //MINIMAP SPRITEBATCH
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone);
-            spriteBatch.Draw(ResourceManager.Texture("OneByOneEmpty"), _minimap, Color.Gray);
-            spriteBatch.Draw(Minimap.CurrentMinimap, _minimapInner, Color.White);
-            spriteBatch.End();
+            // MINIMAP SPRITEBATCH
+            using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone))
+            {
+                spriteBatch.Draw(ResourceManager.Texture("OneByOneEmpty"), minimap, Color.Gray);
+                spriteBatch.Draw(Minimap.CurrentMinimap, minimapInner, Color.White);
+            }
         }
     }
 }

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Button.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
+using System;
 using System.Diagnostics;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
@@ -68,12 +72,16 @@ namespace HoardeGame.GUI
         /// </summary>
         public new Vector2 Position
         {
+            get
+            {
+                return new Vector2(_button.X, _button.Y);
+            }
+
             set
             {
                 _button.X = (int) value.X;
                 _button.Y = (int) value.Y;
             }
-            get { return new Vector2(_button.X, _button.Y); }
         }
 
         /// <summary>
@@ -81,12 +89,15 @@ namespace HoardeGame.GUI
         /// </summary>
         public string Text
         {
-            get { return _text; }
+            get
+            {
+                return _text;
+            }
+
             set
             {
                 _text = value;
-                _button = new Rectangle((int) Position.X, (int) Position.Y, (int)Font.MeasureString(value).X,
-                    (int) Font.MeasureString(value).Y);
+                _button = new Rectangle((int) Position.X, (int) Position.Y, (int)Font.MeasureString(value).X, (int)Font.MeasureString(value).Y);
             }
         }
 

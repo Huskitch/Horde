@@ -1,24 +1,34 @@
-﻿using System.Diagnostics;
+﻿// <copyright file="EntityPlayer.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
 using FarseerPhysics;
-using FarseerPhysics.Collision.Shapes;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Graphics.Rendering;
+using HoardeGame.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace HoardeGame.Entities
 {
+    /// <summary>
+    /// Player entity
+    /// </summary>
     public class EntityPlayer : EntityBase
     {
         /// <summary>
-        /// Singleton of player
+        /// Gets instance of <see cref="EntityPlayer"/>
         /// </summary>
-        public static EntityPlayer Player;
+        public static EntityPlayer Player { get; private set; }
 
         private AnimatedSprite animator;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
+        /// </summary>
+        /// <param name="world"><see cref="World"/> to place this entity in</param>
         public EntityPlayer(World world) : base(world)
         {
             Body = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(10), 1f, ConvertUnits.ToSimUnits(new Vector2(400, 400)));
@@ -32,23 +42,27 @@ namespace HoardeGame.Entities
             Player = this;
         }
 
+        /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
             Vector2 velocity = Vector2.Zero;
 
-            if (Main.KState.IsKeyDown(Keys.S))
+            if (InputManager.KeyboardState.IsKeyDown(Keys.S))
             {
                 velocity.Y++;
             }
-            if (Main.KState.IsKeyDown(Keys.W))
+
+            if (InputManager.KeyboardState.IsKeyDown(Keys.W))
             {
                 velocity.Y--;
             }
-            if (Main.KState.IsKeyDown(Keys.D))
+
+            if (InputManager.KeyboardState.IsKeyDown(Keys.D))
             {
                 velocity.X++;
             }
-            if (Main.KState.IsKeyDown(Keys.A))
+
+            if (InputManager.KeyboardState.IsKeyDown(Keys.A))
             {
                 velocity.X--;
             }
@@ -60,6 +74,7 @@ namespace HoardeGame.Entities
             base.Update(gameTime);
         }
 
+        /// <inheritdoc/>
         public override void Draw(SpriteBatch spriteBatch)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);

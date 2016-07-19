@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// <copyright file="GameState.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.State
 {
+    /// <summary>
+    /// GameState
+    /// </summary>
     public abstract class GameState
     {
         /// <summary>
@@ -46,7 +49,6 @@ namespace HoardeGame.State
             OnCheck?.Invoke(gameTime, point, click);
         }
 
-
         /// <summary>
         /// Checks and invokes teh OnDraw event
         /// </summary>
@@ -58,12 +60,49 @@ namespace HoardeGame.State
             OnDraw?.Invoke(gameTime, spriteBatch, interpolation);
         }
 
-        public virtual void Start() { }
-        public virtual void End() { }
-        public virtual void Pause() { }
-        public virtual void Resume() { }
+        /// <summary>
+        /// Start this GameState
+        /// </summary>
+        public virtual void Start()
+        {
+        }
 
-        public virtual void Update(GameTime gameTime) { }
-        public virtual void Draw(GameTime gameTime, float interpolation) { }
+        /// <summary>
+        /// Stop this GameState
+        /// </summary>
+        public virtual void End()
+        {
+        }
+
+        /// <summary>
+        /// Pause this GameState
+        /// </summary>
+        public virtual void Pause()
+        {
+        }
+
+        /// <summary>
+        /// Resume this GameState
+        /// </summary>
+        public virtual void Resume()
+        {
+        }
+
+        /// <summary>
+        /// Update this GameState
+        /// </summary>
+        /// <param name="gameTime"><see cref="GameTime"/></param>
+        public virtual void Update(GameTime gameTime)
+        {
+        }
+
+        /// <summary>
+        /// Draw this GameState
+        /// </summary>
+        /// <param name="gameTime"><see cref="GameTime"/></param>
+        /// <param name="interpolation">Interpolation</param>
+        public virtual void Draw(GameTime gameTime, float interpolation)
+        {
+        }
     }
 }

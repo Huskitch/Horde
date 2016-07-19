@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Program.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
+using System;
 
 namespace HoardeGame
 {
@@ -12,10 +16,12 @@ namespace HoardeGame
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        public static void Main()
         {
             using (var game = new Main())
+            {
                 game.Run();
+            }
         }
     }
 #endif

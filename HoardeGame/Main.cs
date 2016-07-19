@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿// <copyright file="Main.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
 using FarseerPhysics;
 using HoardeGame.GameStates;
-using HoardeGame.GUI;
+using HoardeGame.Input;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,17 +12,18 @@ using Microsoft.Xna.Framework.Input;
 
 namespace HoardeGame
 {
+    /// <summary>
+    /// Core game class
+    /// </summary>
     public class Main : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
         private StateManager stateManager;
 
-        public static KeyboardState KState;
-        public static KeyboardState LastKState;
-        public static MouseState LastMState;
-        public static MouseState MState;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Main"/> class.
+        /// </summary>
         public Main()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -39,30 +42,13 @@ namespace HoardeGame
             ConvertUnits.SetDisplayUnitToSimUnitRatio(32f);
         }
 
-        public static bool JustPressed(bool leftMouse = true)
-        {
-            if (leftMouse)
-                return LastMState.LeftButton == ButtonState.Released & MState.LeftButton == ButtonState.Pressed;
-
-            return LastMState.RightButton == ButtonState.Released & MState.RightButton == ButtonState.Pressed;
-        }
-
-        public static bool JustKeyDown(Keys key)
-        {
-            return LastKState.IsKeyDown(key) == false & KState.IsKeyDown(key);
-        }
-
-        public static List<Keys> JustKeysDown()
-        {
-            return KState.GetPressedKeys().Where(keyState => LastKState.IsKeyUp(keyState)).ToList();
-        }
-
+        /// <inheritdoc/>
         protected override void Initialize()
         {
-
             base.Initialize();
         }
 
+        /// <inheritdoc/>
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -70,29 +56,30 @@ namespace HoardeGame
             stateManager.Push(new SinglePlayer(Content, spriteBatch, GraphicsDevice, Window));
         }
 
+        /// <inheritdoc/>
         protected override void UnloadContent()
         {
         }
 
+        /// <inheritdoc/>
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            {
                 Exit();
+            }
 
-            LastMState = MState;
-            MState = Mouse.GetState();
-
-            LastKState = KState;
-            KState = Keyboard.GetState();
-
+            InputManager.Update(gameTime);
             stateManager.Update(gameTime);
 
             base.Update(gameTime);
         }
 
+        /// <inheritdoc/>
         protected override void Draw(GameTime gameTime)
         {
             stateManager.Draw(gameTime, 0);
+
             base.Draw(gameTime);
         }
     }

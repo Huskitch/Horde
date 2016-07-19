@@ -1,4 +1,8 @@
-﻿using System.Diagnostics;
+﻿// <copyright file="Label.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
+using System.Diagnostics;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

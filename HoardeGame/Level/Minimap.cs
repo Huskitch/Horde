@@ -1,4 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿// <copyright file="Minimap.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.Level

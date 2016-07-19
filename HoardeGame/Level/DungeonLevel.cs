@@ -1,9 +1,9 @@
-﻿using System;
+﻿// <copyright file="DungeonLevel.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FarseerPhysics.Dynamics;
 using HoardeGame.Entities;
 using Microsoft.Xna.Framework;

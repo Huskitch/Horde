@@ -1,4 +1,7 @@
-﻿using System;
+﻿// <copyright file="ResourceManager.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -36,14 +39,15 @@ namespace HoardeGame
         /// <summary>
         /// Current graphics device
         /// </summary>
-        private static GraphicsDevice _device;
+        private static GraphicsDevice device;
 
         /// <summary>
         /// Initializes the resource manager and prepares it for loading
         /// </summary>
-        public static void Init(GraphicsDevice device)
+        /// <param name="graphicsDevice"></param>
+        public static void Init(GraphicsDevice graphicsDevice)
         {
-            _device = device;
+            device = graphicsDevice;
 
             textures = new Dictionary<string, Texture2D>();
             fonts = new Dictionary<string, SpriteFont>();
@@ -69,8 +73,8 @@ namespace HoardeGame
         /// <param name="content">MonoGame content manager</param>
         public static void LoadTextures(ContentManager content)
         {
-            Texture2D oneByOne = new Texture2D(_device, 1, 1);
-            oneByOne.SetData(new[] {new Color(255,255,255)});
+            Texture2D oneByOne = new Texture2D(device, 1, 1);
+            oneByOne.SetData(new[] { Color.White });
 
             textures.Add("OneByOneEmpty", oneByOne);
 

@@ -1,4 +1,8 @@
-﻿using HoardeGame.State;
+﻿// <copyright file="GuiBase.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
+using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
