@@ -68,7 +68,7 @@ namespace HoardeGame.Level
 
             if (collide)
             {
-                body = BodyFactory.CreateRectangle(world, ConvertUnits.ToSimUnits(scale.X), ConvertUnits.ToSimUnits(scale.Y), 1f);
+                body = BodyFactory.CreateRectangle(world, ConvertUnits.ToSimUnits(32), ConvertUnits.ToSimUnits(32), 1f, new Vector2(0, 24));
                 body.IsStatic = true;
                 body.Position = ConvertUnits.ToSimUnits(pos);
             }
