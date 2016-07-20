@@ -30,7 +30,7 @@ namespace HoardeGame.Entities
 
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 0f;
-            Body.ApplyForce(direction * 10);
+            Body.ApplyForce(direction * 20);
         }
 
         /// <inheritdoc/>
@@ -42,7 +42,7 @@ namespace HoardeGame.Entities
         public override void Draw(SpriteBatch spriteBatch)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            spriteBatch.Draw(ResourceManager.GetTexture("Bullet"), screenPos, Color.White);
+            spriteBatch.Draw(ResourceManager.GetTexture("Bullet"), new Rectangle((int)screenPos.X, (int)screenPos.Y, 32, 32), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
         }
     }
 }

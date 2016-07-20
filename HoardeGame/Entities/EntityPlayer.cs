@@ -32,6 +32,8 @@ namespace HoardeGame.Entities
         private AnimatedSprite animator;
         private World worldInstance;
         private IInputProvider inputProvider;
+        private float fireTimer;
+        private int fireRate = 100;
 
         private enum Directions
         {
@@ -139,41 +141,49 @@ namespace HoardeGame.Entities
                 velocity.X--;
             }
 
-            if (inputProvider.KeyboardState.IsKeyDown(Keys.Space))
-            {
-                Vector2 direction = Vector2.Zero;
+            fireTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-                switch (dir)
+            if (fireTimer > fireRate)
+            {
+                if (inputProvider.KeyboardState.IsKeyDown(Keys.Space))
                 {
-                    case Directions.NORTH:
-                        direction = new Vector2(0, -1);
-                        break;
-                    case Directions.SOUTH:
-                        direction = new Vector2(0, 1);
-                        break;
-                    case Directions.WEST:
-                        direction = new Vector2(-1, 0);
-                        break;
-                    case Directions.EAST:
-                        direction = new Vector2(1, 0);
-                        break;
-                    case Directions.NORTHEAST:
-                        direction = new Vector2(1, -1);
-                        break;
-                    case Directions.NORTHWEST:
-                        direction = new Vector2(-1, -1);
-                        break;
-                    case Directions.SOUTHEAST:
-                        direction = new Vector2(1, 1);
-                        break;
-                    case Directions.SOUTHWEST:
-                        direction = new Vector2(-1, 1);
-                        break;
+                    Vector2 direction = Vector2.Zero;
+
+                    switch (dir)
+                    {
+                        case Directions.NORTH:
+                            direction = new Vector2(0, -1);
+                            break;
+                        case Directions.SOUTH:
+                            direction = new Vector2(0, 1);
+                            break;
+                        case Directions.WEST:
+                            direction = new Vector2(-1, 0);
+                            break;
+                        case Directions.EAST:
+                            direction = new Vector2(1, 0);
+                            break;
+                        case Directions.NORTHEAST:
+                            direction = new Vector2(1, -1);
+                            break;
+                        case Directions.NORTHWEST:
+                            direction = new Vector2(-1, -1);
+                            break;
+                        case Directions.SOUTHEAST:
+                            direction = new Vector2(1, 1);
+                            break;
+                        case Directions.SOUTHWEST:
+                            direction = new Vector2(-1, 1);
+                            break;
+                    }
+
+                    EntityBullet bullet = new EntityBullet(worldInstance, ConvertUnits.ToDisplayUnits(Position),
+                        direction);
+
+                    Bullets.Add(bullet);
                 }
 
-                EntityBullet bullet = new EntityBullet(worldInstance, ConvertUnits.ToDisplayUnits(Position), direction);
-
-                Bullets.Add(bullet);
+                fireTimer = 0;
             }
 
             Body.ApplyForce(velocity * 50);
