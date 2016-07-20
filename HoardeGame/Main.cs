@@ -6,6 +6,7 @@ using FarseerPhysics;
 using HoardeGame.Gameplay;
 using HoardeGame.GameStates;
 using HoardeGame.Input;
+using HoardeGame.Resources;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -23,6 +24,7 @@ namespace HoardeGame
         private StateManager stateManager;
         private IInputProvider inputProvider;
         private ICardProvider cardProvider;
+        private IResourceProvider resourceProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Main"/> class.
@@ -32,8 +34,9 @@ namespace HoardeGame
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
+            resourceProvider = new ResourceManager();
             inputProvider = new InputManager();
-            cardProvider = new CardManager();
+            cardProvider = new CardManager(resourceProvider);
             stateManager = new StateManager();
 
             graphics.PreferredBackBufferWidth = 1600;
@@ -59,12 +62,12 @@ namespace HoardeGame
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            ResourceManager.Init(graphics.GraphicsDevice);
-            ResourceManager.LoadContent(Content);
+            (resourceProvider as ResourceManager).Init(graphics.GraphicsDevice);
+            (resourceProvider as ResourceManager).LoadContent(Content);
 
             (cardProvider as CardManager).LoadXmlFile("Content/CARDS.xml");
 
-            stateManager.Push(new SinglePlayer(inputProvider, cardProvider, Content, spriteBatch, GraphicsDevice, Window));
+            stateManager.Push(new SinglePlayer(resourceProvider, inputProvider, cardProvider, Content, spriteBatch, GraphicsDevice, Window));
         }
 
         /// <inheritdoc/>

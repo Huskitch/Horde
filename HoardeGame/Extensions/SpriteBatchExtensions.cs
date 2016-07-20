@@ -3,7 +3,7 @@
 // </copyright>
 
 using System;
-
+using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -17,12 +17,13 @@ namespace HoardeGame.Extensions
         /// <summary>
         ///     Draw a line between two points
         /// </summary>
-        /// <param name="spriteBatch"><see cref="SpriteBatch"/></param>
+        /// <param name="spriteBatch"><see cref="SpriteBatch"/> for drawing the line</param>
+        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="begin">Start position</param>
         /// <param name="end">End position</param>
         /// <param name="color">Color of the line</param>
         /// <param name="width">Width of line in pixels</param>
-        public static void DrawLine(this SpriteBatch spriteBatch, Vector2 begin, Vector2 end, Color color, int width = 1)
+        public static void DrawLine(this SpriteBatch spriteBatch, IResourceProvider resourceProvider, Vector2 begin, Vector2 end, Color color, int width = 1)
         {
             Rectangle r = new Rectangle((int)begin.X, (int)begin.Y, (int)(end - begin).Length() + width, width);
             Vector2 v = Vector2.Normalize(begin - end);
@@ -32,7 +33,7 @@ namespace HoardeGame.Extensions
                 angle = MathHelper.TwoPi - angle;
             }
 
-            spriteBatch.Draw(ResourceManager.GetTexture("OneByOneEmpty"), r, null, color, angle, Vector2.Zero, SpriteEffects.None, 0);
+            spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), r, null, color, angle, Vector2.Zero, SpriteEffects.None, 0);
         }
 
         /// <summary>

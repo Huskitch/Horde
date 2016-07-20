@@ -11,6 +11,7 @@ using HoardeGame.Graphics.Rendering;
 using HoardeGame.GUI;
 using HoardeGame.Input;
 using HoardeGame.Level;
+using HoardeGame.Resources;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -30,6 +31,7 @@ namespace HoardeGame.GameStates
         private readonly GraphicsDevice graphicsDevice;
         private readonly IInputProvider inputProvider;
         private readonly ICardProvider cardProvider;
+        private readonly IResourceProvider resourceProvider;
 
         private readonly Camera camera;
         private readonly DungeonLevel dungeon;
@@ -48,16 +50,18 @@ namespace HoardeGame.GameStates
         /// <param name="window"><see cref="GameWindow"/> to draw in</param>
         /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
         /// <param name="cardProvider"><see cref="ICardProvider"/> for managing cards</param>
-        public SinglePlayer(IInputProvider inputProvider, ICardProvider cardProvider, ContentManager content, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, GameWindow window)
+        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
+        public SinglePlayer(IResourceProvider resourceProvider, IInputProvider inputProvider, ICardProvider cardProvider, ContentManager content, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, GameWindow window)
         {
             this.graphicsDevice = graphicsDevice;
             this.spriteBatch = spriteBatch;
             this.inputProvider = inputProvider;
             this.cardProvider = cardProvider;
+            this.resourceProvider = resourceProvider;
 
             testCard = cardProvider.GetCard("testCard");
 
-            GuiBase.Font = ResourceManager.GetFont("BasicFont");
+            GuiBase.Font = resourceProvider.GetFont("BasicFont");
 
             camera = new Camera
             {
@@ -65,16 +69,19 @@ namespace HoardeGame.GameStates
                 Size = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight)
             };
 
-            dungeon = new DungeonLevel();
+            dungeon = new DungeonLevel(resourceProvider);
             dungeon.GenerateLevel(64, 64, 40);
 
-            EntityPlayer player = new EntityPlayer(dungeon.World, inputProvider);
+            EntityPlayer player = new EntityPlayer(dungeon.World, inputProvider, resourceProvider);
             dungeon.AddEntity(player);
 
-            dungeon.AddEntity<EntityBat>();
-            dungeon.AddEntity<EntityChest>();
+            EntityBat bat = new EntityBat(dungeon.World, resourceProvider);
+            dungeon.AddEntity(bat);
 
-            minimap = new Minimap();
+            EntityChest chest = new EntityChest(dungeon.World, resourceProvider);
+            dungeon.AddEntity(chest);
+
+            minimap = new Minimap(resourceProvider);
             minimap.Generate(graphicsDevice, dungeon.GetMap());
 
             minimapRectangle = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 280, graphicsDevice.PresentationParameters.BackBufferHeight - 280, 260, 260);
@@ -95,8 +102,8 @@ namespace HoardeGame.GameStates
                 Position = new Vector2(10, 30),
                 TargetRectangle = new Rectangle(10, 30, 128, 32),
                 TextOffset = new Vector2(10, 5),
-                ButtonTexture = ResourceManager.GetTexture("BasicButton"),
-                ButtonTextureOver = ResourceManager.GetTexture("BasicButtonHover"),
+                ButtonTexture = resourceProvider.GetTexture("BasicButton"),
+                ButtonTextureOver = resourceProvider.GetTexture("BasicButtonHover"),
                 Text = "Click me!",
                 OverColor = Color.Red,
                 OnClick = () =>
@@ -107,10 +114,10 @@ namespace HoardeGame.GameStates
                 }
             };
 
-            bar = new ProgressBar(this, "helloWorldProgressBar")
+            bar = new ProgressBar(this, resourceProvider, "helloWorldProgressBar")
             {
                 Position = new Vector2(10, 70),
-                ProgressBarTexture = ResourceManager.GetTexture("BasicProgressBar"),
+                ProgressBarTexture = resourceProvider.GetTexture("BasicProgressBar"),
                 BarHeight = 23,
                 BarStart = new Vector2(1, 1),
                 BarWidth = 63,

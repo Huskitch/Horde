@@ -6,6 +6,7 @@ using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Graphics.Rendering;
+using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -22,7 +23,8 @@ namespace HoardeGame.Entities
         /// Initializes a new instance of the <see cref="EntityBat"/> class.
         /// </summary>
         /// <param name="world"><see cref="World"/> to place this entity in</param>
-        public EntityBat(World world) : base(world)
+        /// <param name="resourceProvider"><see cref="IResourceProvider"/> to load resources with</param>
+        public EntityBat(World world, IResourceProvider resourceProvider) : base(world)
         {
             Body = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(10), 1f, ConvertUnits.ToSimUnits(new Vector2(500, 500)));
             Body.CollisionCategories = Category.Cat3;
@@ -33,7 +35,7 @@ namespace HoardeGame.Entities
 
             Health = 3;
 
-            animator = new AnimatedSprite(ResourceManager.GetTexture("BatSheet"));
+            animator = new AnimatedSprite(resourceProvider.GetTexture("BatSheet"));
             animator.AddAnimation("Flap", 32, 0, 2, 100);
         }
 

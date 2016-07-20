@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.Xml.Serialization;
+using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -99,6 +100,17 @@ namespace HoardeGame.Gameplay
         /// </summary>
         public int[] Price { get; set; } = new int[3];
 
+        private IResourceProvider resourceProvider;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Card"/> class.
+        /// </summary>
+        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
+        public void Initialize(IResourceProvider resourceProvider)
+        {
+            this.resourceProvider = resourceProvider;
+        }
+
         /// <summary>
         ///     Draw the card
         /// </summary>
@@ -115,27 +127,27 @@ namespace HoardeGame.Gameplay
             switch (Rarity)
             {
                 case CardRarity.Common:
-                    cardTexture = ResourceManager.GetTexture("CommonCard");
+                    cardTexture = resourceProvider.GetTexture("CommonCard");
                     break;
                 case CardRarity.Rare:
-                    cardTexture = ResourceManager.GetTexture("RareCard");
+                    cardTexture = resourceProvider.GetTexture("RareCard");
                     break;
                 case CardRarity.Epic:
-                    cardTexture = ResourceManager.GetTexture("EpicCard");
+                    cardTexture = resourceProvider.GetTexture("EpicCard");
                     break;
             }
 
             spriteBatch.Draw(cardTexture, position, null, null, null, 0f, scaleVector, Color.White);
             spriteBatch.Draw(Texture, position + CardTextureOffset * scale, null, null, null, 0f, scaleVector, Color.White);
 
-            spriteBatch.DrawString(ResourceManager.GetFont("BasicFont"), Name, CardNameOffset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Name, CardNameOffset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
 
-            spriteBatch.DrawString(ResourceManager.GetFont("BasicFont"), Description, CardDescriptionOffset + position - Vector2.One, Color.Gray, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
-            spriteBatch.DrawString(ResourceManager.GetFont("BasicFont"), Description, CardDescriptionOffset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Description, CardDescriptionOffset + position - Vector2.One, Color.Gray, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Description, CardDescriptionOffset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
 
-            spriteBatch.DrawString(ResourceManager.GetFont("BasicFont"), Price[0].ToString(), Mana1Offset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
-            spriteBatch.DrawString(ResourceManager.GetFont("BasicFont"), Price[1].ToString(), Mana2Offset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
-            spriteBatch.DrawString(ResourceManager.GetFont("BasicFont"), Price[2].ToString(), Mana3Offset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Price[0].ToString(), Mana1Offset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Price[1].ToString(), Mana2Offset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Price[2].ToString(), Mana3Offset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
         }
 
         /// <inheritdoc/>

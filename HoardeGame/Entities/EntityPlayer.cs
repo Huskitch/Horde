@@ -8,6 +8,7 @@ using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Graphics.Rendering;
 using HoardeGame.Input;
+using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -45,6 +46,7 @@ namespace HoardeGame.Entities
             SOUTHWEST
         }
 
+        private readonly IResourceProvider resourceProvider;
         private Directions dir;
 
         /// <summary>
@@ -52,9 +54,11 @@ namespace HoardeGame.Entities
         /// </summary>
         /// <param name="world"><see cref="World"/> to place this entity in</param>
         /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
-        public EntityPlayer(World world, IInputProvider inputProvider) : base(world)
+        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
+        public EntityPlayer(World world, IInputProvider inputProvider, IResourceProvider resourceProvider) : base(world)
         {
             this.inputProvider = inputProvider;
+            this.resourceProvider = resourceProvider;
 
             Body = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(10), 1f, ConvertUnits.ToSimUnits(new Vector2(400, 400)));
 
@@ -71,7 +75,7 @@ namespace HoardeGame.Entities
 
             Health = 10;
 
-            animator = new AnimatedSprite(ResourceManager.GetTexture("PlayerSheet"));
+            animator = new AnimatedSprite(resourceProvider.GetTexture("PlayerSheet"));
             animator.AddAnimation("South", 32, 0, 5, 100);
             animator.AddAnimation("West", 32, 2, 5, 100);
             animator.AddAnimation("East", 32, 6, 5, 100);
@@ -171,7 +175,7 @@ namespace HoardeGame.Entities
                         break;
                 }
 
-                EntityBullet bullet = new EntityBullet(worldInstance, ConvertUnits.ToDisplayUnits(Position), direction);
+                EntityBullet bullet = new EntityBullet(worldInstance, resourceProvider, ConvertUnits.ToDisplayUnits(Position), direction);
 
                 Bullets.Add(bullet);
             }
