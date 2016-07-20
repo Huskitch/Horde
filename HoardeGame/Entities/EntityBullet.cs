@@ -5,6 +5,7 @@
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
+using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -15,14 +16,19 @@ namespace HoardeGame.Entities
     /// </summary>
     public class EntityBullet : EntityBase
     {
+        private readonly IResourceProvider resourceProvider;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBullet"/> class.
         /// </summary>
         /// <param name="world"><see cref="World"/> to place this entity in</param>
+        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="startPos">Starting position</param>
         /// <param name="direction">Direction</param>
-        public EntityBullet(World world, Vector2 startPos, Vector2 direction) : base(world)
+        public EntityBullet(World world, IResourceProvider resourceProvider, Vector2 startPos, Vector2 direction) : base(world)
         {
+            this.resourceProvider = resourceProvider;
+
             Body = BodyFactory.CreateRectangle(world, ConvertUnits.ToSimUnits(5), ConvertUnits.ToSimUnits(5), 1f, ConvertUnits.ToSimUnits(startPos));
 
             Body.CollisionCategories = Category.Cat2;
@@ -42,7 +48,7 @@ namespace HoardeGame.Entities
         public override void Draw(SpriteBatch spriteBatch)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            spriteBatch.Draw(ResourceManager.GetTexture("Bullet"), new Rectangle((int)screenPos.X, (int)screenPos.Y, 32, 32), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+            spriteBatch.Draw(resourceProvider.GetTexture("Bullet"), screenPos, Color.White);
         }
     }
 }

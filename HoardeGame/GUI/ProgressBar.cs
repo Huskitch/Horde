@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using HoardeGame.Resources;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -38,6 +39,8 @@ namespace HoardeGame.GUI
         /// </summary>
         public float BarWidth { get; set; }
 
+        private readonly IResourceProvider resourceProvider;
+
         private Rectangle bar;
         private float progress;
 
@@ -65,15 +68,17 @@ namespace HoardeGame.GUI
         /// <param name="state"><see cref="GameState"/> to which this button belongs</param>
         /// <param name="id">ID of this control for debugging</param>
         /// <param name="noSub">Whether to subscribe to events in gamestate</param>
-        public ProgressBar(GameState state, string id, bool noSub = false) : base(state, id, noSub)
+        /// <param name="resourceProvider"><see cref="IResourceProvider"/> to use for loading resources</param>
+        public ProgressBar(GameState state, IResourceProvider resourceProvider, string id, bool noSub = false) : base(state, id, noSub)
         {
+            this.resourceProvider = resourceProvider;
         }
 
         /// <inheritdoc/>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, float interpolation)
         {
             spriteBatch.Draw(ProgressBarTexture, TargetRectangle, Color.White);
-            spriteBatch.Draw(ResourceManager.GetTexture("OneByOneEmpty"), bar, Color);
+            spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), bar, Color);
         }
     }
 }

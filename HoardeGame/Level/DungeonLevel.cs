@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using FarseerPhysics.Dynamics;
 using HoardeGame.Entities;
+using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -28,6 +29,7 @@ namespace HoardeGame.Level
 
         private readonly LevelGenerator levelGen;
         private readonly List<EntityBase> entities;
+        private readonly IResourceProvider resourceProvider;
 
         private int[,] map;
         private int mapWidth = 1;
@@ -37,8 +39,11 @@ namespace HoardeGame.Level
         /// <summary>
         /// Initializes a new instance of the <see cref="DungeonLevel"/> class.
         /// </summary>
-        public DungeonLevel()
+        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
+        public DungeonLevel(IResourceProvider resourceProvider)
         {
+            this.resourceProvider = resourceProvider;
+
             levelGen = new LevelGenerator();
             map = new int[mapWidth, mapHeight];
             MapTiles = new List<Tile>();
@@ -74,20 +79,6 @@ namespace HoardeGame.Level
             map = levelGen.Map;
 
             LoadTiles();
-        }
-
-        /// <summary>
-        /// Spawns and adds an entiy of the type T
-        /// </summary>
-        /// <typeparam name="T">Type of the entity</typeparam>
-        /// <returns>Entity that can be catsed to T</returns>
-        public EntityBase AddEntity<T>()
-        {
-            EntityBase entity = (EntityBase)Activator.CreateInstance(typeof(T), World);
-            entity.Level = this;
-            entities.Add(entity);
-
-            return entity;
         }
 
         /// <summary>
@@ -177,7 +168,7 @@ namespace HoardeGame.Level
                 {
                     if (map[x, y] != 1)
                     {
-                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32 + 24), new Vector2(32, 32), ResourceManager.GetTexture("BasicFloor"), false, World));
+                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32 + 24), new Vector2(32, 32), resourceProvider.GetTexture("BasicFloor"), false, World));
                     }
                 }
             }
@@ -188,7 +179,7 @@ namespace HoardeGame.Level
                 {
                     if (map[x, y] == 1)
                     {
-                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32), new Vector2(32, 56), ResourceManager.GetTexture("BasicWall"), true, World));
+                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32), new Vector2(32, 56), resourceProvider.GetTexture("BasicWall"), true, World));
                     }
                 }
             }

@@ -4,6 +4,7 @@
 
 using System;
 using HoardeGame.Graphics.Rendering;
+using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -21,6 +22,17 @@ namespace HoardeGame.Level
         /// Gets the generated minimap to be drawn
         /// </summary>
         public Texture2D Image { get; private set; }
+
+        private readonly IResourceProvider resourceProvider;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Minimap"/> class.
+        /// </summary>
+        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
+        public Minimap(IResourceProvider resourceProvider)
+        {
+            this.resourceProvider = resourceProvider;
+        }
 
         /// <summary>
         /// Generates a new minimap <see cref="Texture2D"/>
@@ -59,7 +71,7 @@ namespace HoardeGame.Level
         /// <param name="camera">Camera to draw outline</param>
         public void Draw(SpriteBatch spriteBatch, Rectangle outer, Rectangle inner, Camera camera)
         {
-            Texture2D white = ResourceManager.GetTexture("OneByOneEmpty");
+            Texture2D white = resourceProvider.GetTexture("OneByOneEmpty");
             spriteBatch.Draw(white, outer, Color.Gray);
 
             float relativeWidth = camera.Size.X / Image.Width;
@@ -67,7 +79,7 @@ namespace HoardeGame.Level
             float relativeX = camera.Position.X / (Image.Width / 2);
             float relativeY = camera.Position.Y / (Image.Height / 2);
 
-            spriteBatch.DrawString(ResourceManager.GetFont("BasicFont"), (camera.Position / 32).ToString(), new Vector2(20, 20), Color.White);
+            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), (camera.Position / 32).ToString(), new Vector2(20, 20), Color.White);
 
             float max = Math.Max(relativeWidth, relativeHeight);
             spriteBatch.Draw(Image, inner, new Rectangle((int)relativeX - (int)(max / 2), (int)relativeY - (int)(max / 2), (int)max, (int)max), Color.White);

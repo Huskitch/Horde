@@ -9,43 +9,43 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 
-namespace HoardeGame
+namespace HoardeGame.Resources
 {
     /// <summary>
     /// Caches resources for the game
     /// </summary>
-    public static class ResourceManager
+    public class ResourceManager : IResourceProvider
     {
         /// <summary>
         /// Dictionary of all loaded <see cref="Texture2D"/>
         /// </summary>
-        private static Dictionary<string, Texture2D> textures;
+        private Dictionary<string, Texture2D> textures;
 
         /// <summary>
         /// Dictionary of all loaded <see cref="SpriteFont"/>
         /// </summary>
-        private static Dictionary<string, SpriteFont> fonts;
+        private Dictionary<string, SpriteFont> fonts;
 
         /// <summary>
         /// Dictionary of all loaded <see cref="SoundEffect"/>
         /// </summary>
-        private static Dictionary<string, SoundEffect> sounds;
+        private Dictionary<string, SoundEffect> sounds;
 
         /// <summary>
         /// Dictionary of all loaded <see cref="Song"/>
         /// </summary>
-        private static Dictionary<string, Song> songs;
+        private Dictionary<string, Song> songs;
 
         /// <summary>
         /// Current <see cref="GraphicsDevice"/>
         /// </summary>
-        private static GraphicsDevice device;
+        private GraphicsDevice device;
 
         /// <summary>
         /// Initializes the resource manager and prepares it for loading
         /// </summary>
         /// <param name="graphicsDevice"><see cref="GraphicsDevice"/></param>
-        public static void Init(GraphicsDevice graphicsDevice)
+        public void Init(GraphicsDevice graphicsDevice)
         {
             device = graphicsDevice;
 
@@ -59,7 +59,7 @@ namespace HoardeGame
         /// Loads all content
         /// </summary>
         /// <param name="content"><see cref="ContentManager"/></param>
-        public static void LoadContent(ContentManager content)
+        public void LoadContent(ContentManager content)
         {
             LoadTextures(content);
             LoadFonts(content);
@@ -71,7 +71,7 @@ namespace HoardeGame
         /// Loads all <see cref="Texture2D"/>
         /// </summary>
         /// <param name="content"><see cref="ContentManager"/></param>
-        public static void LoadTextures(ContentManager content)
+        public void LoadTextures(ContentManager content)
         {
             Texture2D oneByOne = new Texture2D(device, 1, 1);
             oneByOne.SetData(new[] { Color.White });
@@ -101,7 +101,7 @@ namespace HoardeGame
         /// Loads all <see cref="SpriteFont"/>
         /// </summary>
         /// <param name="content"><see cref="ContentManager"/></param>
-        public static void LoadFonts(ContentManager content)
+        public void LoadFonts(ContentManager content)
         {
             fonts.Add("BasicFont", content.Load<SpriteFont>("BasicFont"));
         }
@@ -110,7 +110,7 @@ namespace HoardeGame
         /// Loads all <see cref="SoundEffect"/>
         /// </summary>
         /// <param name="content"><see cref="ContentManager"/></param>
-        public static void LoadSounds(ContentManager content)
+        public void LoadSounds(ContentManager content)
         {
         }
 
@@ -118,7 +118,7 @@ namespace HoardeGame
         /// Loads all <see cref="Song"/>
         /// </summary>
         /// <param name="content"><see cref="ContentManager"/>r</param>
-        public static void LoadSongs(ContentManager content)
+        public void LoadSongs(ContentManager content)
         {
         }
 
@@ -127,7 +127,7 @@ namespace HoardeGame
         /// </summary>
         /// <param name="key">Name of the <see cref="Texture2D"/></param>
         /// <returns><see cref="Texture2D"/> with matching key or null</returns>
-        public static Texture2D GetTexture(string key)
+        public Texture2D GetTexture(string key)
         {
             return !textures.ContainsKey(key) ? null : textures[key];
         }
@@ -137,7 +137,7 @@ namespace HoardeGame
         /// </summary>
         /// <param name="key">Name of the <see cref="SpriteFont"/></param>
         /// <returns><see cref="SpriteFont"/> with matching key or null</returns>
-        public static SpriteFont GetFont(string key)
+        public SpriteFont GetFont(string key)
         {
             return !fonts.ContainsKey(key) ? null : fonts[key];
         }
@@ -147,7 +147,7 @@ namespace HoardeGame
         /// </summary>
         /// <param name="key">Name of the <see cref="SoundEffect"/></param>
         /// <returns><see cref="SoundEffect"/> with matching key or null</returns>
-        public static SoundEffect GetSoundEffect(string key)
+        public SoundEffect GetSoundEffect(string key)
         {
             return !sounds.ContainsKey(key) ? null : sounds[key];
         }
@@ -157,7 +157,7 @@ namespace HoardeGame
         /// </summary>
         /// <param name="key">Name of the <see cref="Song"/></param>
         /// <returns><see cref="Song"/> with matching key or null</returns>
-        public static Song GetSong(string key)
+        public Song GetSong(string key)
         {
             return !songs.ContainsKey(key) ? null : songs[key];
         }

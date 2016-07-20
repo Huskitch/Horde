@@ -5,6 +5,7 @@
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
+using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -15,12 +16,17 @@ namespace HoardeGame.Entities
     /// </summary>
     public class EntityChest : EntityBase
     {
+        private readonly IResourceProvider resourceProvider;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityChest"/> class.
         /// </summary>
         /// <param name="world"><see cref="World"/> to place this entity in</param>
-        public EntityChest(World world) : base(world)
+        /// <param name="resourceProvider"><see cref="IResourceProvider"/> to use for loading resources</param>
+        public EntityChest(World world, IResourceProvider resourceProvider) : base(world)
         {
+            this.resourceProvider = resourceProvider;
+
             Body = BodyFactory.CreateRectangle(world, ConvertUnits.ToSimUnits(25), ConvertUnits.ToSimUnits(25), 1f, ConvertUnits.ToSimUnits(new Vector2(450, 500)));
 
             Body.CollisionCategories = Category.Cat3;
@@ -41,7 +47,7 @@ namespace HoardeGame.Entities
         public override void Draw(SpriteBatch spriteBatch)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            spriteBatch.Draw(ResourceManager.GetTexture("Chest"), screenPos, Color.White);
+            spriteBatch.Draw(resourceProvider.GetTexture("Chest"), screenPos, Color.White);
         }
     }
 }
