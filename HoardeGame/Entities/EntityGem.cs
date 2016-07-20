@@ -26,7 +26,7 @@ namespace HoardeGame.Entities
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         public EntityGem(DungeonLevel level, IResourceProvider resourceProvider) : base(level)
         {
-            Body = BodyFactory.CreateCircle(Level.World, 4, 1);
+            FixtureFactory.AttachCircle(4, 1, Body);
             Body.CollisionCategories = Category.Cat3;
             Body.CollidesWith = Category.All;
 

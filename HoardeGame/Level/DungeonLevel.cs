@@ -114,6 +114,7 @@ namespace HoardeGame.Level
         /// <param name="entity">Entity to be added</param>
         public void AddEntity(EntityBase entity)
         {
+            entity.Start();
             entities.Add(entity);
         }
 

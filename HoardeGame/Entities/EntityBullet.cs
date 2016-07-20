@@ -31,8 +31,8 @@ namespace HoardeGame.Entities
         {
             this.resourceProvider = resourceProvider;
 
-            Body = BodyFactory.CreateRectangle(Level.World, ConvertUnits.ToSimUnits(5), ConvertUnits.ToSimUnits(5), 1f, ConvertUnits.ToSimUnits(startPos));
-
+            FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(5), ConvertUnits.ToSimUnits(5), 1f, Vector2.Zero, Body);
+            Body.Position = ConvertUnits.ToSimUnits(startPos);
             Body.CollisionCategories = Category.Cat2;
             Body.CollidesWith = Category.Cat3 | Category.Cat4;
 

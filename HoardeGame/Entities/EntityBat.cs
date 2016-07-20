@@ -17,7 +17,7 @@ namespace HoardeGame.Entities
     /// <summary>
     /// Bat entity
     /// </summary>
-    public class EntityBat : EntityBase
+    public class EntityBat : EntityBaseEnemy
     {
         private readonly AnimatedSprite animator;
 
@@ -28,13 +28,13 @@ namespace HoardeGame.Entities
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> to load resources with</param>
         public EntityBat(DungeonLevel level, IResourceProvider resourceProvider) : base(level)
         {
-            Body = BodyFactory.CreateCircle(Level.World, ConvertUnits.ToSimUnits(10), 1f, ConvertUnits.ToSimUnits(new Vector2(500, 500)));
+            FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10f), 1f, Body);
+            Body.Position = ConvertUnits.ToSimUnits(new Vector2(500, 500));
             Body.CollisionCategories = Category.Cat3;
             Body.CollidesWith = Category.All;
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
-            Body.OnCollision += OnShot;
 
             Health = 3;
 
@@ -53,28 +53,6 @@ namespace HoardeGame.Entities
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
             animator.DrawAnimation("Flap", screenPos, spriteBatch);
-        }
-
-        private bool OnShot(Fixture fixtureA, Fixture fixtureB, Contact contact)
-        {
-            if (fixtureB.CollisionCategories != Category.Cat2)
-            {
-                return true;
-            }
-
-            if (Health < 0)
-            {
-                return false;
-            }
-
-            Health--;
-
-            if (Health == 0)
-            {
-                Removed = true;
-            }
-
-            return true;
         }
     }
 }

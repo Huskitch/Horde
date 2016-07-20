@@ -62,8 +62,8 @@ namespace HoardeGame.Entities
             this.inputProvider = inputProvider;
             this.resourceProvider = resourceProvider;
 
-            Body = BodyFactory.CreateCircle(level.World, ConvertUnits.ToSimUnits(10), 1f, Level.GetSpawnPosition());
-
+            FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10), 1f, Body);
+            Body.Position = Level.GetSpawnPosition();
             Body.CollisionCategories = Category.Cat1;
             Body.CollidesWith = Category.Cat3 | Category.Cat4;
 

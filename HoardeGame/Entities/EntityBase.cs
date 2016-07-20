@@ -30,9 +30,9 @@ namespace HoardeGame.Entities
         public int Health { get; set; }
 
         /// <summary>
-        /// Gets or sets the physics body of the entity
+        /// Gets the physics body of the entity
         /// </summary>
-        public Body Body { get; set; }
+        public Body Body { get; private set; }
 
         /// <summary>
         /// Gets the position of the <see cref="Body"/>
@@ -51,6 +51,14 @@ namespace HoardeGame.Entities
         public EntityBase(DungeonLevel level)
         {
             Level = level;
+            Body = new Body(level.World);
+        }
+
+        /// <summary>
+        /// Initializes the entity when it's added into the level
+        /// </summary>
+        public virtual void Start()
+        {
         }
 
         /// <summary>
