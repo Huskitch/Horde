@@ -44,7 +44,10 @@ namespace HoardeGame.GameStates
         private readonly Rectangle minimapInner;
         private readonly Rectangle screenRectangle;
 
-        private ProgressBar bar;
+        private ProgressBar heatlthBar;
+        private ProgressBar armorBar;
+        private Label healthLabel;
+        private Label armorLabel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SinglePlayer"/> class.
@@ -100,39 +103,42 @@ namespace HoardeGame.GameStates
         /// <inheritdoc/>
         public override void Start()
         {
-            new Label(this, "helloWorldLabel")
+            heatlthBar = new ProgressBar(this, resourceProvider, "healthProgressBar")
             {
-                Position = new Vector2(10, 10),
-                Text = "Hello world!"
-            };
-
-            new Button(this, "helloWorldButton")
-            {
-                Position = new Vector2(10, 30),
-                TargetRectangle = new Rectangle(10, 30, 128, 32),
-                TextOffset = new Vector2(10, 5),
-                ButtonTexture = resourceProvider.GetTexture("BasicButton"),
-                ButtonTextureOver = resourceProvider.GetTexture("BasicButtonHover"),
-                Text = "Click me!",
-                OverColor = Color.Red,
-                OnClick = () =>
-                {
-                    Random rnd = new Random();
-
-                    bar.Color = new Color(new Vector3((float)rnd.NextDouble(), (float)rnd.NextDouble(), (float)rnd.NextDouble()));
-                }
-            };
-
-            bar = new ProgressBar(this, resourceProvider, "helloWorldProgressBar")
-            {
-                Position = new Vector2(10, 70),
+                Position = new Vector2(20, graphicsDevice.PresentationParameters.BackBufferHeight - 85),
                 ProgressBarTexture = resourceProvider.GetTexture("BasicProgressBar"),
-                BarHeight = 23,
+                BarHeight = 38,
                 BarStart = new Vector2(1, 1),
-                BarWidth = 63,
-                TargetRectangle = new Rectangle(10, 70, 65, 25),
-                Color = Color.Blue,
+                BarWidth = 118,
+                TargetRectangle = new Rectangle(20, graphicsDevice.PresentationParameters.BackBufferHeight - 85, 120, 40),
+                Color = new Color(190, 74, 57),
                 Progress = 1f
+            };
+
+            healthLabel = new Label(this, "healthLabel")
+            {
+                Position = new Vector2(107, graphicsDevice.PresentationParameters.BackBufferHeight - 85),
+                Color = Color.LightGray,
+                Text = "100"
+            };
+
+            armorBar = new ProgressBar(this, resourceProvider, "armorProgressBar")
+            {
+                Position = new Vector2(15, graphicsDevice.PresentationParameters.BackBufferHeight - 65),
+                ProgressBarTexture = resourceProvider.GetTexture("BasicProgressBar"),
+                BarHeight = 28,
+                BarStart = new Vector2(1, 1),
+                BarWidth = 108,
+                TargetRectangle = new Rectangle(15, graphicsDevice.PresentationParameters.BackBufferHeight - 65, 110, 30),
+                Color = new Color(82, 141, 156),
+                Progress = 1f
+            };
+
+            armorLabel = new Label(this, "armorLabel")
+            {
+                Position = new Vector2(93, graphicsDevice.PresentationParameters.BackBufferHeight - 65),
+                Color = Color.LightGray,
+                Text = "100"
             };
         }
 
@@ -140,8 +146,6 @@ namespace HoardeGame.GameStates
         public override void Update(GameTime gameTime)
         {
             MouseState state = Mouse.GetState();
-
-            bar.Progress = gameTime.TotalGameTime.Milliseconds / 1000f;
 
             DoCheck(gameTime, new Point(state.X, state.Y), inputProvider.LeftClicked);
 
