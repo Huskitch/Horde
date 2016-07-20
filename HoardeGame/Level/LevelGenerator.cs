@@ -80,7 +80,7 @@ namespace HoardeGame.Level
             List<Point> emptySpaces = FindEmptySpaces(ref map);
             Random rnd = new Random();
 
-            Vector2 position = emptySpaces[rnd.Next(emptySpaces.Count)].ToVector2() * 32;
+            Vector2 position = emptySpaces[rnd.Next(emptySpaces.Count)].ToVector2() * 32 + new Vector2(0, 16);
 
             return ConvertUnits.ToSimUnits(position);
         }
