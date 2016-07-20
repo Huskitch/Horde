@@ -38,7 +38,11 @@ namespace HoardeGame.Entities
             NORTH,
             EAST,
             SOUTH,
-            WEST
+            WEST,
+            NORTHEAST,
+            NORTHWEST,
+            SOUTHEAST,
+            SOUTHWEST
         }
 
         private Directions dir;
@@ -53,6 +57,10 @@ namespace HoardeGame.Entities
             this.inputProvider = inputProvider;
 
             Body = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(10), 1f, ConvertUnits.ToSimUnits(new Vector2(400, 400)));
+
+            Body.CollisionCategories = Category.Cat1;
+            Body.CollidesWith = Category.Cat3 | Category.Cat4;
+
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
@@ -97,13 +105,37 @@ namespace HoardeGame.Entities
 
             if (inputProvider.KeyboardState.IsKeyDown(Keys.D))
             {
-                dir = Directions.EAST;
+                if (dir == Directions.SOUTH)
+                {
+                    dir = Directions.SOUTHEAST;
+                }
+                else if (dir == Directions.NORTH)
+                {
+                    dir = Directions.NORTHEAST;
+                }
+                else
+                {
+                    dir = Directions.EAST;
+                }
+
                 velocity.X++;
             }
 
             if (inputProvider.KeyboardState.IsKeyDown(Keys.A))
             {
-                dir = Directions.WEST;
+                if (dir == Directions.SOUTH)
+                {
+                    dir = Directions.SOUTHWEST;
+                }
+                else if (dir == Directions.NORTH)
+                {
+                    dir = Directions.NORTHWEST;
+                }
+                else
+                {
+                    dir = Directions.WEST;
+                }
+
                 velocity.X--;
             }
 
@@ -111,12 +143,37 @@ namespace HoardeGame.Entities
             {
                 Vector2 direction = Vector2.Zero;
 
-                if (dir == Directions.NORTH)
+                switch (dir)
                 {
-                    direction = new Vector2(0, -1);
+                    case Directions.NORTH:
+                        direction = new Vector2(0, -1);
+                        break;
+                    case Directions.SOUTH:
+                        direction = new Vector2(0, 1);
+                        break;
+                    case Directions.WEST:
+                        direction = new Vector2(-1, 0);
+                        break;
+                    case Directions.EAST:
+                        direction = new Vector2(1, 0);
+                        break;
+                    case Directions.NORTHEAST:
+                        direction = new Vector2(1, -1);
+                        break;
+                    case Directions.NORTHWEST:
+                        direction = new Vector2(-1, -1);
+                        break;
+                    case Directions.SOUTHEAST:
+                        direction = new Vector2(1, 1);
+                        break;
+                    case Directions.SOUTHWEST:
+                        direction = new Vector2(-1, 1);
+                        break;
                 }
 
-                Bullets.Add(new EntityBullet(worldInstance, ConvertUnits.ToDisplayUnits(Position), direction));
+                EntityBullet bullet = new EntityBullet(worldInstance, ConvertUnits.ToDisplayUnits(Position), direction);
+
+                Bullets.Add(bullet);
             }
 
             Body.ApplyForce(velocity * 50);
@@ -136,6 +193,7 @@ namespace HoardeGame.Entities
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
 
+            // TODO: Plzno
             if (inputProvider.KeyboardState.IsKeyDown(Keys.S) && inputProvider.KeyboardState.IsKeyDown(Keys.A))
             {
                 animator.DrawAnimation("SouthWest", screenPos, spriteBatch);

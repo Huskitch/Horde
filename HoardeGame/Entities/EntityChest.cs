@@ -23,6 +23,8 @@ namespace HoardeGame.Entities
         {
             Body = BodyFactory.CreateRectangle(world, ConvertUnits.ToSimUnits(25), ConvertUnits.ToSimUnits(25), 1f, ConvertUnits.ToSimUnits(new Vector2(450, 500)));
 
+            Body.CollisionCategories = Category.Cat3;
+            Body.CollidesWith = Category.All;
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 70f;
             Body.FixedRotation = true;

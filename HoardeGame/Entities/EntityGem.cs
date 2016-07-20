@@ -24,6 +24,8 @@ namespace HoardeGame.Entities
         public EntityGem(World world) : base(world)
         {
             Body = BodyFactory.CreateCircle(world, 4, 1);
+            Body.CollisionCategories = Category.Cat3;
+            Body.CollidesWith = Category.All;
 
             animator = new AnimatedSprite(ResourceManager.GetTexture("GemAnimation"));
             animator.AddAnimation("Bounce", 12, 0, 7, 150);

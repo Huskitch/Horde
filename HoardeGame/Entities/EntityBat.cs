@@ -25,6 +25,8 @@ namespace HoardeGame.Entities
         public EntityBat(World world) : base(world)
         {
             Body = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(10), 1f, ConvertUnits.ToSimUnits(new Vector2(500, 500)));
+            Body.CollisionCategories = Category.Cat3;
+            Body.CollidesWith = Category.All;
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
