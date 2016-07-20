@@ -14,7 +14,6 @@ using HoardeGame.Level;
 using HoardeGame.Resources;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -25,6 +24,11 @@ namespace HoardeGame.GameStates
     /// </summary>
     public class SinglePlayer : GameState
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether the player is drilling
+        /// </summary>
+        public bool Drilling { get; set; }
+
         private readonly Card testCard;
 
         private readonly SpriteBatch spriteBatch;
@@ -38,6 +42,7 @@ namespace HoardeGame.GameStates
         private readonly Minimap minimap;
         private readonly Rectangle minimapRectangle;
         private readonly Rectangle minimapInner;
+        private readonly Rectangle screenRectangle;
 
         private ProgressBar bar;
 
@@ -62,6 +67,8 @@ namespace HoardeGame.GameStates
 
             GuiBase.Font = resourceProvider.GetFont("BasicFont");
 
+            screenRectangle = new Rectangle(0, 0, graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight);
+
             camera = new Camera
             {
                 Zoom = 2.4f,
@@ -79,6 +86,9 @@ namespace HoardeGame.GameStates
 
             EntityChest chest = new EntityChest(dungeon, resourceProvider);
             dungeon.AddEntity(chest);
+
+            EntityDrill drill = new EntityDrill(dungeon, inputProvider, resourceProvider, this);
+            dungeon.AddEntity(drill);
 
             minimap = new Minimap(resourceProvider);
             minimap.Generate(graphicsDevice, dungeon.GetMap());
@@ -155,8 +165,15 @@ namespace HoardeGame.GameStates
             {
                 DoDraw(gameTime, spriteBatch, interp);
 
-                // CARD
-                testCard.Draw(new Vector2(10, 150), 1f, gameTime, spriteBatch, interp);
+                // CARDS
+                if (Drilling)
+                {
+                    spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), screenRectangle, new Color(0, 0, 0, 150));
+
+                    testCard.Draw(new Vector2(40, 300), .75f, gameTime, spriteBatch, interp);
+                    testCard.Draw(new Vector2(500, 300), .75f, gameTime, spriteBatch, interp);
+                    testCard.Draw(new Vector2(970, 300), .75f, gameTime, spriteBatch, interp);
+                }
             }
 
             // MINIMAP SPRITEBATCH

@@ -24,7 +24,7 @@ namespace HoardeGame.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBat"/> class.
         /// </summary>
-        /// <param name="level"><see cref="World"/> to place this entity in</param>
+        /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> to load resources with</param>
         public EntityBat(DungeonLevel level, IResourceProvider resourceProvider) : base(level)
         {

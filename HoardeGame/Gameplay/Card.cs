@@ -140,14 +140,14 @@ namespace HoardeGame.Gameplay
             spriteBatch.Draw(cardTexture, position, null, null, null, 0f, scaleVector, Color.White);
             spriteBatch.Draw(Texture, position + CardTextureOffset * scale, null, null, null, 0f, scaleVector, Color.White);
 
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Name, CardNameOffset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Name, CardNameOffset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
 
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Description, CardDescriptionOffset + position - Vector2.One, Color.Gray, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Description, CardDescriptionOffset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Description, CardDescriptionOffset * scale + position - Vector2.One, Color.Gray, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Description, CardDescriptionOffset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
 
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Price[0].ToString(), Mana1Offset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Price[1].ToString(), Mana2Offset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Price[2].ToString(), Mana3Offset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Price[0].ToString(), Mana1Offset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Price[1].ToString(), Mana2Offset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Price[2].ToString(), Mana3Offset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
         }
 
         /// <inheritdoc/>
