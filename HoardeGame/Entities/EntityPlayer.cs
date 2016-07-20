@@ -8,6 +8,7 @@ using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Graphics.Rendering;
 using HoardeGame.Input;
+using HoardeGame.Level;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -31,7 +32,6 @@ namespace HoardeGame.Entities
         public List<EntityBullet> Bullets { get; private set; }
 
         private AnimatedSprite animator;
-        private World worldInstance;
         private IInputProvider inputProvider;
         private float fireTimer;
         private int fireRate = 100;
@@ -54,15 +54,17 @@ namespace HoardeGame.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
         /// </summary>
-        /// <param name="world"><see cref="World"/> to place this entity in</param>
+        /// <param name="level"><see cref="DungeonLevel"/> in which the player will spawn</param>
         /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        public EntityPlayer(World world, IInputProvider inputProvider, IResourceProvider resourceProvider) : base(world)
+        public EntityPlayer(DungeonLevel level, IInputProvider inputProvider, IResourceProvider resourceProvider) : base(level.World)
         {
             this.inputProvider = inputProvider;
             this.resourceProvider = resourceProvider;
 
-            Body = BodyFactory.CreateCircle(world, ConvertUnits.ToSimUnits(10), 1f, ConvertUnits.ToSimUnits(new Vector2(400, 400)));
+            Level = level;
+
+            Body = BodyFactory.CreateCircle(level.World, ConvertUnits.ToSimUnits(10), 1f, Level.GetSpawnPosition());
 
             Body.CollisionCategories = Category.Cat1;
             Body.CollidesWith = Category.Cat3 | Category.Cat4;
@@ -72,8 +74,6 @@ namespace HoardeGame.Entities
             Body.FixedRotation = true;
 
             Bullets = new List<EntityBullet>();
-
-            worldInstance = world;
 
             Health = 10;
 
@@ -181,7 +181,7 @@ namespace HoardeGame.Entities
                             break;
                     }
 
-                    EntityBullet bullet = new EntityBullet(worldInstance, resourceProvider, ConvertUnits.ToDisplayUnits(Position), direction);
+                    EntityBullet bullet = new EntityBullet(Level.World, resourceProvider, ConvertUnits.ToDisplayUnits(Position), direction);
 
                     Bullets.Add(bullet);
                     fireTimer = 0;

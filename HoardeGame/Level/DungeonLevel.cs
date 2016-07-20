@@ -60,6 +60,15 @@ namespace HoardeGame.Level
         }
 
         /// <summary>
+        /// Finds an epty 5x5 space for the player to spawn
+        /// </summary>
+        /// <returns>Spawn point for player</returns>
+        public Vector2 GetSpawnPosition()
+        {
+            return levelGen.GetSpawnPosition();
+        }
+
+        /// <summary>
         /// Generates a <see cref="DungeonLevel"/>
         /// </summary>
         /// <param name="width">Width of the <see cref="DungeonLevel"/></param>

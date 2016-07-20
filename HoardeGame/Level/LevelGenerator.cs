@@ -3,6 +3,9 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
+using FarseerPhysics;
+using Microsoft.Xna.Framework;
 
 namespace HoardeGame.Level
 {
@@ -57,6 +60,29 @@ namespace HoardeGame.Level
                     Map[column, row] = PlaceWallLogic(column, row);
                 }
             }
+        }
+
+        /// <summary>
+        /// Finds an epty 5x5 space for the player to spawn
+        /// </summary>
+        /// <returns>Spawn point for player</returns>
+        public Vector2 GetSpawnPosition()
+        {
+            int[,] map = Map.Clone() as int[,];
+            Point? nextWall = FindWall(ref map);
+
+            while (nextWall != null)
+            {
+                nextWall = FindWall(ref map);
+                FillInWall(ref map, nextWall);
+            }
+
+            List<Point> emptySpaces = FindEmptySpaces(ref map);
+            Random rnd = new Random();
+
+            Vector2 position = emptySpaces[rnd.Next(emptySpaces.Count)].ToVector2() * 32;
+
+            return ConvertUnits.ToSimUnits(position);
         }
 
         /// <summary>
@@ -224,6 +250,66 @@ namespace HoardeGame.Level
             }
 
             return 0;
+        }
+
+        private Point? FindWall(ref int[,] map)
+        {
+            for (int x = 0; x < map.GetLength(0); x++)
+            {
+                for (int y = 0; y < map.GetLength(1); y++)
+                {
+                    if (map[x, y] == 1)
+                    {
+                        return new Point(x, y);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private void FillInWall(ref int[,] map, Point? wallPosition)
+        {
+            if (wallPosition == null)
+            {
+                return;
+            }
+
+            for (int x = wallPosition.Value.X - 2; x < wallPosition.Value.X + 2; x++)
+            {
+                for (int y = wallPosition.Value.Y - 2; y < wallPosition.Value.Y + 2; y++)
+                {
+                    if (IsOutOfBounds(x, y))
+                    {
+                        continue;
+                    }
+
+                    map[x, y] = 2;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds all empty space on a map
+        /// </summary>
+        /// <param name="map">Map to be used for seach</param>
+        /// <returns><see cref="List{Point}"/> of all free space on provided map</returns>
+        private List<Point> FindEmptySpaces(ref int[,] map)
+        {
+            List<Point> spaceList = new List<Point>();
+
+            for (int x = 0; x < map.GetLength(0); x++)
+            {
+                for (int y = 0; y < map.GetLength(1); y++)
+                {
+                    if (map[x, y] == 0)
+                    {
+                        spaceList.Add(new Point(x, y));
+                    }
+                }
+            }
+
+            return spaceList;
         }
 
         /// <summary>

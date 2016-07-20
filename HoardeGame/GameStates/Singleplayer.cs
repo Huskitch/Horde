@@ -71,7 +71,7 @@ namespace HoardeGame.GameStates
             dungeon = new DungeonLevel(resourceProvider);
             dungeon.GenerateLevel(64, 64, 40);
 
-            EntityPlayer player = new EntityPlayer(dungeon.World, inputProvider, resourceProvider);
+            EntityPlayer player = new EntityPlayer(dungeon, inputProvider, resourceProvider);
             dungeon.AddEntity(player);
 
             EntityBat bat = new EntityBat(dungeon.World, resourceProvider);
