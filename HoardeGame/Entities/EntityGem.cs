@@ -5,6 +5,7 @@
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Graphics.Rendering;
+using HoardeGame.Level;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,11 +22,11 @@ namespace HoardeGame.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityGem"/> class.
         /// </summary>
-        /// <param name="world"><see cref="World"/> to place this entity in</param>
+        /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        public EntityGem(World world, IResourceProvider resourceProvider) : base(world)
+        public EntityGem(DungeonLevel level, IResourceProvider resourceProvider) : base(level)
         {
-            Body = BodyFactory.CreateCircle(world, 4, 1);
+            Body = BodyFactory.CreateCircle(Level.World, 4, 1);
             Body.CollisionCategories = Category.Cat3;
             Body.CollidesWith = Category.All;
 

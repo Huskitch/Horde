@@ -57,12 +57,10 @@ namespace HoardeGame.Entities
         /// <param name="level"><see cref="DungeonLevel"/> in which the player will spawn</param>
         /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        public EntityPlayer(DungeonLevel level, IInputProvider inputProvider, IResourceProvider resourceProvider) : base(level.World)
+        public EntityPlayer(DungeonLevel level, IInputProvider inputProvider, IResourceProvider resourceProvider) : base(level)
         {
             this.inputProvider = inputProvider;
             this.resourceProvider = resourceProvider;
-
-            Level = level;
 
             Body = BodyFactory.CreateCircle(level.World, ConvertUnits.ToSimUnits(10), 1f, Level.GetSpawnPosition());
 
@@ -181,7 +179,7 @@ namespace HoardeGame.Entities
                             break;
                     }
 
-                    EntityBullet bullet = new EntityBullet(Level.World, resourceProvider, ConvertUnits.ToDisplayUnits(Position), direction);
+                    EntityBullet bullet = new EntityBullet(Level, resourceProvider, ConvertUnits.ToDisplayUnits(Position), direction);
 
                     Bullets.Add(bullet);
                     fireTimer = 0;
@@ -192,9 +190,16 @@ namespace HoardeGame.Entities
 
             animator.Update(gameTime);
 
-            foreach (EntityBullet bullet in Bullets)
+            for (int i = 0; i < Bullets.Count; i++)
             {
-                bullet.Update(gameTime);
+                if (Bullets[i].Removed)
+                {
+                    Bullets[i].Body.Dispose();
+                    Bullets.Remove(Bullets[i]);
+                    continue;
+                }
+
+                Bullets[i].Update(gameTime);
             }
 
             base.Update(gameTime);

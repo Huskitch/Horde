@@ -15,9 +15,14 @@ namespace HoardeGame.Entities
     public abstract class EntityBase
     {
         /// <summary>
-        /// Gets or sets the level in which this entity exists
+        /// Gets the level in which this entity exists
         /// </summary>
-        public DungeonLevel Level { get; set; }
+        public DungeonLevel Level { get; private set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the entity is going to be removed
+        /// </summary>
+        public bool Removed { get; set; }
 
         /// <summary>
         /// Gets or sets the health of the entity
@@ -42,9 +47,10 @@ namespace HoardeGame.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBase"/> class.
         /// </summary>
-        /// <param name="world"><see cref="World"/> to place this entity in</param>
-        public EntityBase(World world)
+        /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
+        public EntityBase(DungeonLevel level)
         {
+            Level = level;
         }
 
         /// <summary>

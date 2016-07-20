@@ -74,10 +74,10 @@ namespace HoardeGame.GameStates
             EntityPlayer player = new EntityPlayer(dungeon, inputProvider, resourceProvider);
             dungeon.AddEntity(player);
 
-            EntityBat bat = new EntityBat(dungeon.World, resourceProvider);
+            EntityBat bat = new EntityBat(dungeon, resourceProvider);
             dungeon.AddEntity(bat);
 
-            EntityChest chest = new EntityChest(dungeon.World, resourceProvider);
+            EntityChest chest = new EntityChest(dungeon, resourceProvider);
             dungeon.AddEntity(chest);
 
             minimap = new Minimap(resourceProvider);

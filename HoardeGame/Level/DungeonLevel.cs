@@ -51,6 +51,24 @@ namespace HoardeGame.Level
         }
 
         /// <summary>
+        /// Finds an entity with a matching <see cref="Body"/>
+        /// </summary>
+        /// <param name="body"><see cref="Body"/> to search for</param>
+        /// <returns>Entity or null</returns>
+        public EntityBase FindEntityByBody(Body body)
+        {
+            foreach (var entity in entities)
+            {
+                if (entity.Body == body)
+                {
+                    return entity;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Gets the raw map data from <see cref="LevelGenerator"/>
         /// </summary>
         /// <returns>Raw map data</returns>
@@ -141,6 +159,15 @@ namespace HoardeGame.Level
             foreach (Tile tile in MapTiles)
             {
                 tile.Update(gameTime);
+            }
+
+            for (int i = 0; i < entities.Count; i++)
+            {
+                if (entities[i].Removed)
+                {
+                    entities[i].Body.Dispose();
+                    RemoveEntity(entities[i]);
+                }
             }
 
             foreach (EntityBase entity in entities)

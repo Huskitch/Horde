@@ -5,6 +5,7 @@
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
+using HoardeGame.Level;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,13 +22,13 @@ namespace HoardeGame.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityChest"/> class.
         /// </summary>
-        /// <param name="world"><see cref="World"/> to place this entity in</param>
+        /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> to use for loading resources</param>
-        public EntityChest(World world, IResourceProvider resourceProvider) : base(world)
+        public EntityChest(DungeonLevel level, IResourceProvider resourceProvider) : base(level)
         {
             this.resourceProvider = resourceProvider;
 
-            Body = BodyFactory.CreateRectangle(world, ConvertUnits.ToSimUnits(25), ConvertUnits.ToSimUnits(25), 1f, ConvertUnits.ToSimUnits(new Vector2(450, 500)));
+            Body = BodyFactory.CreateRectangle(Level.World, ConvertUnits.ToSimUnits(25), ConvertUnits.ToSimUnits(25), 1f, ConvertUnits.ToSimUnits(new Vector2(450, 500)));
 
             Body.CollisionCategories = Category.Cat3;
             Body.CollidesWith = Category.All;

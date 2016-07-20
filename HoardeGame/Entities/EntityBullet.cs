@@ -4,7 +4,9 @@
 
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
+using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Factories;
+using HoardeGame.Level;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,15 +23,15 @@ namespace HoardeGame.Entities
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBullet"/> class.
         /// </summary>
-        /// <param name="world"><see cref="World"/> to place this entity in</param>
+        /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="startPos">Starting position</param>
         /// <param name="direction">Direction</param>
-        public EntityBullet(World world, IResourceProvider resourceProvider, Vector2 startPos, Vector2 direction) : base(world)
+        public EntityBullet(DungeonLevel level, IResourceProvider resourceProvider, Vector2 startPos, Vector2 direction) : base(level)
         {
             this.resourceProvider = resourceProvider;
 
-            Body = BodyFactory.CreateRectangle(world, ConvertUnits.ToSimUnits(5), ConvertUnits.ToSimUnits(5), 1f, ConvertUnits.ToSimUnits(startPos));
+            Body = BodyFactory.CreateRectangle(Level.World, ConvertUnits.ToSimUnits(5), ConvertUnits.ToSimUnits(5), 1f, ConvertUnits.ToSimUnits(startPos));
 
             Body.CollisionCategories = Category.Cat2;
             Body.CollidesWith = Category.Cat3 | Category.Cat4;
@@ -37,6 +39,7 @@ namespace HoardeGame.Entities
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 0f;
             Body.ApplyForce(direction * 20);
+            Body.OnCollision += OnShoot;
         }
 
         /// <inheritdoc/>
@@ -49,6 +52,16 @@ namespace HoardeGame.Entities
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
             spriteBatch.Draw(resourceProvider.GetTexture("Bullet"), screenPos, Color.White);
+        }
+
+        private bool OnShoot(Fixture fixtureA, Fixture fixtureB, Contact contact)
+        {
+            if (fixtureB.CollisionCategories == Category.Cat4 || fixtureB.CollisionCategories == Category.Cat3)
+            {
+                Removed = true;
+            }
+
+            return true;
         }
     }
 }
