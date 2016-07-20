@@ -49,7 +49,7 @@ namespace HoardeGame.Entities
         }
 
         private readonly IResourceProvider resourceProvider;
-        private Directions dir;
+        private Directions direction;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
@@ -97,29 +97,29 @@ namespace HoardeGame.Entities
 
             if (inputProvider.KeyboardState.IsKeyDown(Keys.S))
             {
-                dir = Directions.SOUTH;
+                direction = Directions.SOUTH;
                 velocity.Y++;
             }
 
             if (inputProvider.KeyboardState.IsKeyDown(Keys.W))
             {
-                dir = Directions.NORTH;
+                direction = Directions.NORTH;
                 velocity.Y--;
             }
 
             if (inputProvider.KeyboardState.IsKeyDown(Keys.D))
             {
-                if (dir == Directions.SOUTH)
+                if (direction == Directions.SOUTH)
                 {
-                    dir = Directions.SOUTHEAST;
+                    direction = Directions.SOUTHEAST;
                 }
-                else if (dir == Directions.NORTH)
+                else if (direction == Directions.NORTH)
                 {
-                    dir = Directions.NORTHEAST;
+                    direction = Directions.NORTHEAST;
                 }
                 else
                 {
-                    dir = Directions.EAST;
+                    direction = Directions.EAST;
                 }
 
                 velocity.X++;
@@ -127,17 +127,17 @@ namespace HoardeGame.Entities
 
             if (inputProvider.KeyboardState.IsKeyDown(Keys.A))
             {
-                if (dir == Directions.SOUTH)
+                if (direction == Directions.SOUTH)
                 {
-                    dir = Directions.SOUTHWEST;
+                    direction = Directions.SOUTHWEST;
                 }
-                else if (dir == Directions.NORTH)
+                else if (direction == Directions.NORTH)
                 {
-                    dir = Directions.NORTHWEST;
+                    direction = Directions.NORTHWEST;
                 }
                 else
                 {
-                    dir = Directions.WEST;
+                    direction = Directions.WEST;
                 }
 
                 velocity.X--;
@@ -151,7 +151,7 @@ namespace HoardeGame.Entities
                 {
                     Vector2 direction = Vector2.Zero;
 
-                    switch (dir)
+                    switch (this.direction)
                     {
                         case Directions.NORTH:
                             direction = new Vector2(0, -1);
@@ -210,42 +210,39 @@ namespace HoardeGame.Entities
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
 
-            // TODO: Plzno
-            if (inputProvider.KeyboardState.IsKeyDown(Keys.S) && inputProvider.KeyboardState.IsKeyDown(Keys.A))
+            if (Velocity.Length() < 0.1f)
             {
-                animator.DrawAnimation("SouthWest", screenPos, spriteBatch);
-            }
-            else if (inputProvider.KeyboardState.IsKeyDown(Keys.W) && inputProvider.KeyboardState.IsKeyDown(Keys.A))
-            {
-                animator.DrawAnimation("NorthWest", screenPos, spriteBatch);
-            }
-            else if (inputProvider.KeyboardState.IsKeyDown(Keys.D) && inputProvider.KeyboardState.IsKeyDown(Keys.S))
-            {
-                animator.DrawAnimation("SouthEast", screenPos, spriteBatch);
-            }
-            else if (inputProvider.KeyboardState.IsKeyDown(Keys.W) && inputProvider.KeyboardState.IsKeyDown(Keys.D))
-            {
-                animator.DrawAnimation("NorthEast", screenPos, spriteBatch);
-            }
-            else if (inputProvider.KeyboardState.IsKeyDown(Keys.W))
-            {
-                animator.DrawAnimation("North", screenPos, spriteBatch);
-            }
-            else if (inputProvider.KeyboardState.IsKeyDown(Keys.S))
-            {
-                animator.DrawAnimation("South", screenPos, spriteBatch);
-            }
-            else if (inputProvider.KeyboardState.IsKeyDown(Keys.A))
-            {
-                animator.DrawAnimation("West", screenPos, spriteBatch);
-            }
-            else if (inputProvider.KeyboardState.IsKeyDown(Keys.D))
-            {
-                animator.DrawAnimation("East", screenPos, spriteBatch);
+                animator.DrawAnimation("Idle", screenPos, spriteBatch);
             }
             else
             {
-                animator.DrawLastUsedAnimation(screenPos, spriteBatch);
+                switch (direction)
+                {
+                    case Directions.NORTH:
+                        animator.DrawAnimation("North", screenPos, spriteBatch);
+                        break;
+                    case Directions.SOUTH:
+                        animator.DrawAnimation("South", screenPos, spriteBatch);
+                        break;
+                    case Directions.WEST:
+                        animator.DrawAnimation("West", screenPos, spriteBatch);
+                        break;
+                    case Directions.EAST:
+                        animator.DrawAnimation("East", screenPos, spriteBatch);
+                        break;
+                    case Directions.NORTHEAST:
+                        animator.DrawAnimation("NorthEast", screenPos, spriteBatch);
+                        break;
+                    case Directions.NORTHWEST:
+                        animator.DrawAnimation("NorthWest", screenPos, spriteBatch);
+                        break;
+                    case Directions.SOUTHEAST:
+                        animator.DrawAnimation("SouthEast", screenPos, spriteBatch);
+                        break;
+                    case Directions.SOUTHWEST:
+                        animator.DrawAnimation("SouthWest", screenPos, spriteBatch);
+                        break;
+                }
             }
 
             foreach (EntityBullet bullet in Bullets)

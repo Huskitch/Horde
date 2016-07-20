@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using HoardeGame.Level;
 using Microsoft.Xna.Framework;
@@ -35,9 +36,14 @@ namespace HoardeGame.Entities
         public Body Body { get; private set; }
 
         /// <summary>
-        /// Gets the position of the <see cref="Body"/>
+        /// Gets the position of the <see cref="Body"/> in meters
         /// </summary>
         public Vector2 Position => Body.Position;
+
+        /// <summary>
+        /// Gets the position of the <see cref="Body"/> in pixels
+        /// </summary>
+        public Vector2 ScreenPosition => ConvertUnits.ToDisplayUnits(Position);
 
         /// <summary>
         /// Gets the velocity of the <see cref="Body"/>

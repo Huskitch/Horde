@@ -28,6 +28,14 @@ namespace HoardeGame.Entities
             Body.OnCollision += OnShot;
         }
 
+        /// <summary>
+        /// Gets automatically called when the entity collides with another entity
+        /// Filters out bullets and does damage
+        /// </summary>
+        /// <param name="fixtureA">Fisrt <see cref="Fixture"/></param>
+        /// <param name="fixtureB">Second <see cref="Fixture"/></param>
+        /// <param name="contact"><see cref="Contact"/></param>
+        /// <returns>true</returns>
         private bool OnShot(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
             if (fixtureB.CollisionCategories != Category.Cat2)

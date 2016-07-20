@@ -35,7 +35,6 @@ namespace HoardeGame.Entities
             Body.Position = ConvertUnits.ToSimUnits(startPos);
             Body.CollisionCategories = Category.Cat2;
             Body.CollidesWith = Category.Cat3 | Category.Cat4;
-
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 0f;
             Body.ApplyForce(direction * 20);
@@ -54,6 +53,14 @@ namespace HoardeGame.Entities
             spriteBatch.Draw(resourceProvider.GetTexture("Bullet"), screenPos, Color.White);
         }
 
+        /// <summary>
+        /// Gets automatically called when the bullet collides with another entity
+        /// Removes the bullet
+        /// </summary>
+        /// <param name="fixtureA">Fisrt <see cref="Fixture"/></param>
+        /// <param name="fixtureB">Second <see cref="Fixture"/></param>
+        /// <param name="contact"><see cref="Contact"/></param>
+        /// <returns>true</returns>
         private bool OnShoot(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
             if (fixtureB.CollisionCategories == Category.Cat4 || fixtureB.CollisionCategories == Category.Cat3)
