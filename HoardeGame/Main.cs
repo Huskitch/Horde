@@ -20,6 +20,7 @@ namespace HoardeGame
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private StateManager stateManager;
+        private IInputProvider inputProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Main"/> class.
@@ -29,6 +30,7 @@ namespace HoardeGame
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
+            inputProvider = new InputManager();
             stateManager = new StateManager();
 
             graphics.PreferredBackBufferWidth = 1600;
@@ -54,7 +56,7 @@ namespace HoardeGame
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            stateManager.Push(new SinglePlayer(Content, spriteBatch, GraphicsDevice, Window));
+            stateManager.Push(new SinglePlayer(inputProvider, Content, spriteBatch, GraphicsDevice, Window));
         }
 
         /// <inheritdoc/>
@@ -70,7 +72,7 @@ namespace HoardeGame
                 Exit();
             }
 
-            InputManager.Update(gameTime);
+            inputProvider.Update(gameTime);
             stateManager.Update(gameTime);
 
             base.Update(gameTime);

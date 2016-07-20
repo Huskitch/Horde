@@ -28,6 +28,7 @@ namespace HoardeGame.GameStates
 
         private readonly SpriteBatch spriteBatch;
         private readonly GraphicsDevice graphicsDevice;
+        private readonly IInputProvider inputProvider;
 
         private readonly Camera camera;
         private readonly DungeonLevel dungeon;
@@ -44,10 +45,12 @@ namespace HoardeGame.GameStates
         /// <param name="spriteBatch"><see cref="SpriteBatch"/> to draw with</param>
         /// <param name="graphicsDevice"><see cref="GraphicsDevice"/> to draw with</param>
         /// <param name="window"><see cref="GameWindow"/> to draw in</param>
-        public SinglePlayer(ContentManager content, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, GameWindow window)
+        /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
+        public SinglePlayer(IInputProvider inputProvider, ContentManager content, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, GameWindow window)
         {
             this.graphicsDevice = graphicsDevice;
             this.spriteBatch = spriteBatch;
+            this.inputProvider = inputProvider;
 
             ResourceManager.Init(graphicsDevice);
             ResourceManager.LoadContent(content);
@@ -69,7 +72,9 @@ namespace HoardeGame.GameStates
             dungeon = new DungeonLevel();
             dungeon.GenerateLevel(64, 64, 40);
 
-            dungeon.AddEntity<EntityPlayer>();
+            EntityPlayer player = new EntityPlayer(dungeon.World, inputProvider);
+            dungeon.AddEntity(player);
+
             dungeon.AddEntity<EntityBat>();
             dungeon.AddEntity<EntityChest>();
 
@@ -126,7 +131,7 @@ namespace HoardeGame.GameStates
 
             bar.Progress = gameTime.TotalGameTime.Milliseconds / 1000f;
 
-            DoCheck(gameTime, new Point(state.X, state.Y), InputManager.LeftClicked);
+            DoCheck(gameTime, new Point(state.X, state.Y), inputProvider.LeftClicked);
 
             dungeon.Update(gameTime);
             camera.Position = ConvertUnits.ToDisplayUnits(EntityPlayer.Player.Position);

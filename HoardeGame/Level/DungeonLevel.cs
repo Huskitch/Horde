@@ -21,9 +21,13 @@ namespace HoardeGame.Level
         /// </summary>
         public List<Tile> MapTiles { get; private set; }
 
+        /// <summary>
+        /// Gets the physics world for all <see cref="EntityBase"/>
+        /// </summary>
+        public World World { get; private set; } = new World(Vector2.Zero);
+
         private readonly LevelGenerator levelGen;
         private readonly List<EntityBase> entities;
-        private readonly World world = new World(Vector2.Zero);
 
         private int[,] map;
         private int mapWidth = 1;
@@ -73,17 +77,26 @@ namespace HoardeGame.Level
         }
 
         /// <summary>
-        /// Adds an entiy of the type T
+        /// Spawns and adds an entiy of the type T
         /// </summary>
         /// <typeparam name="T">Type of the entity</typeparam>
         /// <returns>Entity that can be catsed to T</returns>
         public EntityBase AddEntity<T>()
         {
-            EntityBase entity = (EntityBase)Activator.CreateInstance(typeof(T), world);
+            EntityBase entity = (EntityBase)Activator.CreateInstance(typeof(T), World);
             entity.Level = this;
             entities.Add(entity);
 
             return entity;
+        }
+
+        /// <summary>
+        /// Adds a new prespawned entity
+        /// </summary>
+        /// <param name="entity">Entity to be added</param>
+        public void AddEntity(EntityBase entity)
+        {
+            entities.Add(entity);
         }
 
         /// <summary>
@@ -123,7 +136,7 @@ namespace HoardeGame.Level
         /// <param name="gameTime"><see cref="GameTime"/></param>
         public void Update(GameTime gameTime)
         {
-            world.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f, 1f / 30f));
+            World.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f, 1f / 30f));
 
             foreach (Tile tile in MapTiles)
             {
@@ -164,7 +177,7 @@ namespace HoardeGame.Level
                 {
                     if (map[x, y] != 1)
                     {
-                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32 + 24), new Vector2(32, 32), ResourceManager.GetTexture("BasicFloor"), false, world));
+                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32 + 24), new Vector2(32, 32), ResourceManager.GetTexture("BasicFloor"), false, World));
                     }
                 }
             }
@@ -175,7 +188,7 @@ namespace HoardeGame.Level
                 {
                     if (map[x, y] == 1)
                     {
-                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32), new Vector2(32, 56), ResourceManager.GetTexture("BasicWall"), true, world));
+                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32), new Vector2(32, 56), ResourceManager.GetTexture("BasicWall"), true, World));
                     }
                 }
             }
