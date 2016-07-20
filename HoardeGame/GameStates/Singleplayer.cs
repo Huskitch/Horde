@@ -44,14 +44,13 @@ namespace HoardeGame.GameStates
         /// <summary>
         /// Initializes a new instance of the <see cref="SinglePlayer"/> class.
         /// </summary>
-        /// <param name="content"><see cref="ContentManager"/> to load resources with</param>
         /// <param name="spriteBatch"><see cref="SpriteBatch"/> to draw with</param>
         /// <param name="graphicsDevice"><see cref="GraphicsDevice"/> to draw with</param>
         /// <param name="window"><see cref="GameWindow"/> to draw in</param>
         /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
         /// <param name="cardProvider"><see cref="ICardProvider"/> for managing cards</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        public SinglePlayer(IResourceProvider resourceProvider, IInputProvider inputProvider, ICardProvider cardProvider, ContentManager content, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, GameWindow window)
+        public SinglePlayer(IResourceProvider resourceProvider, IInputProvider inputProvider, ICardProvider cardProvider, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, GameWindow window)
         {
             this.graphicsDevice = graphicsDevice;
             this.spriteBatch = spriteBatch;

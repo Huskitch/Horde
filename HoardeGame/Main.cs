@@ -67,7 +67,7 @@ namespace HoardeGame
 
             (cardProvider as CardManager).LoadXmlFile("Content/CARDS.xml");
 
-            stateManager.Push(new SinglePlayer(resourceProvider, inputProvider, cardProvider, Content, spriteBatch, GraphicsDevice, Window));
+            stateManager.Push(new SinglePlayer(resourceProvider, inputProvider, cardProvider, spriteBatch, GraphicsDevice, Window));
         }
 
         /// <inheritdoc/>
