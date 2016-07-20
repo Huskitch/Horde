@@ -160,6 +160,12 @@ namespace HoardeGame.GameStates
                 dungeon.Draw(spriteBatch);
             }
 
+            // MINIMAP SPRITEBATCH
+            using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone))
+            {
+                minimap.Draw(spriteBatch, minimapRectangle, minimapInner, camera);
+            }
+
             // GUI SPRITEBATCH
             using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone))
             {
@@ -170,16 +176,10 @@ namespace HoardeGame.GameStates
                 {
                     spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), screenRectangle, new Color(0, 0, 0, 150));
 
-                    testCard.Draw(new Vector2(40, 300), .75f, gameTime, spriteBatch, interp);
-                    testCard.Draw(new Vector2(500, 300), .75f, gameTime, spriteBatch, interp);
-                    testCard.Draw(new Vector2(970, 300), .75f, gameTime, spriteBatch, interp);
+                    testCard.Draw(new Vector2(175, 247), 0.75f, gameTime, spriteBatch, interp);
+                    testCard.Draw(new Vector2(650, 247), 0.75f, gameTime, spriteBatch, interp);
+                    testCard.Draw(new Vector2(1075, 247), 0.75f, gameTime, spriteBatch, interp);
                 }
-            }
-
-            // MINIMAP SPRITEBATCH
-            using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone))
-            {
-                minimap.Draw(spriteBatch, minimapRectangle, minimapInner, camera);
             }
         }
     }
