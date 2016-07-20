@@ -145,9 +145,7 @@ namespace HoardeGame.GameStates
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
-            MouseState state = Mouse.GetState();
-
-            DoCheck(gameTime, new Point(state.X, state.Y), inputProvider.LeftClicked);
+            DoCheck(gameTime, new Point(inputProvider.MouseState.X, inputProvider.MouseState.Y), inputProvider.LeftClicked);
 
             dungeon.Update(gameTime);
             camera.Position = ConvertUnits.ToDisplayUnits(EntityPlayer.Player.Position);
