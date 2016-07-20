@@ -11,45 +11,40 @@ using Microsoft.Xna.Framework.Graphics;
 namespace HoardeGame.Gameplay
 {
     /// <summary>
-    /// CardManager
+    /// Manager for cards
     /// </summary>
-    public class CardManager
+    public class CardManager : ICardProvider
     {
-        private static Dictionary<string, Card> cards;
+        private Dictionary<string, Card> cards = new Dictionary<string, Card>();
+        private Dictionary<CardRarity, Texture2D> backgrounds = new Dictionary<CardRarity, Texture2D>();
 
-        [XmlIgnore]
-        private static Dictionary<CardRarity, Texture2D> backgrounds;
-
-        /// <summary>
-        /// Init singleton
-        /// </summary>
-        public static void Init()
+        /// <inheritdoc/>
+        public Card GetCard(string key)
         {
-            cards = new Dictionary<string, Card>();
-            backgrounds = new Dictionary<CardRarity, Texture2D>();
+            return !cards.ContainsKey(key) ? null : cards[key];
         }
 
         /// <summary>
-        /// Load cards from file
+        /// Load cards from a file
         /// </summary>
         /// <param name="filename">XML file to load from</param>
-        public static void LoadXmlFile(string filename)
+        public void LoadXmlFile(string filename)
         {
-            CardManager.cards.Clear();
+            cards.Clear();
 
             XmlSerializer ser = new XmlSerializer(typeof(List<Card>), new XmlRootAttribute("Cards"));
             TextReader reader = new StreamReader(filename);
 
-            List<Card> cards = ser.Deserialize(reader) as List<Card>;
-            if (cards == null)
+            List<Card> cardList = ser.Deserialize(reader) as List<Card>;
+            if (cardList == null)
             {
                 throw new InvalidDataException("Provided card file is not valid! ({" + filename + "})");
             }
 
-            foreach (var card in cards)
+            foreach (var card in cardList)
             {
                 card.Texture = ResourceManager.GetTexture(card.TextureName);
-                CardManager.cards.Add(card.ID, card);
+                cards.Add(card.ID, card);
             }
 
             reader.Close();
@@ -59,7 +54,7 @@ namespace HoardeGame.Gameplay
         /// Save cards to file
         /// </summary>
         /// <param name="filename">XML file to save to</param>
-        public static void SaveXmlFile(string filename)
+        public void SaveXmlFile(string filename)
         {
             XmlSerializer ser = new XmlSerializer(typeof(List<Card>), new XmlRootAttribute("Cards"));
             TextWriter writer = new StreamWriter(filename);
@@ -67,37 +62,6 @@ namespace HoardeGame.Gameplay
             ser.Serialize(writer, cards.Values.ToList());
 
             writer.Close();
-        }
-
-        /// <summary>
-        /// Load background textures
-        /// </summary>
-        public static void LoadBackgrounds()
-        {
-            backgrounds.Add(CardRarity.Common, ResourceManager.GetTexture("CommonCard"));
-
-            // _backgrounds.Add(CardRarity.Rare, ResourceManager.Texture("RareCard"));
-            // _backgrounds.Add(CardRarity.Epic, ResourceManager.Texture("EpicCard"));
-        }
-
-        /// <summary>
-        ///     Get a card singleton
-        /// </summary>
-        /// <param name="key">Name of card</param>
-        /// <returns>Found card or <c>null</c></returns>
-        public static Card GetCard(string key)
-        {
-            return !cards.ContainsKey(key) ? null : cards[key];
-        }
-
-        /// <summary>
-        ///     Get a background texture
-        /// </summary>
-        /// <param name="rarity"><see cref="CardRarity"/></param>
-        /// <returns><see cref="Texture2D"/></returns>
-        public static Texture2D GetBackground(CardRarity rarity)
-        {
-            return !backgrounds.ContainsKey(rarity) ? null : backgrounds[rarity];
         }
     }
 }

@@ -29,6 +29,7 @@ namespace HoardeGame.GameStates
         private readonly SpriteBatch spriteBatch;
         private readonly GraphicsDevice graphicsDevice;
         private readonly IInputProvider inputProvider;
+        private readonly ICardProvider cardProvider;
 
         private readonly Camera camera;
         private readonly DungeonLevel dungeon;
@@ -46,20 +47,15 @@ namespace HoardeGame.GameStates
         /// <param name="graphicsDevice"><see cref="GraphicsDevice"/> to draw with</param>
         /// <param name="window"><see cref="GameWindow"/> to draw in</param>
         /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
-        public SinglePlayer(IInputProvider inputProvider, ContentManager content, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, GameWindow window)
+        /// <param name="cardProvider"><see cref="ICardProvider"/> for managing cards</param>
+        public SinglePlayer(IInputProvider inputProvider, ICardProvider cardProvider, ContentManager content, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, GameWindow window)
         {
             this.graphicsDevice = graphicsDevice;
             this.spriteBatch = spriteBatch;
             this.inputProvider = inputProvider;
+            this.cardProvider = cardProvider;
 
-            ResourceManager.Init(graphicsDevice);
-            ResourceManager.LoadContent(content);
-
-            CardManager.Init();
-            CardManager.LoadXmlFile("Content/CARDS.xml");
-            CardManager.LoadBackgrounds();
-
-            testCard = CardManager.GetCard("testCard");
+            testCard = cardProvider.GetCard("testCard");
 
             GuiBase.Font = ResourceManager.GetFont("BasicFont");
 

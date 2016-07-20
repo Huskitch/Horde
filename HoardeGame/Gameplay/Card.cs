@@ -110,8 +110,22 @@ namespace HoardeGame.Gameplay
         public void Draw(Vector2 position, float scale, GameTime gameTime, SpriteBatch spriteBatch, float interpolation)
         {
             Vector2 scaleVector = new Vector2(scale, scale);
+            Texture2D cardTexture = null;
 
-            spriteBatch.Draw(CardManager.GetBackground(Rarity), position, null, null, null, 0f, scaleVector, Color.White);
+            switch (Rarity)
+            {
+                case CardRarity.Common:
+                    cardTexture = ResourceManager.GetTexture("CommonCard");
+                    break;
+                case CardRarity.Rare:
+                    cardTexture = ResourceManager.GetTexture("RareCard");
+                    break;
+                case CardRarity.Epic:
+                    cardTexture = ResourceManager.GetTexture("EpicCard");
+                    break;
+            }
+
+            spriteBatch.Draw(cardTexture, position, null, null, null, 0f, scaleVector, Color.White);
             spriteBatch.Draw(Texture, position + CardTextureOffset * scale, null, null, null, 0f, scaleVector, Color.White);
 
             spriteBatch.DrawString(ResourceManager.GetFont("BasicFont"), Name, CardNameOffset + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
