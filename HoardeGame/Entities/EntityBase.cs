@@ -15,6 +15,52 @@ namespace HoardeGame.Entities
     /// </summary>
     public abstract class EntityBase
     {
+        private int blinkFrame = 0;
+        private float[] blinkFrames = new[]
+        {
+            0f,
+            0f,
+            0.5f,
+            0.5f,
+            1f,
+            1f,
+            1f,
+            1f,
+            0.5f,
+            0.5f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0.5f,
+            0.5f,
+            1f,
+            1f,
+            1f,
+            1f,
+            0.5f,
+            0.5f
+        };
+
+        /// <summary>
+        /// Gets the value of the current blink frame
+        /// </summary>
+        protected float CurrentBlinkFrame
+        {
+            // this probably doesn't belong here but it works for now
+            get
+            {
+                float frame = blinkFrames[blinkFrame];
+
+                if (blinkFrame > 0)
+                {
+                    blinkFrame--;
+                }
+
+                return frame;
+            }
+        }
+
         /// <summary>
         /// Gets the level in which this entity exists
         /// </summary>
@@ -68,6 +114,14 @@ namespace HoardeGame.Entities
         }
 
         /// <summary>
+        /// Starts the hit animation
+        /// </summary>
+        public void Hit()
+        {
+            blinkFrame = blinkFrames.Length - 1;
+        }
+
+        /// <summary>
         /// Update the entity
         /// </summary>
         /// <param name="gameTime"><see cref="GameTime"/></param>
@@ -79,7 +133,8 @@ namespace HoardeGame.Entities
         /// Draw the entity
         /// </summary>
         /// <param name="spriteBatch"><see cref="GameTime"/></param>
-        public virtual void Draw(SpriteBatch spriteBatch)
+        /// <param name="effect"><see cref="Effect"/></param>
+        public virtual void Draw(SpriteBatch spriteBatch, Effect effect)
         {
         }
     }

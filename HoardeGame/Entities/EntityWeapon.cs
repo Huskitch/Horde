@@ -60,14 +60,14 @@ namespace HoardeGame.Gameplay
             base.Update(gameTime);
         }
 
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Effect effect)
         {
             foreach (EntityBullet bullet in bullets)
             {
-                bullet.Draw(spriteBatch);
+                bullet.Draw(spriteBatch, effect);
             }
 
-            base.Draw(spriteBatch);
+            base.Draw(spriteBatch, effect);
         }
     }
 }

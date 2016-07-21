@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using FarseerPhysics.Dynamics;
 using HoardeGame.Entities;
+using HoardeGame.Extensions;
+using HoardeGame.Graphics.Rendering;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -181,16 +183,25 @@ namespace HoardeGame.Level
         /// Draws the <see cref="DungeonLevel"/> and all <see cref="EntityBase"/> in it
         /// </summary>
         /// <param name="spriteBatch"><see cref="SpriteBatch"/> to draw the <see cref="DungeonLevel"/> with</param>
-        public void Draw(SpriteBatch spriteBatch)
+        /// <param name="camera"><see cref="Camera"/></param>
+        /// <param name="graphicsDevice"><see cref="GraphicsDevice"/></param>
+        public void Draw(SpriteBatch spriteBatch, Camera camera, GraphicsDevice graphicsDevice)
         {
-            foreach (Tile tile in MapTiles)
+            using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.Transformation(graphicsDevice)))
             {
-                tile.Draw(spriteBatch);
+                foreach (Tile tile in MapTiles)
+                {
+                    tile.Draw(spriteBatch);
+                }
             }
 
-            foreach (EntityBase entity in entities)
+            Effect effect = resourceProvider.GetEffect("SpriteEffect");
+            using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, effect, camera.Transformation(graphicsDevice)))
             {
-                entity.Draw(spriteBatch);
+                foreach (EntityBase entity in entities)
+                {
+                    entity.Draw(spriteBatch, effect);
+                }
             }
         }
 

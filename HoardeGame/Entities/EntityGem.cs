@@ -43,10 +43,10 @@ namespace HoardeGame.Entities
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Effect effect)
         {
             animator.DrawAnimation("Bounce", Position, spriteBatch);
-            base.Draw(spriteBatch);
+            base.Draw(spriteBatch, effect);
         }
     }
 }

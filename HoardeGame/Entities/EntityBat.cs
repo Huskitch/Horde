@@ -4,7 +4,6 @@
 
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
-using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Factories;
 using HoardeGame.Graphics.Rendering;
 using HoardeGame.Level;
@@ -49,10 +48,10 @@ namespace HoardeGame.Entities
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Effect effect)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            animator.DrawAnimation("Flap", screenPos, spriteBatch);
+            animator.DrawAnimation("Flap", screenPos, spriteBatch, CurrentBlinkFrame);
         }
     }
 }

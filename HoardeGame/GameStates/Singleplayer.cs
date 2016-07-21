@@ -85,6 +85,7 @@ namespace HoardeGame.GameStates
             dungeon.AddEntity(player);
 
             EntityBat bat = new EntityBat(dungeon, resourceProvider);
+            bat.Body.Position = player.Position;
             dungeon.AddEntity(bat);
 
             EntityChest chest = new EntityChest(dungeon, resourceProvider);
@@ -157,10 +158,7 @@ namespace HoardeGame.GameStates
             graphicsDevice.Clear(Color.Black);
 
             // GAME SPRITEBATCH
-            using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.Transformation(graphicsDevice)))
-            {
-                dungeon.Draw(spriteBatch);
-            }
+            dungeon.Draw(spriteBatch, camera, graphicsDevice);
 
             // MINIMAP SPRITEBATCH
             using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone))

@@ -44,6 +44,7 @@ namespace HoardeGame.Entities
             }
 
             Health--;
+            Hit();
 
             if (Health <= 0)
             {

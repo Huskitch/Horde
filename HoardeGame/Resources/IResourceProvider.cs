@@ -40,5 +40,12 @@ namespace HoardeGame.Resources
         /// <param name="key">Name of the <see cref="Song"/></param>
         /// <returns><see cref="Song"/> with matching key or null</returns>
         Song GetSong(string key);
+
+        /// <summary>
+        /// Gets a <see cref="Effect"/> with provided key
+        /// </summary>
+        /// <param name="key">key</param>
+        /// <returns><see cref="Effect"/></returns>
+        Effect GetEffect(string key);
     }
 }

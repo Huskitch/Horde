@@ -85,6 +85,20 @@ namespace HoardeGame.Graphics.Rendering
         }
 
         /// <summary>
+        /// Draws an <see cref="Animation"/>
+        /// </summary>
+        /// <param name="animation">Name of the <see cref="Animation"/></param>
+        /// <param name="position">Position where to draw the <see cref="Animation"/></param>
+        /// <param name="spriteBatch"><see cref="SpriteFont"/> to draw the animation with</param>
+        /// <param name="white">White value, should only be used with sprite shader</param>
+        public void DrawAnimation(string animation, Vector2 position, SpriteBatch spriteBatch, float white)
+        {
+            Animation selectedAnim = animations[animation];
+            lastUsedAnimation = selectedAnim;
+            spriteBatch.Draw(sheet, new Rectangle((int)position.X, (int)position.Y, selectedAnim.FrameSize, selectedAnim.FrameSize), selectedAnim.AnimRect, new Color(1 - white, 1 - white, 1 - white, 1));
+        }
+
+        /// <summary>
         /// Updates all the <see cref="Animation"/>
         /// </summary>
         /// <param name="gameTime"><see cref="GameTime"/></param>

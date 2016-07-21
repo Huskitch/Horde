@@ -20,7 +20,7 @@ namespace HoardeGame.Entities
     {
         private readonly IResourceProvider resourceProvider;
         private Tweener tween;
-        private float interractLabelPos;
+        private float interractLabelPos = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityChest"/> class.
@@ -52,13 +52,14 @@ namespace HoardeGame.Entities
 
             if (Vector2.Distance(EntityPlayer.Player.Position, Position) < 3)
             {
-                tween.Tween(this, new {interractLabelPos = (screenPos.Y - 10)}, 1f).Ease(Ease.LinearIn);
+                tween.Tween(this, new { interractLabelPos = screenPos.Y - 10 }, 1f).Ease(Ease.LinearIn);
             }
+
             base.Update(gameTime);
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Effect effect)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
             spriteBatch.Draw(resourceProvider.GetTexture("Chest"), screenPos, Color.White);

@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -37,6 +38,11 @@ namespace HoardeGame.Resources
         private Dictionary<string, Song> songs;
 
         /// <summary>
+        /// Dictionary of all loaded <see cref="Effect"/>
+        /// </summary>
+        private Dictionary<string, Effect> effects;
+
+        /// <summary>
         /// Current <see cref="GraphicsDevice"/>
         /// </summary>
         private GraphicsDevice device;
@@ -53,6 +59,7 @@ namespace HoardeGame.Resources
             fonts = new Dictionary<string, SpriteFont>();
             sounds = new Dictionary<string, SoundEffect>();
             songs = new Dictionary<string, Song>();
+            effects = new Dictionary<string, Effect>();
         }
 
         /// <summary>
@@ -65,6 +72,16 @@ namespace HoardeGame.Resources
             LoadFonts(content);
             LoadSounds(content);
             LoadSongs(content);
+            LoadEffects(content);
+        }
+
+        /// <summary>
+        /// Loads all <see cref="Effect"/>
+        /// </summary>
+        /// <param name="content"><see cref="ContentManager"/></param>
+        public void LoadEffects(ContentManager content)
+        {
+            effects.Add("SpriteEffect", content.Load<Effect>("sprite"));
         }
 
         /// <summary>
@@ -161,6 +178,12 @@ namespace HoardeGame.Resources
         public Song GetSong(string key)
         {
             return !songs.ContainsKey(key) ? null : songs[key];
+        }
+
+        /// <inheritdoc/>
+        public Effect GetEffect(string key)
+        {
+            return !effects.ContainsKey(key) ? null : effects[key];
         }
     }
 }

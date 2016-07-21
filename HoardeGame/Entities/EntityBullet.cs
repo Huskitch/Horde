@@ -47,7 +47,7 @@ namespace HoardeGame.Entities
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch, Effect effect)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
             spriteBatch.Draw(resourceProvider.GetTexture("Bullet"), screenPos, Color.White);
