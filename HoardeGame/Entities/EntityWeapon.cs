@@ -1,37 +1,50 @@
-﻿using System;
+﻿// <copyright file="EntityWeapon.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FarseerPhysics;
-using HoardeGame.Entities;
 using HoardeGame.Level;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace HoardeGame.Gameplay
+namespace HoardeGame.Entities
 {
+    /// <summary>
+    /// Base entity for all weapons
+    /// </summary>
     public class EntityWeapon : EntityBase
     {
-        private List<EntityBullet> bullets;
+        private readonly List<EntityBullet> bullets = new List<EntityBullet>();
         private float fireTimer;
 
-        public int FireRate = 100;
+        /// <summary>
+        /// Gets or sets the fire rate of the weapon
+        /// </summary>
+        public int FireRate { get; set; } = 100;
 
         private readonly DungeonLevel level;
         private readonly IResourceProvider resourceProvider;
         private readonly EntityBase owner;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EntityWeapon"/> class.
+        /// </summary>
+        /// <param name="level"> <see cref="DungeonLevel"/> to place this entity in</param>
+        /// <param name="resourceProvider"><see cref="IResourceProvider"/> to use for loading resources</param>
+        /// <param name="owner"><see cref="EntityBase"/> owner of the weapon</param>
         public EntityWeapon(DungeonLevel level, IResourceProvider resourceProvider, EntityBase owner) : base(level)
         {
             this.level = level;
             this.resourceProvider = resourceProvider;
             this.owner = owner;
-
-            bullets = new List<EntityBullet>();
         }
 
+        /// <summary>
+        /// Shoots
+        /// </summary>
+        /// <param name="direction">Direction of fired shot</param>
         public void Shoot(Vector2 direction)
         {
             if (fireTimer > FireRate)
@@ -41,6 +54,7 @@ namespace HoardeGame.Gameplay
             }
         }
 
+        /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
             fireTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -60,6 +74,7 @@ namespace HoardeGame.Gameplay
             base.Update(gameTime);
         }
 
+        /// <inheritdoc/>
         public override void Draw(SpriteBatch spriteBatch, Effect effect)
         {
             foreach (EntityBullet bullet in bullets)

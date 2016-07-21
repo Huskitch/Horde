@@ -5,9 +5,9 @@
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
-using Glide;
 using HoardeGame.Level;
 using HoardeGame.Resources;
+using HoardeGame.Tweening;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -19,7 +19,7 @@ namespace HoardeGame.Entities
     public class EntityChest : EntityBase
     {
         private readonly IResourceProvider resourceProvider;
-        private Tweener tween;
+        private readonly Tweener tween = new Tweener();
         private float interractLabelPos = 0;
 
         /// <summary>
@@ -38,8 +38,6 @@ namespace HoardeGame.Entities
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 70f;
             Body.FixedRotation = true;
-
-            tween = new Tweener();
 
             Health = 3;
         }

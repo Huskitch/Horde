@@ -43,25 +43,6 @@ namespace HoardeGame.Entities
         };
 
         /// <summary>
-        /// Gets the value of the current blink frame
-        /// </summary>
-        protected float CurrentBlinkFrame
-        {
-            // this probably doesn't belong here but it works for now
-            get
-            {
-                float frame = blinkFrames[blinkFrame];
-
-                if (blinkFrame > 0)
-                {
-                    blinkFrame--;
-                }
-
-                return frame;
-            }
-        }
-
-        /// <summary>
         /// Gets the level in which this entity exists
         /// </summary>
         public DungeonLevel Level { get; private set; }
@@ -95,6 +76,25 @@ namespace HoardeGame.Entities
         /// Gets the velocity of the <see cref="Body"/>
         /// </summary>
         public Vector2 Velocity => Body.LinearVelocity;
+
+        /// <summary>
+        /// Gets the value of the current blink frame
+        /// </summary>
+        protected float CurrentBlinkFrame
+        {
+            // this probably doesn't belong here but it works for now
+            get
+            {
+                float frame = blinkFrames[blinkFrame];
+
+                if (blinkFrame > 0)
+                {
+                    blinkFrame--;
+                }
+
+                return frame;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBase"/> class.
