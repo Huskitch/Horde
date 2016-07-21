@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
+using HoardeGame.Gameplay;
 using HoardeGame.Graphics.Rendering;
 using HoardeGame.Input;
 using HoardeGame.Level;
@@ -26,15 +27,8 @@ namespace HoardeGame.Entities
         /// </summary>
         public static EntityPlayer Player { get; private set; }
 
-        /// <summary>
-        /// Gets a list of bullets shot by player
-        /// </summary>
-        public List<EntityBullet> Bullets { get; private set; }
-
         private AnimatedSprite animator;
         private IInputProvider inputProvider;
-        private float fireTimer;
-        private int fireRate = 100;
 
         private enum Directions
         {
@@ -50,6 +44,7 @@ namespace HoardeGame.Entities
 
         private readonly IResourceProvider resourceProvider;
         private Directions direction;
+        private EntityWeapon weapon;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
@@ -71,8 +66,6 @@ namespace HoardeGame.Entities
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
 
-            Bullets = new List<EntityBullet>();
-
             Health = 10;
 
             animator = new AnimatedSprite(resourceProvider.GetTexture("PlayerSheet"));
@@ -86,6 +79,8 @@ namespace HoardeGame.Entities
             animator.AddAnimation("NorthEast", 32, 5, 5, 100);
             animator.AddAnimation("Idle", 32, 8, 5, 100);
             animator.SetDefaultAnimation("Idle");
+
+            weapon = new EntityWeapon(level, resourceProvider, this);
 
             Player = this;
         }
@@ -143,64 +138,45 @@ namespace HoardeGame.Entities
                 velocity.X--;
             }
 
-            fireTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            if (fireTimer > fireRate)
+            if (inputProvider.KeyboardState.IsKeyDown(Keys.Space))
             {
-                if (inputProvider.KeyboardState.IsKeyDown(Keys.Space))
+                Vector2 direction = Vector2.Zero;
+
+                switch (this.direction)
                 {
-                    Vector2 direction = Vector2.Zero;
-
-                    switch (this.direction)
-                    {
-                        case Directions.NORTH:
-                            direction = new Vector2(0, -1);
-                            break;
-                        case Directions.SOUTH:
-                            direction = new Vector2(0, 1);
-                            break;
-                        case Directions.WEST:
-                            direction = new Vector2(-1, 0);
-                            break;
-                        case Directions.EAST:
-                            direction = new Vector2(1, 0);
-                            break;
-                        case Directions.NORTHEAST:
-                            direction = new Vector2(1, -1);
-                            break;
-                        case Directions.NORTHWEST:
-                            direction = new Vector2(-1, -1);
-                            break;
-                        case Directions.SOUTHEAST:
-                            direction = new Vector2(1, 1);
-                            break;
-                        case Directions.SOUTHWEST:
-                            direction = new Vector2(-1, 1);
-                            break;
-                    }
-
-                    EntityBullet bullet = new EntityBullet(Level, resourceProvider, ConvertUnits.ToDisplayUnits(Position), direction);
-
-                    Bullets.Add(bullet);
-                    fireTimer = 0;
+                    case Directions.NORTH:
+                        direction = new Vector2(0, -1);
+                        break;
+                    case Directions.SOUTH:
+                        direction = new Vector2(0, 1);
+                        break;
+                    case Directions.WEST:
+                        direction = new Vector2(-1, 0);
+                        break;
+                    case Directions.EAST:
+                        direction = new Vector2(1, 0);
+                        break;
+                    case Directions.NORTHEAST:
+                        direction = new Vector2(1, -1);
+                        break;
+                    case Directions.NORTHWEST:
+                        direction = new Vector2(-1, -1);
+                        break;
+                    case Directions.SOUTHEAST:
+                        direction = new Vector2(1, 1);
+                        break;
+                    case Directions.SOUTHWEST:
+                        direction = new Vector2(-1, 1);
+                        break;
                 }
-             }
+
+                weapon.Shoot(direction);
+            }
 
             Body.ApplyForce(velocity * 50);
 
             animator.Update(gameTime);
-
-            for (int i = 0; i < Bullets.Count; i++)
-            {
-                if (Bullets[i].Removed)
-                {
-                    Bullets[i].Body.Dispose();
-                    Bullets.Remove(Bullets[i]);
-                    continue;
-                }
-
-                Bullets[i].Update(gameTime);
-            }
+            weapon.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -245,10 +221,7 @@ namespace HoardeGame.Entities
                 }
             }
 
-            foreach (EntityBullet bullet in Bullets)
-            {
-                bullet.Draw(spriteBatch);
-            }
+            weapon.Draw(spriteBatch);
 
             base.Draw(spriteBatch);
         }

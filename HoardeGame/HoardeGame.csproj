@@ -57,6 +57,7 @@
     <Compile Include="Gameplay\Card.cs" />
     <Compile Include="Gameplay\CardManager.cs" />
     <Compile Include="Gameplay\ICardProvider.cs" />
+    <Compile Include="Entities\EntityWeapon.cs" />
     <Compile Include="GameStates\SinglePlayer.cs" />
     <Compile Include="Graphics\Rendering\AnimatedSprite.cs" />
     <Compile Include="Graphics\Rendering\Animation.cs" />
