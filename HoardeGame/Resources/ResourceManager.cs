@@ -100,6 +100,9 @@ namespace HoardeGame.Resources
             textures.Add("PlayerSheet", content.Load<Texture2D>("Art/PlayerSheet"));
             textures.Add("GemAnimation", content.Load<Texture2D>("Art/gemAnimation"));
             textures.Add("BatSheet", content.Load<Texture2D>("Art/BatSheet"));
+            textures.Add("SnakeSheet", content.Load<Texture2D>("Art/SnakeSheet"));
+            textures.Add("DiamondSheet", content.Load<Texture2D>("Art/DiamondSheet"));
+            textures.Add("EmeraldSheet", content.Load<Texture2D>("Art/EmeraldSheet"));
             textures.Add("Chest", content.Load<Texture2D>("Art/Chest"));
             textures.Add("Bullet", content.Load<Texture2D>("Art/playerBullet"));
             textures.Add("Drill", content.Load<Texture2D>("Art/drill"));

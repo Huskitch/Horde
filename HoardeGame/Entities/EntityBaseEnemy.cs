@@ -83,7 +83,25 @@ namespace HoardeGame.Entities
                             }
                         };
 
+                        EntityGem2 gem2 = new EntityGem2(Level, resourceProvider, playerProvider)
+                        {
+                            Body =
+                            {
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8))
+                            }
+                        };
+
+                        EntityGem3 gem3 = new EntityGem3(Level, resourceProvider, playerProvider)
+                        {
+                            Body =
+                            {
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8))
+                            }
+                        };
+
                         Level.AddEntity(gem);
+                        Level.AddEntity(gem2);
+                        Level.AddEntity(gem3);
                     }
                 }
             }

@@ -8,11 +8,16 @@
     <EntitySpawns>
       <EntitySpawnInfo>
         <EntityType>HoardeGame.Entities.EntityBat</EntityType>
-        <MinClusterSize>20</MinClusterSize>
-        <MaxClusterSize>20</MaxClusterSize>
+        <MinClusterSize>3</MinClusterSize>
+        <MaxClusterSize>10</MaxClusterSize>
         <SpawnRate>3</SpawnRate>
       </EntitySpawnInfo>
-    </EntitySpawns>
+      <EntitySpawnInfo>
+        <EntityType>HoardeGame.Entities.EntitySnake</EntityType>
+        <MinClusterSize>3</MinClusterSize>
+        <MaxClusterSize>10</MaxClusterSize>
+        <SpawnRate>3</SpawnRate>
+      </EntitySpawnInfo>    </EntitySpawns>
     <ChestInfo>
       <MinAmmo>50</MinAmmo>
       <MaxAmmo>100</MaxAmmo>

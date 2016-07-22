@@ -52,7 +52,10 @@
     <Compile Include="Entities\EntityChest.cs" />
     <Compile Include="Entities\EntityDrill.cs" />
     <Compile Include="Entities\EntityGem.cs" />
+    <Compile Include="Entities\EntityGem2.cs" />
+    <Compile Include="Entities\EntityGem3.cs" />
     <Compile Include="Entities\EntityPlayer.cs" />
+    <Compile Include="Entities\EntitySnake.cs" />
     <Compile Include="Entities\IPlayerProvider.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
