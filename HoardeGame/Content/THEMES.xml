@@ -17,8 +17,7 @@
         <MinClusterSize>3</MinClusterSize>
         <MaxClusterSize>10</MaxClusterSize>
         <SpawnRate>3</SpawnRate>
-      </EntitySpawnInfo>
-    </EntitySpawns>
+      </EntitySpawnInfo>    </EntitySpawns>
     <ChestInfo>
       <MinAmmo>50</MinAmmo>
       <MaxAmmo>100</MaxAmmo>
