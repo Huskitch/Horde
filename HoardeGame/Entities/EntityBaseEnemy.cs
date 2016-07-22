@@ -21,12 +21,12 @@ namespace HoardeGame.Entities
         /// <summary>
         /// Gets or sets the minimal amount of gems that will drop from this entity when killed
         /// </summary>
-        public int[] MinGemDrop { get; protected set; } = new int[3];
+        public int[] MinGemDrop { get; protected set; } = new int[4];
 
         /// <summary>
         /// Gets or sets the maximum amount of gems that will drop from this entity when killed
         /// </summary>
-        public int[] MaxGemDrop { get; protected set; } = new int[3];
+        public int[] MaxGemDrop { get; protected set; } = new int[4];
 
         /// <summary>
         /// Gets or sets the current direction of this entity
@@ -107,6 +107,7 @@ namespace HoardeGame.Entities
                     int gemCount1 = random.Next(MinGemDrop[0], MaxGemDrop[0]);
                     int gemCount2 = random.Next(MinGemDrop[1], MaxGemDrop[1]);
                     int gemCount3 = random.Next(MinGemDrop[2], MaxGemDrop[2]);
+                    int keyCount = random.Next(MinGemDrop[3], MaxGemDrop[3]);
 
                     for (int i = 0; i < gemCount1; i++)
                     {
@@ -145,6 +146,19 @@ namespace HoardeGame.Entities
                         };
 
                         Level.AddEntity(gem3);
+                    }
+
+                    for (int i = 0; i < keyCount; i++)
+                    {
+                        EntityKey key = new EntityKey(Level, resourceProvider, playerProvider)
+                        {
+                            Body =
+                            {
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                            }
+                        };
+
+                        Level.AddEntity(key);
                     }
                 }
             }

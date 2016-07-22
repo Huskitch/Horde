@@ -54,6 +54,7 @@
     <Compile Include="Entities\EntityGem.cs" />
     <Compile Include="Entities\EntityGem2.cs" />
     <Compile Include="Entities\EntityGem3.cs" />
+    <Compile Include="Entities\EntityKey.cs" />
     <Compile Include="Entities\EntityPlayer.cs" />
     <Compile Include="Entities\EntitySnake.cs" />
     <Compile Include="Entities\IPlayerProvider.cs" />

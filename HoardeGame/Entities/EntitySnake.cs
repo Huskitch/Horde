@@ -39,8 +39,8 @@ namespace HoardeGame.Entities
             this.playerProvider = playerProvider;
 
             Health = 3;
-            MinGemDrop = new[] { 3, 2, 1 };
-            MaxGemDrop = new[] { 6, 4, 2 };
+            MinGemDrop = new[] { 3, 2, 1, 1 };
+            MaxGemDrop = new[] { 6, 4, 2, 1 };
 
             animator = new AnimatedSprite(resourceProvider.GetTexture("SnakeSheet"));
             animator.AddAnimation("North", 48, 1, 3, 100);

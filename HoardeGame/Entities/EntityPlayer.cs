@@ -23,7 +23,7 @@ namespace HoardeGame.Entities
         /// <summary>
         /// Gets the amount of gems the player has
         /// </summary>
-        public int[] Gems { get; } = new int[3];
+        public int[] Gems { get; } = new int[4];
 
         /// <summary>
         /// Gets or sets a value indicating whether the player is dead
