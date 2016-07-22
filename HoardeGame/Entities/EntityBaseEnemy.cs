@@ -79,7 +79,7 @@ namespace HoardeGame.Entities
                         {
                             Body =
                             {
-                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(0, 0, 0.25f, 0.25f)
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(0, 0, 0.3f, 0.3f)
                             }
                         };
 

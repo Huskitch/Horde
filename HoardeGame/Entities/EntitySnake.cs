@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="EntitySnake.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
+using System;
+
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
@@ -15,6 +15,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.Entities
 {
+    /// <summary>
+    /// Snake entity
+    /// </summary>
     public class EntitySnake : EntityBaseEnemy
     {
         private readonly AnimatedSprite animator;
@@ -22,8 +25,9 @@ namespace HoardeGame.Entities
         private float walkTimer;
         private Vector2 direction;
         private Random rng = new Random(Guid.NewGuid().GetHashCode());
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="HoardeGame.Entities.EntityBat"/> class.
+        /// Initializes a new instance of the <see cref="EntitySnake"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> to load resources with</param>
@@ -58,6 +62,10 @@ namespace HoardeGame.Entities
             animator.Update(gameTime);
         }
 
+        /// <summary>
+        /// Updates the AI state
+        /// </summary>
+        /// <param name="gameTime"><see cref="GameTime"/></param>
         public void UpdateAI(GameTime gameTime)
         {
             walkTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -77,7 +85,6 @@ namespace HoardeGame.Entities
             }
 
             Body.ApplyForce(direction * 20);
-            Debug.WriteLine(Body.BodyId + " is applying force in direction: " + direction);
         }
 
         /// <inheritdoc/>
@@ -86,16 +93,21 @@ namespace HoardeGame.Entities
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
 
             if (direction == new Vector2(0, -1))
+            {
                 animator.DrawAnimation("North", screenPos, spriteBatch, CurrentBlinkFrame);
-
+            }
             else if (direction == new Vector2(1, 0))
+            {
                 animator.DrawAnimation("East", screenPos, spriteBatch, CurrentBlinkFrame);
-
+            }
             else if (direction == new Vector2(0, 1))
+            {
                 animator.DrawAnimation("South", screenPos, spriteBatch, CurrentBlinkFrame);
-
+            }
             else if (direction == new Vector2(-1, 0))
+            {
                 animator.DrawAnimation("West", screenPos, spriteBatch, CurrentBlinkFrame);
+            }
             else
             {
                 animator.DrawAnimation("South", screenPos, spriteBatch, CurrentBlinkFrame);
