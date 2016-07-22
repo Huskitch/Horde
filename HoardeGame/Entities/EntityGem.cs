@@ -2,7 +2,6 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using System.Collections.ObjectModel;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;

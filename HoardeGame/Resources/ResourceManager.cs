@@ -2,7 +2,6 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;

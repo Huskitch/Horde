@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System.IO;
 using System.Xml.Serialization;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
@@ -154,6 +155,18 @@ namespace HoardeGame.Gameplay
         public override string ToString()
         {
             return $"{Name} ({ID}): {Description} ({Price[0]}|{Price[1]}|{Price[2]})";
+        }
+
+        /// <summary>
+        /// Validates the card
+        /// </summary>
+        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for checking assets</param>
+        public void Validate(IResourceProvider resourceProvider)
+        {
+            if (resourceProvider.GetTexture(TextureName) == null)
+            {
+                throw new FileNotFoundException($"Texture {TextureName} does not exist!");
+            }
         }
     }
 }

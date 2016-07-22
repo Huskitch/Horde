@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Themes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Theme ID="temple">
+    <Name>Temple</Name>
+    <FloorTextureName>BasicFloor</FloorTextureName>
+    <WallTextureName>BasicWall</WallTextureName>
+    <Special />
+    <EntitySpawns>
+      <EnemySpawnInfo>
+        <EnemyType>HoardeGame.Entities.EntityBat</EnemyType>
+        <MinClusterSize>2</MinClusterSize>
+        <MaxClusterSize>5</MaxClusterSize>
+        <SpawnRate>3</SpawnRate>
+      </EnemySpawnInfo>
+      <EnemySpawnInfo>
+        <EnemyType>HoardeGame.Entities.EntityGem</EnemyType>
+        <MinClusterSize>1</MinClusterSize>
+        <MaxClusterSize>3</MaxClusterSize>
+        <SpawnRate>1</SpawnRate>
+      </EnemySpawnInfo>
+    </EntitySpawns>
+    <ChestInfo>
+      <MinAmmo>50</MinAmmo>
+      <MaxAmmo>100</MaxAmmo>
+      <MinHealth>1</MinHealth>
+      <MaxHealth>5</MaxHealth>
+      <MinArmour>0</MinArmour>
+      <MaxArmour>2</MaxArmour>
+      <MinGems>
+        <int>3</int>
+        <int>2</int>
+        <int>1</int>
+      </MinGems>
+      <MaxGems>
+        <int>9</int>
+        <int>6</int>
+        <int>3</int>
+      </MaxGems>
+      <WeaponType></WeaponType>
+      <WeaponDropChance>100</WeaponDropChance>
+      <WeaponDropType>Random</WeaponDropType>
+    </ChestInfo>
+    <Songs />
+  </Theme>
+</Themes>

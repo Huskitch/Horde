@@ -56,6 +56,7 @@ namespace HoardeGame.Gameplay
             {
                 card.Initialize(resourceProvider);
                 card.Texture = resourceProvider.GetTexture(card.TextureName);
+                card.Validate(resourceProvider);
                 cards.Add(card.ID, card);
             }
 

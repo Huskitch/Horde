@@ -6,7 +6,6 @@ using System;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
-using HoardeGame.GameStates;
 using HoardeGame.Level;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;

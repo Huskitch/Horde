@@ -8,6 +8,7 @@ using HoardeGame.GameStates;
 using HoardeGame.Input;
 using HoardeGame.Resources;
 using HoardeGame.State;
+using HoardeGame.Themes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -19,12 +20,14 @@ namespace HoardeGame
     /// </summary>
     public class Main : Game
     {
-        private GraphicsDeviceManager graphics;
+        private readonly GraphicsDeviceManager graphics;
+        private readonly StateManager stateManager;
+        private readonly IInputProvider inputProvider;
+        private readonly ICardProvider cardProvider;
+        private readonly IResourceProvider resourceProvider;
+        private readonly IThemeProvider themeProvider;
+
         private SpriteBatch spriteBatch;
-        private StateManager stateManager;
-        private IInputProvider inputProvider;
-        private ICardProvider cardProvider;
-        private IResourceProvider resourceProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Main"/> class.
@@ -37,6 +40,7 @@ namespace HoardeGame
             resourceProvider = new ResourceManager();
             inputProvider = new InputManager();
             cardProvider = new CardManager(resourceProvider);
+            themeProvider = new ThemeManager();
             stateManager = new StateManager();
 
             graphics.PreferredBackBufferWidth = 1600;
@@ -67,7 +71,9 @@ namespace HoardeGame
 
             (cardProvider as CardManager).LoadXmlFile("Content/CARDS.xml");
 
-            stateManager.Push(new SinglePlayer(resourceProvider, inputProvider, cardProvider, spriteBatch, GraphicsDevice, Window));
+            (themeProvider as ThemeManager).LoadXmlFile("Content/THEMES.xml", resourceProvider);
+
+            stateManager.Push(new SinglePlayer(resourceProvider, inputProvider, cardProvider, themeProvider, spriteBatch, GraphicsDevice, Window));
         }
 
         /// <inheritdoc/>

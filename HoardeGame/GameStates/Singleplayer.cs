@@ -12,6 +12,7 @@ using HoardeGame.Input;
 using HoardeGame.Level;
 using HoardeGame.Resources;
 using HoardeGame.State;
+using HoardeGame.Themes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -39,6 +40,7 @@ namespace HoardeGame.GameStates
         private readonly IInputProvider inputProvider;
         private readonly ICardProvider cardProvider;
         private readonly IResourceProvider resourceProvider;
+        private readonly IThemeProvider themeProvider;
 
         private readonly Camera camera;
         private readonly DungeonLevel dungeon;
@@ -61,14 +63,16 @@ namespace HoardeGame.GameStates
         /// <param name="window"><see cref="GameWindow"/> to draw in</param>
         /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
         /// <param name="cardProvider"><see cref="ICardProvider"/> for managing cards</param>
+        /// <param name="themeProvider"><see cref="IThemeProvider"/> for managing level themes</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        public SinglePlayer(IResourceProvider resourceProvider, IInputProvider inputProvider, ICardProvider cardProvider, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, GameWindow window)
+        public SinglePlayer(IResourceProvider resourceProvider, IInputProvider inputProvider, ICardProvider cardProvider, IThemeProvider themeProvider, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, GameWindow window)
         {
             this.graphicsDevice = graphicsDevice;
             this.spriteBatch = spriteBatch;
             this.inputProvider = inputProvider;
             this.cardProvider = cardProvider;
             this.resourceProvider = resourceProvider;
+            this.themeProvider = themeProvider;
 
             testCard = cardProvider.GetCard("testCard");
 
@@ -82,14 +86,20 @@ namespace HoardeGame.GameStates
                 Size = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight)
             };
 
-            dungeon = new DungeonLevel(resourceProvider);
+            dungeon = new DungeonLevel(resourceProvider, themeProvider.GetTheme("temple"));
             dungeon.GenerateLevel(64, 64, 40);
 
             Player = new EntityPlayer(dungeon, inputProvider, resourceProvider);
             dungeon.AddEntity(Player);
 
-            EntityBat bat = new EntityBat(dungeon, resourceProvider, this);
-            bat.Body.Position = Player.Position + new Vector2(2, 2);
+            EntityBat bat = new EntityBat(dungeon, resourceProvider, this)
+            {
+                Body =
+                {
+                    Position = Player.Position + new Vector2(2, 2)
+                }
+            };
+
             dungeon.AddEntity(bat);
 
             EntityChest chest = new EntityChest(dungeon, resourceProvider, this);

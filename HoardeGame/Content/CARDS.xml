@@ -14,7 +14,7 @@
     </Card>
     <Card ID="testCard2">
         <Name>Increase Speed</Name>
-        <TextureName>TestCard2</TextureName>
+        <TextureName>TestCard</TextureName>
         <Rarity>Rare</Rarity>
         <Type>IncreaseSpeed</Type>
         <Description>Increase your speed 2x</Description>
