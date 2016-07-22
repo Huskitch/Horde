@@ -55,8 +55,6 @@ namespace HoardeGame.GameStates
         private Label armorLabel;
         private Label ammoLabel;
 
-        private EntityBat bat2;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SinglePlayer"/> class.
         /// </summary>
@@ -93,25 +91,6 @@ namespace HoardeGame.GameStates
 
             Player = new EntityPlayer(dungeon, inputProvider, resourceProvider);
             dungeon.AddEntity(Player);
-
-            EntityBat bat = new EntityBat(dungeon, resourceProvider, this)
-            {
-                Body =
-                {
-                    Position = Player.Position + new Vector2(2, 2)
-                }
-            };
-
-            bat2 = new EntityBat(dungeon, resourceProvider, this)
-            {
-                Body =
-                {
-                    Position = Player.Position + new Vector2(4, 4)
-                }
-            };
-
-            dungeon.AddEntity(bat);
-            dungeon.AddEntity(bat2);
 
             EntityChest chest = new EntityChest(dungeon, resourceProvider, this, themeProvider.GetTheme("temple").ChestInfo)
             {

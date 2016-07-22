@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
@@ -16,39 +17,14 @@ namespace HoardeGame.Level
     public class Tile
     {
         /// <summary>
-        /// Gets or sets the position of this tile in meters
+        /// Gets or sets the position of this tile
         /// </summary>
-        public Vector2 Position
-        {
-            get { return body.Position; }
-            set { body.Position = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the position this tile in pixels
-        /// </summary>
-        public Vector2 ScreenPosition
-        {
-            get
-            {
-                return ConvertUnits.ToDisplayUnits(body.Position);
-            }
-
-            set
-            {
-                body.Position = ConvertUnits.ToSimUnits(value);
-            }
-        }
+        public Vector2 Position { get; set; }
 
         /// <summary>
         /// Gets the size of this tile
         /// </summary>
         public Vector2 Scale { get; private set; }
-
-        /// <summary>
-        /// <see cref="Body"/> representing this tile
-        /// </summary>
-        private readonly Body body;
 
         private readonly Texture2D texture;
 
@@ -59,25 +35,18 @@ namespace HoardeGame.Level
         /// <param name="scale"><see cref="Vector2"/> to use for scaling</param>
         /// <param name="texture"><see cref="Texture2D"/> of the tile</param>
         /// <param name="collide">Whether to generate collision boxes</param>
-        /// <param name="world"><see cref="World"/> to place this tile in</param>
-        public Tile(Vector2 pos, Vector2 scale, Texture2D texture, bool collide, World world)
+        /// <param name="level"><see cref="DungeonLevel"/> to place this tile in</param>
+        public Tile(Vector2 pos, Vector2 scale, Texture2D texture, bool collide, DungeonLevel level)
         {
             Scale = scale;
             this.texture = texture;
+            Position = pos;
 
             if (collide)
             {
-                body = BodyFactory.CreateRectangle(world, ConvertUnits.ToSimUnits(32), ConvertUnits.ToSimUnits(32), 1f, new Vector2(0, 24));
-                body.CollisionCategories = Category.Cat4;
-                body.CollidesWith = Category.All;
-                body.IsStatic = true;
-                body.Position = ConvertUnits.ToSimUnits(pos);
-            }
-            else
-            {
-                body = BodyFactory.CreateBody(world);
-                body.IsStatic = true;
-                body.Position = ConvertUnits.ToSimUnits(pos);
+                Fixture fixture = FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(32), ConvertUnits.ToSimUnits(32), 1f, ConvertUnits.ToSimUnits(pos), level.Body);
+                fixture.CollisionCategories = Category.Cat4;
+                fixture.CollidesWith = Category.All;
             }
         }
 
@@ -95,7 +64,7 @@ namespace HoardeGame.Level
         /// <param name="spriteBatch"><see cref="SpriteBatch"/></param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, new Rectangle((int)ScreenPosition.X, (int)ScreenPosition.Y, (int)Scale.X, (int)Scale.Y), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, new Rectangle((int)Position.X, (int)Position.Y, (int)Scale.X, (int)Scale.Y), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
         }
     }
 }

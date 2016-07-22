@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using FarseerPhysics.Dynamics;
+using FarseerPhysics.Factories;
 using HoardeGame.Entities;
 using HoardeGame.Extensions;
 using HoardeGame.Graphics.Rendering;
@@ -12,7 +13,6 @@ using HoardeGame.Resources;
 using HoardeGame.Themes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
 
 namespace HoardeGame.Level
 {
@@ -30,6 +30,11 @@ namespace HoardeGame.Level
         /// Gets the physics world for all <see cref="EntityBase"/>
         /// </summary>
         public World World { get; private set; } = new World(Vector2.Zero);
+
+        /// <summary>
+        /// Gets or sets the body of the whole world
+        /// </summary>
+        public Body Body { get; set; }
 
         /// <summary>
         /// Gets the current theme of the level
@@ -50,6 +55,7 @@ namespace HoardeGame.Level
         /// Initializes a new instance of the <see cref="DungeonLevel"/> class.
         /// </summary>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
+        /// <param name="playerProvider"><see cref="IPlayerProvider"/> for accessing the player entity</param>
         /// <param name="theme"><see cref="Theme"/> of this level</param>
         public DungeonLevel(IResourceProvider resourceProvider, IPlayerProvider playerProvider, Theme theme)
         {
@@ -62,12 +68,20 @@ namespace HoardeGame.Level
             this.playerProvider = playerProvider;
             Theme = theme;
 
+            Body = BodyFactory.CreateBody(World);
+            Body.CollisionCategories = Category.Cat4;
+            Body.CollidesWith = Category.All;
+            Body.IsStatic = true;
+
             levelGen = new LevelGenerator();
             map = new int[mapWidth, mapHeight];
             MapTiles = new List<Tile>();
             entities = new List<EntityBase>();
+
             PlaceChests();
             SpawnEnemies();
+
+            Console.WriteLine(World.ContactList.Count);
         }
 
         /// <summary>
@@ -108,6 +122,9 @@ namespace HoardeGame.Level
             return levelGen.GetSpawnPosition(size, center);
         }
 
+        /// <summary>
+        /// Places chests
+        /// </summary>
         public void PlaceChests()
         {
             for (int i = 0; i < 5; i++)
@@ -118,34 +135,32 @@ namespace HoardeGame.Level
             }
         }
 
+        /// <summary>
+        /// Spawns enemies
+        /// </summary>
         public void SpawnEnemies()
         {
             Random rng = new Random();
 
             foreach (EntitySpawnInfo spawns in Theme.EntitySpawns)
             {
-                // BRB VIRUSEK ^ THE MERGE BROKE THIS WAT DO
-
                 for (int i = 0; i < spawns.SpawnRate; i++)
                 {
-                    List<EntityBaseEnemy> enemies = new List<EntityBaseEnemy>();
                     int clusterSize = rng.Next(spawns.MinClusterSize, spawns.MaxClusterSize);
+
+                    Vector2 spawnPos = GetSpawnPosition(3);
+                    Random random = new Random();
 
                     for (int j = 0; j < clusterSize; j++)
                     {
                         Type enemyType = Type.GetType(spawns.EntityType);
-                        var instance = Activator.CreateInstance(enemyType, this, resourceProvider, playerProvider);
-                        enemies.Add((EntityBaseEnemy) instance);
-                    }
+                        var instance = Activator.CreateInstance(enemyType, this, resourceProvider, playerProvider) as EntityBaseEnemy;
+                        Vector2 randomVector2 = random.Vector2(0, 0, 0.25f, 0.25f);
+                        instance.Body.Position = spawnPos + randomVector2;
+                        World.Step(10);
+                        Console.WriteLine($"{j + 1} / {clusterSize} ({spawnPos})");
 
-                    Vector2 spawnPos = GetSpawnPosition(3);
-                    for (int j = 0; j < enemies.Count; j++)
-                    {
-                        EntityBaseEnemy enemy = enemies[j];
-
-                        enemy.Body.Position = (spawnPos + new Vector2(j%5 * 0.5f, j/5 * 0.5f));
-
-                        AddEntity(enemy);
+                        AddEntity(instance);
                     }
                 }
             }
@@ -171,6 +186,15 @@ namespace HoardeGame.Level
             map = levelGen.Map;
 
             LoadTiles();
+
+            int maxIters = 300;
+
+            while (World.ContactList.Count > 1000 && maxIters > 0)
+            {
+                World.Step(10);
+                Console.WriteLine($"Contacts: {World.ContactList.Count} / 1000");
+                maxIters--;
+            }
         }
 
         /// <summary>
@@ -220,7 +244,7 @@ namespace HoardeGame.Level
         /// <param name="gameTime"><see cref="GameTime"/></param>
         public void Update(GameTime gameTime)
         {
-            World.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f, 1f / 30f));
+            World.Step(1f / 30f);
 
             foreach (Tile tile in MapTiles)
             {
@@ -279,7 +303,7 @@ namespace HoardeGame.Level
                 {
                     if (map[x, y] != 1)
                     {
-                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32 + 24), new Vector2(32, 32), resourceProvider.GetTexture(Theme.FloorTextureName), false, World));
+                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32 + 24), new Vector2(32, 32), resourceProvider.GetTexture(Theme.FloorTextureName), false, this));
                     }
                 }
             }
@@ -290,7 +314,7 @@ namespace HoardeGame.Level
                 {
                     if (map[x, y] == 1)
                     {
-                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32), new Vector2(32, 56), resourceProvider.GetTexture(Theme.WallTextureName), true, World));
+                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32), new Vector2(32, 56), resourceProvider.GetTexture(Theme.WallTextureName), true, this));
                     }
                 }
             }

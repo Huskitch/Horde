@@ -25,6 +25,7 @@ namespace HoardeGame.Entities
         private float walkTimer;
         private Vector2 direction;
         private Random rng = new Random(Guid.NewGuid().GetHashCode());
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBat"/> class.
         /// </summary>
@@ -34,7 +35,6 @@ namespace HoardeGame.Entities
         public EntityBat(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level, resourceProvider, playerProvider)
         {
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10f), 1f, Body);
-            Body.Position = ConvertUnits.ToSimUnits(new Vector2(500, 500));
             Body.CollisionCategories = Category.Cat3;
             Body.CollidesWith = Category.All;
             Body.BodyType = BodyType.Dynamic;
@@ -58,9 +58,13 @@ namespace HoardeGame.Entities
             animator.Update(gameTime);
         }
 
+        /// <summary>
+        /// Updates the AI state
+        /// </summary>
+        /// <param name="gameTime"><see cref="GameTime"/></param>
         public void UpdateAI(GameTime gameTime)
         {
-            walkTimer += (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+            walkTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             if (walkTimer > rng.Next(100, 3000))
             {
@@ -69,7 +73,6 @@ namespace HoardeGame.Entities
             }
 
            Body.ApplyForce(direction * 20);
-           Debug.WriteLine(Body.BodyId + " is applying force in direction: " + direction);
         }
 
         /// <inheritdoc/>

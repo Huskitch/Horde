@@ -79,7 +79,13 @@ namespace HoardeGame.Level
             float relativeX = camera.Position.X / (Image.Width / 2);
             float relativeY = camera.Position.Y / (Image.Height / 2);
 
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), (camera.Position / 32).ToString(), new Vector2(20, 20), Color.White);
+            string pos = (camera.Position / 32).ToString();
+
+            // In czech NaN is "Není Číslo" which crashes MonoGame
+            if (!pos.Contains("č"))
+            {
+                spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), pos, new Vector2(20, 20), Color.White);
+            }
 
             float max = Math.Max(relativeWidth, relativeHeight);
             spriteBatch.Draw(Image, inner, new Rectangle((int)relativeX - (int)(max / 2), (int)relativeY - (int)(max / 2), (int)max, (int)max), Color.White);

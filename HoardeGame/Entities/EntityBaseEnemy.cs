@@ -6,6 +6,7 @@ using System;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
+using HoardeGame.Extensions;
 using HoardeGame.Level;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
@@ -77,9 +78,9 @@ namespace HoardeGame.Entities
                         EntityGem gem = new EntityGem(Level, resourceProvider, playerProvider)
                         {
                             Body =
-                        {
-                            Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8))
-                        }
+                            {
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(0, 0, 0.25f, 0.25f)
+                            }
                         };
 
                         Level.AddEntity(gem);

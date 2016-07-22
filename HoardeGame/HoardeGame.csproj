@@ -55,6 +55,7 @@
     <Compile Include="Entities\EntityPlayer.cs" />
     <Compile Include="Entities\IPlayerProvider.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="Gameplay\Card.cs" />
     <Compile Include="Gameplay\CardManager.cs" />
