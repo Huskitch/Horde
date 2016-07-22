@@ -22,7 +22,9 @@ namespace HoardeGame.Entities
     {
         private readonly AnimatedSprite animator;
         private IPlayerProvider playerProvider;
-
+        private float walkTimer;
+        private Vector2 direction;
+        private Random rng = new Random(Guid.NewGuid().GetHashCode());
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBat"/> class.
         /// </summary>
@@ -52,7 +54,22 @@ namespace HoardeGame.Entities
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
+            UpdateAI(gameTime);
             animator.Update(gameTime);
+        }
+
+        public void UpdateAI(GameTime gameTime)
+        {
+            walkTimer += (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            if (walkTimer > rng.Next(100, 3000))
+            {
+                direction = new Vector2(rng.Next(-1, 2), rng.Next(-1, 2));
+                walkTimer = 0;
+            }
+
+           Body.ApplyForce(direction * 20);
+           Debug.WriteLine(Body.BodyId + " is applying force in direction: " + direction);
         }
 
         /// <inheritdoc/>

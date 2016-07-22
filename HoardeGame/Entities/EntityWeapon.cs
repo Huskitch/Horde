@@ -27,7 +27,7 @@ namespace HoardeGame.Entities
         /// <summary>
         /// Gets or sets the damage of the weapon
         /// </summary>
-        public int Damage { get; set; } = 3;
+        public int Damage { get; set; } = 1;
 
         private readonly DungeonLevel level;
         private readonly IResourceProvider resourceProvider;

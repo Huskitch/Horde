@@ -12,6 +12,7 @@ using HoardeGame.Resources;
 using HoardeGame.Themes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace HoardeGame.Level
 {
@@ -38,6 +39,7 @@ namespace HoardeGame.Level
         private readonly LevelGenerator levelGen;
         private readonly List<EntityBase> entities;
         private readonly IResourceProvider resourceProvider;
+        private IPlayerProvider playerProvider;
 
         private int[,] map;
         private int mapWidth = 1;
@@ -49,7 +51,7 @@ namespace HoardeGame.Level
         /// </summary>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="theme"><see cref="Theme"/> of this level</param>
-        public DungeonLevel(IResourceProvider resourceProvider, Theme theme)
+        public DungeonLevel(IResourceProvider resourceProvider, IPlayerProvider playerProvider, Theme theme)
         {
             if (theme == null)
             {
@@ -57,12 +59,15 @@ namespace HoardeGame.Level
             }
 
             this.resourceProvider = resourceProvider;
+            this.playerProvider = playerProvider;
             Theme = theme;
 
             levelGen = new LevelGenerator();
             map = new int[mapWidth, mapHeight];
             MapTiles = new List<Tile>();
             entities = new List<EntityBase>();
+            PlaceChests();
+            SpawnEnemies();
         }
 
         /// <summary>
@@ -101,6 +106,47 @@ namespace HoardeGame.Level
         public Vector2 GetSpawnPosition(int size = 5, bool center = true)
         {
             return levelGen.GetSpawnPosition(size, center);
+        }
+
+        public void PlaceChests()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                EntityChest chest = new EntityChest(this, resourceProvider, playerProvider);
+                chest.Body.Position = GetSpawnPosition(2, true);
+                entities.Add(chest);
+            }
+        }
+
+        public void SpawnEnemies()
+        {
+            Random rng = new Random();
+
+            foreach (EnemySpawnInfo spawns in Theme.EntitySpawns)
+            {
+                for (int i = 0; i < spawns.SpawnRate; i++)
+                {
+                    List<EntityBaseEnemy> enemies = new List<EntityBaseEnemy>();
+                    int clusterSize = rng.Next(spawns.MinClusterSize, spawns.MaxClusterSize);
+
+                    for (int j = 0; j < clusterSize; j++)
+                    {
+                        Type enemyType = Type.GetType(spawns.EnemyType);
+                        var instance = Activator.CreateInstance(enemyType, this, resourceProvider, playerProvider);
+                        enemies.Add((EntityBaseEnemy) instance);
+                    }
+
+                    Vector2 spawnPos = GetSpawnPosition(3);
+                    for (int j = 0; j < enemies.Count; j++)
+                    {
+                        EntityBaseEnemy enemy = enemies[j];
+
+                        enemy.Body.Position = (spawnPos + new Vector2(j%5 * 0.5f, j/5 * 0.5f));
+
+                        AddEntity(enemy);
+                    }
+                }
+            }
         }
 
         /// <summary>

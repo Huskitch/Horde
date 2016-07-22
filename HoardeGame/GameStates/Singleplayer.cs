@@ -55,6 +55,8 @@ namespace HoardeGame.GameStates
         private Label armorLabel;
         private Label ammoLabel;
 
+        private EntityBat bat2;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SinglePlayer"/> class.
         /// </summary>
@@ -86,7 +88,7 @@ namespace HoardeGame.GameStates
                 Size = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight)
             };
 
-            dungeon = new DungeonLevel(resourceProvider, themeProvider.GetTheme("temple"));
+            dungeon = new DungeonLevel(resourceProvider, this, themeProvider.GetTheme("temple"));
             dungeon.GenerateLevel(64, 64, 40);
 
             Player = new EntityPlayer(dungeon, inputProvider, resourceProvider);
@@ -100,7 +102,16 @@ namespace HoardeGame.GameStates
                 }
             };
 
+            bat2 = new EntityBat(dungeon, resourceProvider, this)
+            {
+                Body =
+                {
+                    Position = Player.Position + new Vector2(4, 4)
+                }
+            };
+
             dungeon.AddEntity(bat);
+            dungeon.AddEntity(bat2);
 
             EntityChest chest = new EntityChest(dungeon, resourceProvider, this);
             dungeon.AddEntity(chest);
