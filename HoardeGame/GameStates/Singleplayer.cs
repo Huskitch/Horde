@@ -51,6 +51,7 @@ namespace HoardeGame.GameStates
         private ProgressBar armorBar;
         private Label healthLabel;
         private Label armorLabel;
+        private Label ammoLabel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SinglePlayer"/> class.
@@ -144,6 +145,12 @@ namespace HoardeGame.GameStates
                 Color = Color.LightGray,
                 Text = "100"
             };
+
+            ammoLabel = new Label(this, "ammoLabel")
+            {
+                Position = new Vector2(20, graphicsDevice.PresentationParameters.BackBufferHeight - 115),
+                Text = "Ammo: 100"
+            };
         }
 
         /// <inheritdoc/>
@@ -156,6 +163,7 @@ namespace HoardeGame.GameStates
             camera.Position = ConvertUnits.ToDisplayUnits(Player.Position);
             healthLabel.Text = Player.Health.ToString();
             heatlthBar.Progress = Player.Health / 10f;
+            ammoLabel.Text = $"Ammo: {Player.Ammo}";
         }
 
         /// <inheritdoc/>

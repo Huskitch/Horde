@@ -45,14 +45,19 @@ namespace HoardeGame.Entities
         /// Shoots
         /// </summary>
         /// <param name="direction">Direction of fired shot</param>
-        public void Shoot(Vector2 direction)
+        /// <returns>Whether the gun shot</returns>
+        public bool Shoot(Vector2 direction)
         {
             if (fireTimer > FireRate)
             {
                 resourceProvider.GetSoundEffect("Fire").Play();
                 bullets.Add(new EntityBullet(level, resourceProvider, ConvertUnits.ToDisplayUnits(owner.Position), direction));
                 fireTimer = 0;
+
+                return true;
             }
+
+            return false;
         }
 
         /// <inheritdoc/>

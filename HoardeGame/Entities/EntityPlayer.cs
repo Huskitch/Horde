@@ -31,6 +31,11 @@ namespace HoardeGame.Entities
         /// </summary>
         public bool Dead { get; set; }
 
+        /// <summary>
+        /// Gets or sets the amount of ammo the player has
+        /// </summary>
+        public int Ammo { get; set; }
+
         private AnimatedSprite animator;
         private IInputProvider inputProvider;
 
@@ -71,6 +76,7 @@ namespace HoardeGame.Entities
             Body.FixedRotation = true;
 
             Health = 10;
+            Ammo = 100;
             BlinkMultiplier = 4;
 
             animator = new AnimatedSprite(resourceProvider.GetTexture("PlayerSheet"));
@@ -146,7 +152,7 @@ namespace HoardeGame.Entities
                 velocity.X--;
             }
 
-            if (inputProvider.KeyboardState.IsKeyDown(Keys.Space))
+            if (inputProvider.KeyboardState.IsKeyDown(Keys.Space) && Ammo > 0)
             {
                 Vector2 direction = Vector2.Zero;
 
@@ -178,7 +184,10 @@ namespace HoardeGame.Entities
                         break;
                 }
 
-                weapon.Shoot(direction);
+                if (weapon.Shoot(direction))
+                {
+                    Ammo--;
+                }
             }
 
             Body.ApplyForce(velocity * 50);
