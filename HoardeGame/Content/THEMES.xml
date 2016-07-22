@@ -7,13 +7,13 @@
     <Special />
     <EntitySpawns>
       <EntitySpawnInfo>
-        <EnemyType>HoardeGame.Entities.EntityBat</EnemyType>
+        <EntityType>HoardeGame.Entities.EntityBat</EntityType>
         <MinClusterSize>2</MinClusterSize>
         <MaxClusterSize>5</MaxClusterSize>
         <SpawnRate>3</SpawnRate>
       </EntitySpawnInfo>
       <EntitySpawnInfo>
-        <EnemyType>HoardeGame.Entities.EntityGem</EnemyType>
+        <EntityType>HoardeGame.Entities.EntityGem</EntityType>
         <MinClusterSize>1</MinClusterSize>
         <MaxClusterSize>3</MaxClusterSize>
         <SpawnRate>1</SpawnRate>
