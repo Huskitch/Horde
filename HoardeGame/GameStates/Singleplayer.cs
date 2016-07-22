@@ -175,7 +175,7 @@ namespace HoardeGame.GameStates
 
             armorLabel.Text = Player.Armour.ToString();
             armorBar.Progress = Player.Armour / 10f;
-            armorLabel.Position = new Vector2(130*armorBar.Progress, 55);
+            armorLabel.Position = new Vector2(130 * armorBar.Progress, 55);
 
             ammoLabel.Text = $"Ammo: {Player.Ammo}";
         }

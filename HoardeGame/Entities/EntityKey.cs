@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="EntityKey.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
@@ -15,6 +14,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.Entities
 {
+    /// <summary>
+    /// Key entity
+    /// </summary>
     public class EntityKey : EntityBase
     {
         private readonly AnimatedSprite animator;
@@ -22,7 +24,7 @@ namespace HoardeGame.Entities
         private readonly IResourceProvider resourceProvider;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HoardeGame.Entities.EntityGem"/> class.
+        /// Initializes a new instance of the <see cref="EntityKey"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
