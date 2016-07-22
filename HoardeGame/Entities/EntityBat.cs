@@ -2,6 +2,8 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
+using System.Diagnostics;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
@@ -19,6 +21,7 @@ namespace HoardeGame.Entities
     public class EntityBat : EntityBaseEnemy
     {
         private readonly AnimatedSprite animator;
+        private IPlayerProvider playerProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBat"/> class.
@@ -35,6 +38,8 @@ namespace HoardeGame.Entities
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
+
+            this.playerProvider = playerProvider;
 
             Health = 3;
             MinGemDrop = 3;

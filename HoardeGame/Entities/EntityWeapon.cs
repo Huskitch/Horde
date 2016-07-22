@@ -24,6 +24,8 @@ namespace HoardeGame.Entities
         /// </summary>
         public int FireRate { get; set; } = 100;
 
+        public int Damage { get; set; } = 3;
+
         private readonly DungeonLevel level;
         private readonly IResourceProvider resourceProvider;
         private readonly EntityBase owner;
