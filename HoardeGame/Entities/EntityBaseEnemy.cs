@@ -48,29 +48,39 @@ namespace HoardeGame.Entities
         /// <returns>true</returns>
         private bool OnShot(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
-            if (fixtureB.CollisionCategories != Category.Cat2)
+            if (fixtureB.CollisionCategories == Category.Cat2)
             {
-                return true;
-            }
+                Health--;
+                Hit();
 
-            Health--;
-            Hit();
-
-            if (Health <= 0)
-            {
-                Removed = true;
-
-                resourceProvider.GetSoundEffect("Death").Play();
-
-                EntityGem gem = new EntityGem(Level, resourceProvider, playerProvider)
+                if (Health <= 0)
                 {
-                    Body =
+                    Removed = true;
+
+                    resourceProvider.GetSoundEffect("Death").Play();
+
+                    EntityGem gem = new EntityGem(Level, resourceProvider, playerProvider)
+                    {
+                        Body =
                     {
                         Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8))
                     }
-                };
+                    };
 
-                Level.AddEntity(gem);
+                    Level.AddEntity(gem);
+                }
+            }
+            else if (fixtureB.CollisionCategories == Category.Cat1 && !playerProvider.Player.IsHit())
+            {
+                playerProvider.Player.Hit();
+                resourceProvider.GetSoundEffect("Hurt").Play();
+                playerProvider.Player.Health--;
+
+                if (playerProvider.Player.Health == 0)
+                {
+                    playerProvider.Player.Dead = true;
+                    resourceProvider.GetSoundEffect("PlayerDeath").Play();
+                }
             }
 
             return true;

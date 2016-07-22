@@ -42,6 +42,7 @@ namespace HoardeGame.Entities
         };
 
         private int blinkFrame;
+        private int blinkRepeat;
 
         /// <summary>
         /// Gets the level in which this entity exists
@@ -81,7 +82,7 @@ namespace HoardeGame.Entities
         /// <summary>
         /// Gets the value of the current blink frame
         /// </summary>
-        protected float CurrentBlinkFrame
+        public float CurrentBlinkFrame
         {
             // this probably doesn't belong here but it works for now
             get
@@ -92,10 +93,23 @@ namespace HoardeGame.Entities
                 {
                     blinkFrame--;
                 }
+                else
+                {
+                    if (blinkRepeat > 0)
+                    {
+                        blinkFrame = blinkFrames.Length - 1;
+                        blinkRepeat--;
+                    }
+                }
 
                 return frame;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the amount of times the blink animation will play
+        /// </summary>
+        protected int BlinkMultiplier { get; set; } = 1;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBase"/> class.
@@ -105,6 +119,20 @@ namespace HoardeGame.Entities
         {
             Level = level;
             Body = new Body(level.World);
+        }
+
+        /// <summary>
+        /// Determines whether the entity is being hit (can be used to determine if it was talking shit)
+        /// </summary>
+        /// <returns>Whether the entity is being hit</returns>
+        public bool IsHit()
+        {
+            if (blinkRepeat > 0 || blinkFrame > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -120,6 +148,7 @@ namespace HoardeGame.Entities
         public void Hit()
         {
             blinkFrame = blinkFrames.Length - 1;
+            blinkRepeat = BlinkMultiplier;
         }
 
         /// <summary>

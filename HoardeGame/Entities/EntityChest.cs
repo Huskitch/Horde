@@ -51,7 +51,7 @@ namespace HoardeGame.Entities
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
             tween.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
-            if (Vector2.Distance(playerProvider.Player.Position, Position) < 3)
+            if (Vector2.Distance(playerProvider.Player.Position, Position) < 3 && !playerProvider.Player.Dead)
             {
                 tween.Tween(this, new { interractLabelPos = screenPos.Y - 10 }, 1f).Ease(Ease.LinearIn);
             }

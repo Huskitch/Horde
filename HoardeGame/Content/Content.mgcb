@@ -235,3 +235,15 @@
 /processorParam:Quality=Best
 /build:SFX/gem.wav
 
+#begin SFX/hurt.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/hurt.wav
+
+#begin SFX/playerDeath.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/playerDeath.wav
+

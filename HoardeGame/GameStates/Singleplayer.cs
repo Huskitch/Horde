@@ -88,7 +88,7 @@ namespace HoardeGame.GameStates
             dungeon.AddEntity(Player);
 
             EntityBat bat = new EntityBat(dungeon, resourceProvider, this);
-            bat.Body.Position = Player.Position;
+            bat.Body.Position = Player.Position + new Vector2(2, 2);
             dungeon.AddEntity(bat);
 
             EntityChest chest = new EntityChest(dungeon, resourceProvider, this);
@@ -121,9 +121,9 @@ namespace HoardeGame.GameStates
 
             healthLabel = new Label(this, "healthLabel")
             {
-                Position = new Vector2(107, graphicsDevice.PresentationParameters.BackBufferHeight - 85),
+                Position = new Vector2(118, graphicsDevice.PresentationParameters.BackBufferHeight - 85),
                 Color = Color.LightGray,
-                Text = "100"
+                Text = "10"
             };
 
             armorBar = new ProgressBar(this, resourceProvider, "armorProgressBar")
@@ -152,7 +152,10 @@ namespace HoardeGame.GameStates
             DoCheck(gameTime, new Point(inputProvider.MouseState.X, inputProvider.MouseState.Y), inputProvider.LeftClicked);
 
             dungeon.Update(gameTime);
+
             camera.Position = ConvertUnits.ToDisplayUnits(Player.Position);
+            healthLabel.Text = Player.Health.ToString();
+            heatlthBar.Progress = Player.Health / 10f;
         }
 
         /// <inheritdoc/>
@@ -182,6 +185,15 @@ namespace HoardeGame.GameStates
                     testCard.Draw(new Vector2(175, 247), 0.75f, gameTime, spriteBatch, interp);
                     testCard.Draw(new Vector2(650, 247), 0.75f, gameTime, spriteBatch, interp);
                     testCard.Draw(new Vector2(1075, 247), 0.75f, gameTime, spriteBatch, interp);
+                }
+
+                if (Player.Dead)
+                {
+                    Vector2 screenCenter = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth / 2f, graphicsDevice.PresentationParameters.BackBufferHeight / 2f);
+                    Vector2 textSize = resourceProvider.GetFont("BasicFont").MeasureString("YOU DIED") * 4;
+                    screenCenter = screenCenter - textSize / 2;
+
+                    spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), "YOU DIED", screenCenter, Color.DarkRed, 0f, Vector2.Zero, new Vector2(4, 4), SpriteEffects.None, 0f);
                 }
             }
         }

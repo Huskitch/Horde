@@ -2,11 +2,9 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using System.Collections.Generic;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
-using HoardeGame.Gameplay;
 using HoardeGame.Graphics.Rendering;
 using HoardeGame.Input;
 using HoardeGame.Level;
@@ -26,6 +24,12 @@ namespace HoardeGame.Entities
         /// Gets or sets the amount of gems the player has
         /// </summary>
         public int Gems { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player is dead
+        /// Can't just remove the entity because that would break everything
+        /// </summary>
+        public bool Dead { get; set; }
 
         private AnimatedSprite animator;
         private IInputProvider inputProvider;
@@ -67,6 +71,7 @@ namespace HoardeGame.Entities
             Body.FixedRotation = true;
 
             Health = 10;
+            BlinkMultiplier = 4;
 
             animator = new AnimatedSprite(resourceProvider.GetTexture("PlayerSheet"));
             animator.AddAnimation("South", 32, 0, 5, 100);
@@ -86,6 +91,11 @@ namespace HoardeGame.Entities
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
+            if (Dead)
+            {
+                return;
+            }
+
             Vector2 velocity = Vector2.Zero;
 
             if (inputProvider.KeyboardState.IsKeyDown(Keys.S))
@@ -182,6 +192,11 @@ namespace HoardeGame.Entities
         /// <inheritdoc/>
         public override void Draw(SpriteBatch spriteBatch, Effect effect)
         {
+            if (Dead)
+            {
+                return;
+            }
+
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
 
             if (Velocity.Length() < 0.1f)

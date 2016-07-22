@@ -133,6 +133,8 @@ namespace HoardeGame.Resources
             sounds.Add("Fire", content.Load<SoundEffect>("SFX/Fire"));
             sounds.Add("Death", content.Load<SoundEffect>("SFX/Death"));
             sounds.Add("Gem", content.Load<SoundEffect>("SFX/Gem"));
+            sounds.Add("Hurt", content.Load<SoundEffect>("SFX/Hurt"));
+            sounds.Add("PlayerDeath", content.Load<SoundEffect>("SFX/PlayerDeath"));
         }
 
         /// <summary>
