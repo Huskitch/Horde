@@ -7,6 +7,7 @@ using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Level;
 using HoardeGame.Resources;
+using HoardeGame.Themes;
 using HoardeGame.Tweening;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -21,6 +22,7 @@ namespace HoardeGame.Entities
         private readonly IResourceProvider resourceProvider;
         private readonly Tweener tween = new Tweener();
         private readonly IPlayerProvider playerProvider;
+        private readonly ChestInfo info;
         private float interractLabelPos = 0;
 
         /// <summary>
@@ -29,10 +31,12 @@ namespace HoardeGame.Entities
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> to use for loading resources</param>
         /// <param name="playerProvider"><see cref="IPlayerProvider"/> to use for acessing the player entity</param>
-        public EntityChest(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level)
+        /// <param name="info"><see cref="ChestInfo"/> loot info</param>
+        public EntityChest(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider, ChestInfo info) : base(level)
         {
             this.resourceProvider = resourceProvider;
             this.playerProvider = playerProvider;
+            this.info = info;
 
             FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(25), ConvertUnits.ToSimUnits(25), 1f, Vector2.Zero, Body);
             Body.Position = level.GetSpawnPosition();

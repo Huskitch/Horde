@@ -1,4 +1,4 @@
-﻿// <copyright file="EnemySpawnInfo.cs" company="Kuub Studios">
+﻿// <copyright file="EntitySpawnInfo.cs" company="Kuub Studios">
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
@@ -7,12 +7,12 @@ namespace HoardeGame.Themes
     /// <summary>
     /// Contains information about an enemy spawner
     /// </summary>
-    public class EnemySpawnInfo
+    public class EntitySpawnInfo
     {
         /// <summary>
         /// Gets or sets the type of the enemy
         /// </summary>
-        public string EnemyType { get; set; }
+        public string EntityType { get; set; }
 
         /// <summary>
         /// Gets or sets the minimal size of the cluster

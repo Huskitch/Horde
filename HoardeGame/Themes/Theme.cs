@@ -44,7 +44,7 @@ namespace HoardeGame.Themes
         /// <summary>
         /// Gets or sets the list of enemies that can spawn in this theme
         /// </summary>
-        public List<EnemySpawnInfo> EntitySpawns { get; set; }
+        public List<EntitySpawnInfo> EntitySpawns { get; set; }
 
         /// <summary>
         /// Gets or sets the info about the loot on this level
@@ -82,9 +82,9 @@ namespace HoardeGame.Themes
 
             foreach (var spawn in EntitySpawns)
             {
-                if (Type.GetType(spawn.EnemyType) == null)
+                if (Type.GetType(spawn.EntityType) == null)
                 {
-                    throw new ArgumentException($"Entity {spawn.EnemyType} is not valid!", nameof(spawn.EnemyType));
+                    throw new ArgumentException($"Entity {spawn.EntityType} is not valid!", nameof(spawn.EntityType));
                 }
             }
 
