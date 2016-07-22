@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
@@ -19,6 +20,7 @@ namespace HoardeGame.Entities
     public class EntityBullet : EntityBase
     {
         private readonly IResourceProvider resourceProvider;
+        private readonly float rotation;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBullet"/> class.
@@ -39,6 +41,8 @@ namespace HoardeGame.Entities
             Body.LinearDamping = 0f;
             Body.ApplyForce(direction * 20);
             Body.OnCollision += OnShoot;
+
+            rotation = (float)Math.Atan2(direction.Y, direction.X);
         }
 
         /// <inheritdoc/>
@@ -50,7 +54,8 @@ namespace HoardeGame.Entities
         public override void Draw(SpriteBatch spriteBatch, Effect effect)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            spriteBatch.Draw(resourceProvider.GetTexture("Bullet"), screenPos, Color.White);
+
+            spriteBatch.Draw(resourceProvider.GetTexture("Bullet"), new Rectangle((int)screenPos.X + 16, (int)screenPos.Y + 16, 32, 32), null, Color.White, rotation, new Vector2(16, 16), SpriteEffects.None, 0f);
         }
 
         /// <summary>
