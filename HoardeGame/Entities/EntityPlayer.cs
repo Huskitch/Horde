@@ -36,6 +36,11 @@ namespace HoardeGame.Entities
         /// </summary>
         public int Ammo { get; set; }
 
+        /// <summary>
+        /// Gets or sets the weapon of the player
+        /// </summary>
+        public EntityWeapon Weapon { get; set; }
+
         private AnimatedSprite animator;
         private IInputProvider inputProvider;
 
@@ -53,7 +58,6 @@ namespace HoardeGame.Entities
 
         private readonly IResourceProvider resourceProvider;
         private Directions direction;
-        public EntityWeapon Weapon;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.

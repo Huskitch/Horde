@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using FarseerPhysics;
+using HoardeGame.Extensions;
 using Microsoft.Xna.Framework;
 
 namespace HoardeGame.Level
@@ -35,6 +36,7 @@ namespace HoardeGame.Level
         public int PercentAreWalls { get; set; }
 
         private readonly Random rand = new Random();
+        private readonly int[,] searchMap;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LevelGenerator"/> class.
@@ -45,6 +47,7 @@ namespace HoardeGame.Level
             MapHeight = 64;
             PercentAreWalls = 45;
 
+            searchMap = new int[MapWidth, MapHeight];
             RandomFillMap();
         }
 
@@ -79,10 +82,39 @@ namespace HoardeGame.Level
                 FillInWall(ref map, nextWall, size);
             }
 
-            List<Point> emptySpaces = FindEmptySpaces(ref map);
+            List<Point> emptySpaces = FindEmptySpaces(ref map).Shuffle() as List<Point>;
             Random rnd = new Random();
 
-            Vector2 position = emptySpaces[rnd.Next(emptySpaces.Count)].ToVector2() * 32 + new Vector2(0, 16);
+            Vector2 position = emptySpaces[0].ToVector2();
+            int i = 1;
+
+            while (searchMap[(int)position.X, (int)position.Y] == 1)
+            {
+                position = emptySpaces[i].ToVector2();
+                i++;
+
+                if (i == emptySpaces.Count)
+                {
+                    throw new IndexOutOfRangeException("Ran out of free spaces. No more loot for you.");
+                }
+            }
+
+            int sizeHalf = size / 2;
+
+            for (int x = (int)position.X - sizeHalf; x < position.X + sizeHalf; x++)
+            {
+                for (int y = (int)position.Y - sizeHalf; y < position.Y + sizeHalf; y++)
+                {
+                    if (IsOutOfBounds(x, y))
+                    {
+                        continue;
+                    }
+
+                    searchMap[x, y] = 1;
+                }
+            }
+
+            position = position * 32 + new Vector2(0, 16);
 
             if (!center)
             {
