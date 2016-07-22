@@ -112,7 +112,7 @@ namespace HoardeGame.Level
         {
             for (int i = 0; i < 5; i++)
             {
-                EntityChest chest = new EntityChest(this, resourceProvider, playerProvider);
+                EntityChest chest = new EntityChest(this, resourceProvider, playerProvider, new ChestInfo());
                 chest.Body.Position = GetSpawnPosition(2, true);
                 entities.Add(chest);
             }
@@ -122,8 +122,10 @@ namespace HoardeGame.Level
         {
             Random rng = new Random();
 
-            foreach (EnemySpawnInfo spawns in Theme.EntitySpawns)
+            foreach (EntitySpawnInfo spawns in Theme.EntitySpawns)
             {
+                // BRB VIRUSEK ^ THE MERGE BROKE THIS WAT DO
+
                 for (int i = 0; i < spawns.SpawnRate; i++)
                 {
                     List<EntityBaseEnemy> enemies = new List<EntityBaseEnemy>();
@@ -131,7 +133,7 @@ namespace HoardeGame.Level
 
                     for (int j = 0; j < clusterSize; j++)
                     {
-                        Type enemyType = Type.GetType(spawns.EnemyType);
+                        Type enemyType = Type.GetType(spawns.EntityType);
                         var instance = Activator.CreateInstance(enemyType, this, resourceProvider, playerProvider);
                         enemies.Add((EntityBaseEnemy) instance);
                     }

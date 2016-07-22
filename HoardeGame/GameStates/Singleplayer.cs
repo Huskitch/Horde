@@ -113,7 +113,13 @@ namespace HoardeGame.GameStates
             dungeon.AddEntity(bat);
             dungeon.AddEntity(bat2);
 
-            EntityChest chest = new EntityChest(dungeon, resourceProvider, this);
+            EntityChest chest = new EntityChest(dungeon, resourceProvider, this, themeProvider.GetTheme("temple").ChestInfo)
+            {
+                Body =
+                {
+                    Position = Player.Position + new Vector2(1, 1)
+                }
+            };
             dungeon.AddEntity(chest);
 
             EntityDrill drill = new EntityDrill(dungeon, inputProvider, resourceProvider, this);
