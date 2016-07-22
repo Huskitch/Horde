@@ -1,9 +1,9 @@
-﻿// <copyright file="EntityBat.cs" company="Kuub Studios">
-// Copyright (c) Kuub Studios. All rights reserved.
-// </copyright>
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
@@ -15,10 +15,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.Entities
 {
-    /// <summary>
-    /// Bat entity
-    /// </summary>
-    public class EntityBat : EntityBaseEnemy
+    public class EntitySnake : EntityBaseEnemy
     {
         private readonly AnimatedSprite animator;
         private IPlayerProvider playerProvider;
@@ -26,12 +23,12 @@ namespace HoardeGame.Entities
         private Vector2 direction;
         private Random rng = new Random(Guid.NewGuid().GetHashCode());
         /// <summary>
-        /// Initializes a new instance of the <see cref="EntityBat"/> class.
+        /// Initializes a new instance of the <see cref="HoardeGame.Entities.EntityBat"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> to load resources with</param>
         /// <param name="playerProvider"><see cref="IPlayerProvider"/> for acessing the player entity</param>
-        public EntityBat(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level, resourceProvider, playerProvider)
+        public EntitySnake(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level, resourceProvider, playerProvider)
         {
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10f), 1f, Body);
             Body.Position = ConvertUnits.ToSimUnits(new Vector2(500, 500));
@@ -47,8 +44,11 @@ namespace HoardeGame.Entities
             MinGemDrop = 3;
             MaxGemDrop = 5;
 
-            animator = new AnimatedSprite(resourceProvider.GetTexture("BatSheet"));
-            animator.AddAnimation("Flap", 32, 0, 2, 100);
+            animator = new AnimatedSprite(resourceProvider.GetTexture("SnakeSheet"));
+            animator.AddAnimation("North", 48, 1, 3, 100);
+            animator.AddAnimation("East", 48, 2, 3, 100);
+            animator.AddAnimation("South", 48, 3, 3, 100);
+            animator.AddAnimation("West", 48, 0, 3, 100);
         }
 
         /// <inheritdoc/>
@@ -60,7 +60,7 @@ namespace HoardeGame.Entities
 
         public void UpdateAI(GameTime gameTime)
         {
-            walkTimer += (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+            walkTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             if (Vector2.Distance(playerProvider.Player.Position, Position) > 5)
             {
@@ -77,14 +77,29 @@ namespace HoardeGame.Entities
             }
 
             Body.ApplyForce(direction * 20);
-           Debug.WriteLine(Body.BodyId + " is applying force in direction: " + direction);
+            Debug.WriteLine(Body.BodyId + " is applying force in direction: " + direction);
         }
 
         /// <inheritdoc/>
         public override void Draw(SpriteBatch spriteBatch, Effect effect)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            animator.DrawAnimation("Flap", screenPos, spriteBatch, CurrentBlinkFrame);
+
+            if (direction == new Vector2(0, -1))
+                animator.DrawAnimation("North", screenPos, spriteBatch, CurrentBlinkFrame);
+
+            else if (direction == new Vector2(1, 0))
+                animator.DrawAnimation("East", screenPos, spriteBatch, CurrentBlinkFrame);
+
+            else if (direction == new Vector2(0, 1))
+                animator.DrawAnimation("South", screenPos, spriteBatch, CurrentBlinkFrame);
+
+            else if (direction == new Vector2(-1, 0))
+                animator.DrawAnimation("West", screenPos, spriteBatch, CurrentBlinkFrame);
+            else
+            {
+                animator.DrawAnimation("South", screenPos, spriteBatch, CurrentBlinkFrame);
+            }
         }
     }
 }

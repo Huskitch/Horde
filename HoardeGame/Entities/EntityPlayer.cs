@@ -81,7 +81,7 @@ namespace HoardeGame.Entities
 
             Health = 10;
             Ammo = 100;
-            BlinkMultiplier = 4;
+            BlinkMultiplier = 1;
 
             animator = new AnimatedSprite(resourceProvider.GetTexture("PlayerSheet"));
             animator.AddAnimation("South", 32, 0, 5, 100);
