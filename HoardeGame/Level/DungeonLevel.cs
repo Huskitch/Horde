@@ -112,6 +112,15 @@ namespace HoardeGame.Level
         }
 
         /// <summary>
+        /// Gets the raw map search data from <see cref="LevelGenerator"/>
+        /// </summary>
+        /// <returns>Raw map search data</returns>
+        public int[,] GetSearchMap()
+        {
+            return levelGen.SearchMap;
+        }
+
+        /// <summary>
         /// Finds an epty 5x5 space for the player to spawn
         /// </summary>
         /// <param name="size">Size of the spawn area in tiles</param>
@@ -130,7 +139,6 @@ namespace HoardeGame.Level
             for (int i = 0; i < 5; i++)
             {
                 EntityChest chest = new EntityChest(this, resourceProvider, playerProvider, new ChestInfo());
-                chest.Body.Position = GetSpawnPosition(2, true);
                 entities.Add(chest);
             }
         }

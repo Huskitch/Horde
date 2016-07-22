@@ -35,7 +35,6 @@ namespace HoardeGame.Entities
         public EntitySnake(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level, resourceProvider, playerProvider)
         {
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10f), 1f, Body);
-            Body.Position = ConvertUnits.ToSimUnits(new Vector2(500, 500));
             Body.CollisionCategories = Category.Cat3;
             Body.CollidesWith = Category.All;
             Body.BodyType = BodyType.Dynamic;

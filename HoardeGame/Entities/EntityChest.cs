@@ -38,7 +38,7 @@ namespace HoardeGame.Entities
             this.info = info;
 
             FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(25), ConvertUnits.ToSimUnits(25), 1f, Vector2.Zero, Body);
-            Body.Position = level.GetSpawnPosition();
+            Body.Position = level.GetSpawnPosition(2, true);
             Body.CollisionCategories = Category.Cat3;
             Body.CollidesWith = Category.All;
             Body.BodyType = BodyType.Dynamic;

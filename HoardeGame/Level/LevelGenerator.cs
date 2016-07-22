@@ -35,8 +35,12 @@ namespace HoardeGame.Level
         /// </summary>
         public int PercentAreWalls { get; set; }
 
+        /// <summary>
+        /// Gets the search map
+        /// </summary>
+        public int[,] SearchMap { get; }
+
         private readonly Random rand = new Random();
-        private readonly int[,] searchMap;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LevelGenerator"/> class.
@@ -47,7 +51,7 @@ namespace HoardeGame.Level
             MapHeight = 64;
             PercentAreWalls = 45;
 
-            searchMap = new int[MapWidth, MapHeight];
+            SearchMap = new int[MapWidth, MapHeight];
             RandomFillMap();
         }
 
@@ -83,12 +87,13 @@ namespace HoardeGame.Level
             }
 
             List<Point> emptySpaces = FindEmptySpaces(ref map).Shuffle() as List<Point>;
+            Console.WriteLine($"For size {size} there are {emptySpaces.Count} empty spaces");
             Random rnd = new Random();
 
             Vector2 position = emptySpaces[0].ToVector2();
             int i = 1;
 
-            while (searchMap[(int)position.X, (int)position.Y] == 1)
+            while (SearchMap[(int)position.X, (int)position.Y] == 1)
             {
                 position = emptySpaces[i].ToVector2();
                 i++;
@@ -110,7 +115,7 @@ namespace HoardeGame.Level
                         continue;
                     }
 
-                    searchMap[x, y] = 1;
+                    SearchMap[x, y] = 1;
                 }
             }
 

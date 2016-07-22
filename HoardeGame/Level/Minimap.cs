@@ -17,6 +17,7 @@ namespace HoardeGame.Level
     {
         private static readonly Color FloorColor = new Color(113, 88, 71);
         private static readonly Color WallColor = new Color(194, 137, 64);
+        private static readonly Color CustomColor = new Color(255, 0, 255);
 
         /// <summary>
         /// Gets the generated minimap to be drawn
@@ -50,6 +51,10 @@ namespace HoardeGame.Level
                 if (map[i % width, i / width] == 1)
                 {
                     colorData[i] = WallColor;
+                }
+                else if (map[i % width, i / width] == 2)
+                {
+                    colorData[i] = CustomColor;
                 }
                 else
                 {
