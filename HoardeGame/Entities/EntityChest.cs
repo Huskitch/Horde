@@ -49,7 +49,7 @@ namespace HoardeGame.Entities
         public override void Update(GameTime gameTime)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            tween.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
+            tween.Update(gameTime.ElapsedGameTime.Milliseconds / 1000f);
 
             if (Vector2.Distance(playerProvider.Player.Position, Position) < 3 && !playerProvider.Player.Dead)
             {

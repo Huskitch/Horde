@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
@@ -17,6 +18,16 @@ namespace HoardeGame.Entities
     /// </summary>
     public class EntityBaseEnemy : EntityBase
     {
+        /// <summary>
+        /// Gets or sets the minimal amount of gems that will drop from this entity when killed
+        /// </summary>
+        public int MinGemDrop { get; protected set; } = 1;
+
+        /// <summary>
+        /// Gets or sets the maximum amount of gems that will drop from this entity when killed
+        /// </summary>
+        public int MaxGemDrop { get; protected set; } = 1;
+
         private readonly IResourceProvider resourceProvider;
         private readonly IPlayerProvider playerProvider;
 
@@ -58,16 +69,22 @@ namespace HoardeGame.Entities
                     Removed = true;
 
                     resourceProvider.GetSoundEffect("Death").Play();
+                    Random random = new Random();
 
-                    EntityGem gem = new EntityGem(Level, resourceProvider, playerProvider)
+                    int gemCount = random.Next(MinGemDrop, MaxGemDrop);
+
+                    for (int i = 0; i < gemCount; i++)
                     {
-                        Body =
-                    {
-                        Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8))
+                        EntityGem gem = new EntityGem(Level, resourceProvider, playerProvider)
+                        {
+                            Body =
+                        {
+                            Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8))
+                        }
+                        };
+
+                        Level.AddEntity(gem);
                     }
-                    };
-
-                    Level.AddEntity(gem);
                 }
             }
             else if (fixtureB.CollisionCategories == Category.Cat1 && !playerProvider.Player.IsHit())

@@ -37,6 +37,8 @@ namespace HoardeGame.Entities
             Body.FixedRotation = true;
 
             Health = 3;
+            MinGemDrop = 3;
+            MaxGemDrop = 5;
 
             animator = new AnimatedSprite(resourceProvider.GetTexture("BatSheet"));
             animator.AddAnimation("Flap", 32, 0, 2, 100);

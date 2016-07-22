@@ -40,7 +40,7 @@ namespace HoardeGame.Entities
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
             Body.CollisionCategories = Category.Cat3;
-            Body.CollidesWith = Category.Cat1;
+            Body.CollidesWith = Category.Cat1 | Category.Cat3 | Category.Cat4;
 
             Body.OnCollision += Collect;
 
@@ -78,9 +78,11 @@ namespace HoardeGame.Entities
                 resourceProvider.GetSoundEffect("Gem").Play();
                 playerProvider.Player.Gems++;
                 Removed = true;
+
+                return false;
             }
 
-            return false;
+            return true;
         }
     }
 }
