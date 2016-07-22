@@ -49,7 +49,7 @@ namespace HoardeGame.GameStates
         private readonly Rectangle minimapInner;
         private readonly Rectangle screenRectangle;
 
-        private ProgressBar heatlthBar;
+        private ProgressBar healthBar;
         private ProgressBar armorBar;
         private Label healthLabel;
         private Label armorLabel;
@@ -76,7 +76,7 @@ namespace HoardeGame.GameStates
 
             testCard = cardProvider.GetCard("testCard");
 
-            GuiBase.Font = resourceProvider.GetFont("BasicFont");
+            GuiBase.Font = resourceProvider.GetFont("SmallFont");
 
             screenRectangle = new Rectangle(0, 0, graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight);
 
@@ -115,13 +115,13 @@ namespace HoardeGame.GameStates
         /// <inheritdoc/>
         public override void Start()
         {
-            heatlthBar = new ProgressBar(this, resourceProvider, "healthProgressBar")
+            healthBar = new ProgressBar(this, resourceProvider, "healthProgressBar")
             {
-                Position = new Vector2(20, graphicsDevice.PresentationParameters.BackBufferHeight - 85),
+                Position = new Vector2(30, 20),
                 ProgressBarTexture = resourceProvider.GetTexture("BasicProgressBar"),
-                BarHeight = 38,
+                BarHeight = 45,
                 BarStart = new Vector2(1, 1),
-                BarWidth = 118,
+                BarWidth = 200,
                 TargetRectangle = new Rectangle(0, 0, 0, 0),
                 Color = new Color(190, 74, 57),
                 Progress = 1f
@@ -129,18 +129,18 @@ namespace HoardeGame.GameStates
 
             healthLabel = new Label(this, "healthLabel")
             {
-                Position = new Vector2(118, graphicsDevice.PresentationParameters.BackBufferHeight - 85),
+                Position = new Vector2(176, 29),
                 Color = Color.LightGray,
-                Text = "10"
+                Text = "10",
             };
 
             armorBar = new ProgressBar(this, resourceProvider, "armorProgressBar")
             {
-                Position = new Vector2(15, graphicsDevice.PresentationParameters.BackBufferHeight - 65),
+                Position = new Vector2(15, 45),
                 ProgressBarTexture = resourceProvider.GetTexture("BasicProgressBar"),
-                BarHeight = 28,
+                BarHeight = 45,
                 BarStart = new Vector2(1, 1),
-                BarWidth = 108,
+                BarWidth = 144,
                 TargetRectangle = new Rectangle(0, 0, 0, 0),
                 Color = new Color(82, 141, 156),
                 Progress = 1f
@@ -148,7 +148,7 @@ namespace HoardeGame.GameStates
 
             armorLabel = new Label(this, "armorLabel")
             {
-                Position = new Vector2(93, graphicsDevice.PresentationParameters.BackBufferHeight - 65),
+                Position = new Vector2(130 * armorBar.Progress, 55),
                 Color = Color.LightGray,
                 Text = "10"
             };
@@ -170,10 +170,12 @@ namespace HoardeGame.GameStates
             camera.Position = ConvertUnits.ToDisplayUnits(Player.Position);
 
             healthLabel.Text = Player.Health.ToString();
-            heatlthBar.Progress = Player.Health / 10f;
+            healthLabel.Position = new Vector2(30 + (174 * healthBar.Progress), 27);
+            healthBar.Progress = Player.Health / 10f;
 
             armorLabel.Text = Player.Armour.ToString();
             armorBar.Progress = Player.Armour / 10f;
+            armorLabel.Position = new Vector2(130*armorBar.Progress, 55);
 
             ammoLabel.Text = $"Ammo: {Player.Ammo}";
         }
@@ -195,6 +197,7 @@ namespace HoardeGame.GameStates
             // GUI SPRITEBATCH
             using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone))
             {
+                spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), new Rectangle(36, 23, 200, 48), Color.Black);
                 DoDraw(gameTime, spriteBatch, interp);
 
                 // CARDS

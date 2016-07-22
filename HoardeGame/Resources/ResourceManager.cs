@@ -116,6 +116,8 @@ namespace HoardeGame.Resources
             textures.Add("TestCard", content.Load<Texture2D>("Art/testCard"));
 
             textures.Add("CommonCard", content.Load<Texture2D>("Art/commonCard"));
+
+            textures.Add("healthBG", content.Load<Texture2D>("Art/healthBG"));
         }
 
         /// <summary>
@@ -126,6 +128,7 @@ namespace HoardeGame.Resources
         {
             fonts.Add("BasicFont", content.Load<SpriteFont>("BasicFont"));
             fonts.Add("BigFont", content.Load<SpriteFont>("BigFont"));
+            fonts.Add("SmallFont", content.Load<SpriteFont>("SmallerFont"));
         }
 
         /// <summary>

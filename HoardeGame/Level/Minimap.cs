@@ -89,7 +89,7 @@ namespace HoardeGame.Level
             // In czech NaN is "Není Číslo" which crashes MonoGame
             if (!pos.Contains("č"))
             {
-                spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), pos, new Vector2(20, 20), Color.White);
+            //    spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), pos, new Vector2(20, 20), Color.White);
             }
 
             float max = Math.Max(relativeWidth, relativeHeight);
