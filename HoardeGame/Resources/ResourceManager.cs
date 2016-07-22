@@ -124,6 +124,7 @@ namespace HoardeGame.Resources
         public void LoadFonts(ContentManager content)
         {
             fonts.Add("BasicFont", content.Load<SpriteFont>("BasicFont"));
+            fonts.Add("BigFont", content.Load<SpriteFont>("BigFont"));
         }
 
         /// <summary>
@@ -137,6 +138,7 @@ namespace HoardeGame.Resources
             sounds.Add("Gem", content.Load<SoundEffect>("SFX/Gem"));
             sounds.Add("Hurt", content.Load<SoundEffect>("SFX/Hurt"));
             sounds.Add("PlayerDeath", content.Load<SoundEffect>("SFX/PlayerDeath"));
+            sounds.Add("ArmourGone", content.Load<SoundEffect>("SFX/ArmourGone"));
         }
 
         /// <summary>

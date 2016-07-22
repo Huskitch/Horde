@@ -122,7 +122,7 @@ namespace HoardeGame.GameStates
                 BarHeight = 38,
                 BarStart = new Vector2(1, 1),
                 BarWidth = 118,
-                TargetRectangle = new Rectangle(20, graphicsDevice.PresentationParameters.BackBufferHeight - 85, 120, 40),
+                TargetRectangle = new Rectangle(0, 0, 0, 0),
                 Color = new Color(190, 74, 57),
                 Progress = 1f
             };
@@ -141,7 +141,7 @@ namespace HoardeGame.GameStates
                 BarHeight = 28,
                 BarStart = new Vector2(1, 1),
                 BarWidth = 108,
-                TargetRectangle = new Rectangle(15, graphicsDevice.PresentationParameters.BackBufferHeight - 65, 110, 30),
+                TargetRectangle = new Rectangle(0, 0, 0, 0),
                 Color = new Color(82, 141, 156),
                 Progress = 1f
             };
@@ -150,7 +150,7 @@ namespace HoardeGame.GameStates
             {
                 Position = new Vector2(93, graphicsDevice.PresentationParameters.BackBufferHeight - 65),
                 Color = Color.LightGray,
-                Text = "100"
+                Text = "10"
             };
 
             ammoLabel = new Label(this, "ammoLabel")
@@ -168,8 +168,13 @@ namespace HoardeGame.GameStates
             dungeon.Update(gameTime);
 
             camera.Position = ConvertUnits.ToDisplayUnits(Player.Position);
+
             healthLabel.Text = Player.Health.ToString();
             heatlthBar.Progress = Player.Health / 10f;
+
+            armorLabel.Text = Player.Armour.ToString();
+            armorBar.Progress = Player.Armour / 10f;
+
             ammoLabel.Text = $"Ammo: {Player.Ammo}";
         }
 

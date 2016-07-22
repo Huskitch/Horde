@@ -138,7 +138,7 @@ namespace HoardeGame.Level
         {
             for (int i = 0; i < 5; i++)
             {
-                EntityChest chest = new EntityChest(this, resourceProvider, playerProvider, new ChestInfo());
+                EntityChest chest = new EntityChest(this, resourceProvider, playerProvider, Theme.ChestInfo);
                 entities.Add(chest);
             }
         }

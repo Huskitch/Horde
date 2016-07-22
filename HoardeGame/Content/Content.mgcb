@@ -283,3 +283,15 @@
 /processorParam:TextureFormat=Color
 /build:Art/EmeraldSheet.png
 
+#begin BigFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:TextureFormat=Compressed
+/build:BigFont.spritefont
+
+#begin SFX/armourGone.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/armourGone.wav
+

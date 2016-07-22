@@ -59,7 +59,7 @@ namespace HoardeGame.Entities
         {
             walkTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (Vector2.Distance(playerProvider.Player.Position, Position) > 5)
+            if (Vector2.Distance(playerProvider.Player.Position, Position) > 5 || playerProvider.Player.Dead)
             {
                 if (walkTimer > rng.Next(100, 3000))
                 {
@@ -152,11 +152,25 @@ namespace HoardeGame.Entities
             {
                 playerProvider.Player.Hit();
                 resourceProvider.GetSoundEffect("Hurt").Play();
-                playerProvider.Player.Health--;
+
+                if (playerProvider.Player.Armour > 0)
+                {
+                    playerProvider.Player.Armour--;
+
+                    if (playerProvider.Player.Armour == 0)
+                    {
+                        resourceProvider.GetSoundEffect("ArmourGone").Play();
+                    }
+                }
+                else
+                {
+                    playerProvider.Player.Health--;
+                }
 
                 if (playerProvider.Player.Health == 0)
                 {
                     playerProvider.Player.Dead = true;
+                    playerProvider.Player.Body.CollidesWith = Category.None;
                     resourceProvider.GetSoundEffect("PlayerDeath").Play();
                 }
             }

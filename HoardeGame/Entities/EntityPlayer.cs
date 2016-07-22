@@ -37,6 +37,11 @@ namespace HoardeGame.Entities
         public int Ammo { get; set; }
 
         /// <summary>
+        /// Gets or sets the armour of the player
+        /// </summary>
+        public int Armour { get; set; }
+
+        /// <summary>
         /// Gets or sets the weapon of the player
         /// </summary>
         public EntityWeapon Weapon { get; set; }
@@ -80,6 +85,7 @@ namespace HoardeGame.Entities
             Body.FixedRotation = true;
 
             Health = 10;
+            Armour = 10;
             Ammo = 100;
             BlinkMultiplier = 1;
 

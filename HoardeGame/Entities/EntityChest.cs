@@ -2,6 +2,8 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
+using System.Collections.Generic;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
@@ -21,8 +23,7 @@ namespace HoardeGame.Entities
         private readonly IResourceProvider resourceProvider;
         private readonly IPlayerProvider playerProvider;
         private readonly ChestInfo info;
-
-        private float interractLabelPos = 0;
+        private readonly List<string> contentsList = new List<string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityChest"/> class.
@@ -33,12 +34,17 @@ namespace HoardeGame.Entities
         /// <param name="info"><see cref="ChestInfo"/> loot info</param>
         public EntityChest(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider, ChestInfo info) : base(level)
         {
+            if (info == null)
+            {
+                throw new ArgumentException("Chest info cannot be null!", nameof(info));
+            }
+
             this.resourceProvider = resourceProvider;
             this.playerProvider = playerProvider;
             this.info = info;
 
             FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(25), ConvertUnits.ToSimUnits(25), 1f, Vector2.Zero, Body);
-            Body.Position = level.GetSpawnPosition(2, true);
+            Body.Position = level.GetSpawnPosition(2);
             Body.CollisionCategories = Category.Cat3;
             Body.CollidesWith = Category.All;
             Body.BodyType = BodyType.Dynamic;
@@ -46,6 +52,41 @@ namespace HoardeGame.Entities
             Body.FixedRotation = true;
 
             Health = 3;
+
+            if (info.MaxGems[0] > 0)
+            {
+                contentsList.Add("Red gems");
+            }
+
+            if (info.MaxGems[1] > 0)
+            {
+                contentsList.Add("Green gems");
+            }
+
+            if (info.MaxGems[2] > 0)
+            {
+                contentsList.Add("Blue gems");
+            }
+
+            if (info.MaxAmmo > 0)
+            {
+                contentsList.Add("Ammo");
+            }
+
+            if (info.MaxArmour > 0)
+            {
+                contentsList.Add("Armour");
+            }
+
+            if (info.MaxHealth > 0)
+            {
+                contentsList.Add("Health");
+            }
+
+            if (info.WeaponDropType != ChestInfo.WeaponChance.None && info.WeaponDropChance > 0)
+            {
+                contentsList.Add("A weapon");
+            }
         }
 
         /// <inheritdoc/>
@@ -53,10 +94,17 @@ namespace HoardeGame.Entities
         {
             spriteBatch.Draw(resourceProvider.GetTexture("Chest"), ScreenPosition, Color.White);
 
+            int positionOnTheYAxisOfTheCoordinateSystem = contentsList.Count * 10 + 20;
+
             if (Vector2.Distance(playerProvider.Player.Position, Position) < 3)
             {
-                spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), new Rectangle((int)ScreenPosition.X + 11, (int)interractLabelPos, 10, 10), new Color(0, 0, 5, 0.3f));
-                spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), "E", new Vector2((int)ScreenPosition.X, (int)interractLabelPos) + new Vector2(14, 0), Color.White, 0f, Vector2.Zero, new Vector2(0.5f, 0.5f), SpriteEffects.None, 0);
+                spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), new Rectangle((int)ScreenPosition.X - 14, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem, 60, positionOnTheYAxisOfTheCoordinateSystem), new Color(0, 0, 5, 0.3f));
+                spriteBatch.DrawString(resourceProvider.GetFont("BigFont"), "Contents", new Vector2((int)ScreenPosition.X - 8, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem), Color.White, 0f, Vector2.Zero, new Vector2(0.35f, 0.35f), SpriteEffects.None, 0f);
+
+                for (int i = 0; i < contentsList.Count; i++)
+                {
+                    spriteBatch.DrawString(resourceProvider.GetFont("BigFont"), contentsList[i], new Vector2((int)ScreenPosition.X - 8, (int)ScreenPosition.Y - 75 + i * 10), Color.White, 0f, Vector2.Zero, new Vector2(0.3f, 0.3f), SpriteEffects.None, 0f);
+                }
             }
         }
     }
