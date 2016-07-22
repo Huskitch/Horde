@@ -40,7 +40,7 @@ namespace HoardeGame.Entities
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
             Body.CollisionCategories = Category.Cat3;
-            Body.CollidesWith = Category.All;
+            Body.CollidesWith = Category.Cat1;
 
             Body.OnCollision += Collect;
 
@@ -53,9 +53,12 @@ namespace HoardeGame.Entities
         {
             animator.Update(gameTime);
 
-            if (Vector2.Distance(Position, playerProvider.Player.Position) < 2)
+            if (Vector2.Distance(Position, playerProvider.Player.Position) < 1)
             {
-                Body.ApplyForce((playerProvider.Player.Position - Position) * 20f);
+                Vector2 direction = playerProvider.Player.Position - Position;
+                direction.Normalize();
+
+                Body.ApplyForce(direction * 100f);
             }
 
             base.Update(gameTime);
@@ -77,7 +80,7 @@ namespace HoardeGame.Entities
                 Removed = true;
             }
 
-            return true;
+            return false;
         }
     }
 }
