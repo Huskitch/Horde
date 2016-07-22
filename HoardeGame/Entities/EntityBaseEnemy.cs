@@ -183,8 +183,9 @@ namespace HoardeGame.Entities
                     playerProvider.Player.Health -= Damage;
                 }
 
-                if (playerProvider.Player.Health == 0)
+                if (playerProvider.Player.Health <= 0)
                 {
+                    Health = 0;
                     playerProvider.Player.Dead = true;
                     playerProvider.Player.Body.CollidesWith = Category.None;
                     resourceProvider.GetSoundEffect("PlayerDeath").Play();
