@@ -21,6 +21,7 @@ namespace HoardeGame.Entities
     {
         private readonly IResourceProvider resourceProvider;
         private readonly float rotation;
+        private readonly Vector2 direction;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBullet"/> class.
@@ -32,6 +33,7 @@ namespace HoardeGame.Entities
         public EntityBullet(DungeonLevel level, IResourceProvider resourceProvider, Vector2 startPos, Vector2 direction) : base(level)
         {
             this.resourceProvider = resourceProvider;
+            this.direction = direction;
 
             FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(5), ConvertUnits.ToSimUnits(5), 1f, Vector2.Zero, Body);
             Body.Position = ConvertUnits.ToSimUnits(startPos);
@@ -71,6 +73,11 @@ namespace HoardeGame.Entities
             if (fixtureB.CollisionCategories == Category.Cat4 || fixtureB.CollisionCategories == Category.Cat3)
             {
                 Removed = true;
+            }
+
+            if (fixtureB.CollisionCategories == Category.Cat3)
+            {
+                fixtureB.Body.ApplyForce(direction * 250);
             }
 
             return true;

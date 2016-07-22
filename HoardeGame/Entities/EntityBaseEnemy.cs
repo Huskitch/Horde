@@ -39,6 +39,8 @@ namespace HoardeGame.Entities
         private float walkTimer;
         private Random rng = new Random(Guid.NewGuid().GetHashCode());
 
+        protected int Damage { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBaseEnemy"/> class.
         /// </summary>
@@ -169,7 +171,7 @@ namespace HoardeGame.Entities
 
                 if (playerProvider.Player.Armour > 0)
                 {
-                    playerProvider.Player.Armour--;
+                    playerProvider.Player.Armour -= Damage;
 
                     if (playerProvider.Player.Armour == 0)
                     {
@@ -178,7 +180,7 @@ namespace HoardeGame.Entities
                 }
                 else
                 {
-                    playerProvider.Player.Health--;
+                    playerProvider.Player.Health -= Damage;
                 }
 
                 if (playerProvider.Player.Health == 0)
