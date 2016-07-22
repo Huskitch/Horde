@@ -29,7 +29,7 @@ namespace HoardeGame.Entities
         /// <param name="playerProvider"><see cref="IPlayerProvider"/> for acessing the player entity</param>
         public EntitySnake(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level, resourceProvider, playerProvider)
         {
-            FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10f), 1f, Body);
+            FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(14f), 1f, Body);
             Body.CollisionCategories = Category.Cat3;
             Body.CollidesWith = Category.All;
             Body.BodyType = BodyType.Dynamic;

@@ -70,10 +70,9 @@ namespace HoardeGame.Entities
             else
             {
                 Direction = playerProvider.Player.Position - Position;
-                Direction.Normalize();
+                Direction = Vector2.Normalize(Direction);
             }
 
-            Direction.Normalize();
             Body.ApplyForce(Direction * 20);
         }
 
