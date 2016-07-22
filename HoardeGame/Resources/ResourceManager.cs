@@ -130,6 +130,9 @@ namespace HoardeGame.Resources
         /// <param name="content"><see cref="ContentManager"/></param>
         public void LoadSounds(ContentManager content)
         {
+            sounds.Add("Fire", content.Load<SoundEffect>("SFX/Fire"));
+            sounds.Add("Death", content.Load<SoundEffect>("SFX/Death"));
+            sounds.Add("Gem", content.Load<SoundEffect>("SFX/Gem"));
         }
 
         /// <summary>

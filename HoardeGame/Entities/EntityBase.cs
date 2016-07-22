@@ -15,9 +15,8 @@ namespace HoardeGame.Entities
     /// </summary>
     public abstract class EntityBase
     {
-        private int blinkFrame = 0;
-        private float[] blinkFrames = new[]
-        {
+        private readonly float[] blinkFrames =
+{
             0f,
             0f,
             0.5f,
@@ -41,6 +40,8 @@ namespace HoardeGame.Entities
             0.5f,
             0.5f
         };
+
+        private int blinkFrame;
 
         /// <summary>
         /// Gets the level in which this entity exists

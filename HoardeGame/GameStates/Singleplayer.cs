@@ -87,7 +87,7 @@ namespace HoardeGame.GameStates
             Player = new EntityPlayer(dungeon, inputProvider, resourceProvider);
             dungeon.AddEntity(Player);
 
-            EntityBat bat = new EntityBat(dungeon, resourceProvider);
+            EntityBat bat = new EntityBat(dungeon, resourceProvider, this);
             bat.Body.Position = Player.Position;
             dungeon.AddEntity(bat);
 

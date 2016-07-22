@@ -49,6 +49,7 @@ namespace HoardeGame.Entities
         {
             if (fireTimer > FireRate)
             {
+                resourceProvider.GetSoundEffect("Fire").Play();
                 bullets.Add(new EntityBullet(level, resourceProvider, ConvertUnits.ToDisplayUnits(owner.Position), direction));
                 fireTimer = 0;
             }

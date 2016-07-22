@@ -22,6 +22,11 @@ namespace HoardeGame.Entities
     /// </summary>
     public class EntityPlayer : EntityBase
     {
+        /// <summary>
+        /// Gets or sets the amount of gems the player has
+        /// </summary>
+        public int Gems { get; set; }
+
         private AnimatedSprite animator;
         private IInputProvider inputProvider;
 

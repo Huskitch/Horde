@@ -25,7 +25,8 @@ namespace HoardeGame.Entities
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> to load resources with</param>
-        public EntityBat(DungeonLevel level, IResourceProvider resourceProvider) : base(level)
+        /// <param name="playerProvider"><see cref="IPlayerProvider"/> for acessing the player entity</param>
+        public EntityBat(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level, resourceProvider, playerProvider)
         {
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10f), 1f, Body);
             Body.Position = ConvertUnits.ToSimUnits(new Vector2(500, 500));

@@ -217,3 +217,21 @@
 /processorParam:DebugMode=Auto
 /build:sprite.fx
 
+#begin SFX/death.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/death.wav
+
+#begin SFX/fire.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/fire.wav
+
+#begin SFX/gem.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/gem.wav
+
