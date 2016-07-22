@@ -8,7 +8,6 @@ using FarseerPhysics.Factories;
 using HoardeGame.Level;
 using HoardeGame.Resources;
 using HoardeGame.Themes;
-using HoardeGame.Tweening;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -20,9 +19,9 @@ namespace HoardeGame.Entities
     public class EntityChest : EntityBase
     {
         private readonly IResourceProvider resourceProvider;
-        private readonly Tweener tween = new Tweener();
         private readonly IPlayerProvider playerProvider;
         private readonly ChestInfo info;
+
         private float interractLabelPos = 0;
 
         /// <summary>
@@ -50,26 +49,15 @@ namespace HoardeGame.Entities
         }
 
         /// <inheritdoc/>
-        public override void Update(GameTime gameTime)
-        {
-            Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            tween.Update(gameTime.ElapsedGameTime.Milliseconds / 1000f);
-
-            if (Vector2.Distance(playerProvider.Player.Position, Position) < 3 && !playerProvider.Player.Dead)
-            {
-                tween.Tween(this, new { interractLabelPos = screenPos.Y - 10 }, 1f).Ease(Ease.LinearIn);
-            }
-
-            base.Update(gameTime);
-        }
-
-        /// <inheritdoc/>
         public override void Draw(SpriteBatch spriteBatch, Effect effect)
         {
-            Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            spriteBatch.Draw(resourceProvider.GetTexture("Chest"), screenPos, Color.White);
-            spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), new Rectangle((int)screenPos.X + 11, (int)interractLabelPos, 10, 10), new Color(0, 0, 5, 0.3f));
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), "E", screenPos + new Vector2(14, -12), Color.White, 0f, Vector2.Zero, new Vector2(0.5f, 0.5f), SpriteEffects.None, 0);
+            spriteBatch.Draw(resourceProvider.GetTexture("Chest"), ScreenPosition, Color.White);
+
+            if (Vector2.Distance(playerProvider.Player.Position, Position) < 3)
+            {
+                spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), new Rectangle((int)ScreenPosition.X + 11, (int)interractLabelPos, 10, 10), new Color(0, 0, 5, 0.3f));
+                spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), "E", new Vector2((int)ScreenPosition.X, (int)interractLabelPos) + new Vector2(14, 0), Color.White, 0f, Vector2.Zero, new Vector2(0.5f, 0.5f), SpriteEffects.None, 0);
+            }
         }
     }
 }

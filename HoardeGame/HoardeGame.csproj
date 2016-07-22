@@ -86,11 +86,6 @@
     <Compile Include="Themes\IThemeProvider.cs" />
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Themes\ThemeManager.cs" />
-    <Compile Include="Tweening\Ease.cs" />
-    <Compile Include="Tweening\GlideInfo.cs" />
-    <Compile Include="Tweening\Lerper.cs" />
-    <Compile Include="Tweening\Tween.cs" />
-    <Compile Include="Tweening\Tweener.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FarseerPhysics MonoGame, Version=3.5.0.40766, Culture=neutral, processorArchitecture=MSIL">
