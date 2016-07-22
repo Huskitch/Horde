@@ -53,7 +53,7 @@ namespace HoardeGame.Entities
         {
             animator.Update(gameTime);
 
-            if (Vector2.Distance(Position, playerProvider.Player.Position) < 1)
+            if (Vector2.Distance(Position, playerProvider.Player.Position) < 2)
             {
                 Vector2 direction = playerProvider.Player.Position - Position;
                 direction.Normalize();

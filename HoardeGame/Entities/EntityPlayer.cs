@@ -53,7 +53,7 @@ namespace HoardeGame.Entities
 
         private readonly IResourceProvider resourceProvider;
         private Directions direction;
-        private EntityWeapon weapon;
+        public EntityWeapon Weapon;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
@@ -91,7 +91,7 @@ namespace HoardeGame.Entities
             animator.AddAnimation("Idle", 32, 8, 5, 100);
             animator.SetDefaultAnimation("Idle");
 
-            weapon = new EntityWeapon(level, resourceProvider, this);
+            Weapon = new EntityWeapon(level, resourceProvider, this);
         }
 
         /// <inheritdoc/>
@@ -184,7 +184,7 @@ namespace HoardeGame.Entities
                         break;
                 }
 
-                if (weapon.Shoot(direction))
+                if (Weapon.Shoot(direction))
                 {
                     Ammo--;
                 }
@@ -193,7 +193,7 @@ namespace HoardeGame.Entities
             Body.ApplyForce(velocity * 50);
 
             animator.Update(gameTime);
-            weapon.Update(gameTime);
+            Weapon.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -243,7 +243,7 @@ namespace HoardeGame.Entities
                 }
             }
 
-            weapon.Draw(spriteBatch, effect);
+            Weapon.Draw(spriteBatch, effect);
 
             base.Draw(spriteBatch, effect);
         }
