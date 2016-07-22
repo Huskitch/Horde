@@ -53,6 +53,7 @@
     <Compile Include="Entities\EntityDrill.cs" />
     <Compile Include="Entities\EntityGem.cs" />
     <Compile Include="Entities\EntityPlayer.cs" />
+    <Compile Include="Entities\IPlayerProvider.cs" />
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />
     <Compile Include="Gameplay\Card.cs" />
     <Compile Include="Gameplay\CardManager.cs" />

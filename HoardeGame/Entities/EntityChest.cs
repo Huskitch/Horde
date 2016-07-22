@@ -20,6 +20,7 @@ namespace HoardeGame.Entities
     {
         private readonly IResourceProvider resourceProvider;
         private readonly Tweener tween = new Tweener();
+        private readonly IPlayerProvider playerProvider;
         private float interractLabelPos = 0;
 
         /// <summary>
@@ -27,9 +28,11 @@ namespace HoardeGame.Entities
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> to use for loading resources</param>
-        public EntityChest(DungeonLevel level, IResourceProvider resourceProvider) : base(level)
+        /// <param name="playerProvider"><see cref="IPlayerProvider"/> to use for acessing the player entity</param>
+        public EntityChest(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level)
         {
             this.resourceProvider = resourceProvider;
+            this.playerProvider = playerProvider;
 
             FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(25), ConvertUnits.ToSimUnits(25), 1f, Vector2.Zero, Body);
             Body.Position = level.GetSpawnPosition();
@@ -48,7 +51,7 @@ namespace HoardeGame.Entities
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
             tween.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
-            if (Vector2.Distance(EntityPlayer.Player.Position, Position) < 3)
+            if (Vector2.Distance(playerProvider.Player.Position, Position) < 3)
             {
                 tween.Tween(this, new { interractLabelPos = screenPos.Y - 10 }, 1f).Ease(Ease.LinearIn);
             }

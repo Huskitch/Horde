@@ -19,9 +19,11 @@ namespace HoardeGame.Entities
     /// </summary>
     public class EntityDrill : EntityBase
     {
-        private IInputProvider inputProvider;
-        private IResourceProvider resourceProvider;
-        private SinglePlayer sp;
+        private readonly IInputProvider inputProvider;
+        private readonly IResourceProvider resourceProvider;
+        private readonly SinglePlayer sp;
+
+        // This probably isn't the best solution since you can't swap out sp for an interface but having both sp and playerProvider seems useless
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityDrill"/> class.
@@ -40,7 +42,7 @@ namespace HoardeGame.Entities
             Body.CollisionCategories = Category.Cat4;
             Body.CollidesWith = Category.All;
             Body.IsStatic = true;
-            Body.Position = EntityPlayer.Player.Position;
+            Body.Position = sp.Player.Position;
         }
 
         /// <summary>
@@ -54,7 +56,7 @@ namespace HoardeGame.Entities
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
-            if (Vector2.Distance(EntityPlayer.Player.Position, Position) < 3 && inputProvider.KeyPressed(Microsoft.Xna.Framework.Input.Keys.E))
+            if (Vector2.Distance(sp.Player.Position, Position) < 3 && inputProvider.KeyPressed(Microsoft.Xna.Framework.Input.Keys.E))
             {
                 Activate();
             }

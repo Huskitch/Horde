@@ -22,11 +22,6 @@ namespace HoardeGame.Entities
     /// </summary>
     public class EntityPlayer : EntityBase
     {
-        /// <summary>
-        /// Gets instance of <see cref="EntityPlayer"/>
-        /// </summary>
-        public static EntityPlayer Player { get; private set; }
-
         private AnimatedSprite animator;
         private IInputProvider inputProvider;
 
@@ -81,8 +76,6 @@ namespace HoardeGame.Entities
             animator.SetDefaultAnimation("Idle");
 
             weapon = new EntityWeapon(level, resourceProvider, this);
-
-            Player = this;
         }
 
         /// <inheritdoc/>

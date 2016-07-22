@@ -2,7 +2,6 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using System;
 using FarseerPhysics;
 using HoardeGame.Entities;
 using HoardeGame.Extensions;
@@ -15,19 +14,23 @@ using HoardeGame.Resources;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace HoardeGame.GameStates
 {
     /// <summary>
     /// Singleplayer gamestate
     /// </summary>
-    public class SinglePlayer : GameState
+    public class SinglePlayer : GameState, IPlayerProvider
     {
         /// <summary>
         /// Gets or sets a value indicating whether the player is drilling
         /// </summary>
         public bool Drilling { get; set; }
+
+        /// <summary>
+        /// Gets the player entity
+        /// </summary>
+        public EntityPlayer Player { get; private set; }
 
         private readonly Card testCard;
 
@@ -81,14 +84,14 @@ namespace HoardeGame.GameStates
             dungeon = new DungeonLevel(resourceProvider);
             dungeon.GenerateLevel(64, 64, 40);
 
-            EntityPlayer player = new EntityPlayer(dungeon, inputProvider, resourceProvider);
-            dungeon.AddEntity(player);
+            Player = new EntityPlayer(dungeon, inputProvider, resourceProvider);
+            dungeon.AddEntity(Player);
 
             EntityBat bat = new EntityBat(dungeon, resourceProvider);
-            bat.Body.Position = player.Position;
+            bat.Body.Position = Player.Position;
             dungeon.AddEntity(bat);
 
-            EntityChest chest = new EntityChest(dungeon, resourceProvider);
+            EntityChest chest = new EntityChest(dungeon, resourceProvider, this);
             dungeon.AddEntity(chest);
 
             EntityDrill drill = new EntityDrill(dungeon, inputProvider, resourceProvider, this);
@@ -149,7 +152,7 @@ namespace HoardeGame.GameStates
             DoCheck(gameTime, new Point(inputProvider.MouseState.X, inputProvider.MouseState.Y), inputProvider.LeftClicked);
 
             dungeon.Update(gameTime);
-            camera.Position = ConvertUnits.ToDisplayUnits(EntityPlayer.Player.Position);
+            camera.Position = ConvertUnits.ToDisplayUnits(Player.Position);
         }
 
         /// <inheritdoc/>
