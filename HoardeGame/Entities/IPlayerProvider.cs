@@ -1,4 +1,8 @@
-﻿namespace HoardeGame.Entities
+﻿// <copyright file="IPlayerProvider.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
+namespace HoardeGame.Entities
 {
     /// <summary>
     /// Defines a provider of the player entity

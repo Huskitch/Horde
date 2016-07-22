@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ListExtensions.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 
 namespace HoardeGame.Extensions

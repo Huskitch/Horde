@@ -6,12 +6,12 @@
     <WallTextureName>BasicWall</WallTextureName>
     <Special />
     <EntitySpawns>
-      <EnemySpawnInfo>
+      <EntitySpawnInfo>
         <EntityType>HoardeGame.Entities.EntityBat</EntityType>
         <MinClusterSize>20</MinClusterSize>
         <MaxClusterSize>20</MaxClusterSize>
         <SpawnRate>3</SpawnRate>
-      </EnemySpawnInfo>
+      </EntitySpawnInfo>
     </EntitySpawns>
     <ChestInfo>
       <MinAmmo>50</MinAmmo>
