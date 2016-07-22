@@ -21,9 +21,9 @@ namespace HoardeGame.Entities
     public class EntityPlayer : EntityBase
     {
         /// <summary>
-        /// Gets or sets the amount of gems the player has
+        /// Gets the amount of gems the player has
         /// </summary>
-        public int Gems { get; set; }
+        public int[] Gems { get; } = new int[3];
 
         /// <summary>
         /// Gets or sets a value indicating whether the player is dead

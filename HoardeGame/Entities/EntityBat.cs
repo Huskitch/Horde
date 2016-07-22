@@ -22,9 +22,6 @@ namespace HoardeGame.Entities
     {
         private readonly AnimatedSprite animator;
         private IPlayerProvider playerProvider;
-        private float walkTimer;
-        private Vector2 direction;
-        private Random rng = new Random(Guid.NewGuid().GetHashCode());
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBat"/> class.
@@ -44,8 +41,8 @@ namespace HoardeGame.Entities
             this.playerProvider = playerProvider;
 
             Health = 3;
-            MinGemDrop = 3;
-            MaxGemDrop = 5;
+            MinGemDrop = new[] { 3, 2, 1 };
+            MaxGemDrop = new[] { 6, 4, 2 };
 
             animator = new AnimatedSprite(resourceProvider.GetTexture("BatSheet"));
             animator.AddAnimation("Flap", 32, 0, 2, 100);
@@ -56,31 +53,6 @@ namespace HoardeGame.Entities
         {
             UpdateAI(gameTime);
             animator.Update(gameTime);
-        }
-
-        /// <summary>
-        /// Updates the AI state
-        /// </summary>
-        /// <param name="gameTime"><see cref="GameTime"/></param>
-        public void UpdateAI(GameTime gameTime)
-        {
-            walkTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            if (Vector2.Distance(playerProvider.Player.Position, Position) > 5)
-            {
-                if (walkTimer > rng.Next(100, 3000))
-                {
-                    direction = new Vector2(rng.Next(-1, 2), rng.Next(-1, 2));
-                    walkTimer = 0;
-                }
-            }
-            else
-            {
-                direction = playerProvider.Player.Position - Position;
-                direction.Normalize();
-            }
-
-           Body.ApplyForce(direction * 20);
         }
 
         /// <inheritdoc/>

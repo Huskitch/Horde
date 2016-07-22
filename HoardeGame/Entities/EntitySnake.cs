@@ -2,8 +2,6 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using System;
-
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
@@ -22,9 +20,6 @@ namespace HoardeGame.Entities
     {
         private readonly AnimatedSprite animator;
         private IPlayerProvider playerProvider;
-        private float walkTimer;
-        private Vector2 direction;
-        private Random rng = new Random(Guid.NewGuid().GetHashCode());
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntitySnake"/> class.
@@ -44,8 +39,8 @@ namespace HoardeGame.Entities
             this.playerProvider = playerProvider;
 
             Health = 3;
-            MinGemDrop = 3;
-            MaxGemDrop = 5;
+            MinGemDrop = new[] { 3, 2, 1 };
+            MaxGemDrop = new[] { 6, 4, 2 };
 
             animator = new AnimatedSprite(resourceProvider.GetTexture("SnakeSheet"));
             animator.AddAnimation("North", 48, 1, 3, 100);
@@ -61,49 +56,24 @@ namespace HoardeGame.Entities
             animator.Update(gameTime);
         }
 
-        /// <summary>
-        /// Updates the AI state
-        /// </summary>
-        /// <param name="gameTime"><see cref="GameTime"/></param>
-        public void UpdateAI(GameTime gameTime)
-        {
-            walkTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-
-            if (Vector2.Distance(playerProvider.Player.Position, Position) > 5)
-            {
-                if (walkTimer > rng.Next(100, 3000))
-                {
-                    direction = new Vector2(rng.Next(-1, 2), rng.Next(-1, 2));
-                    walkTimer = 0;
-                }
-            }
-            else
-            {
-                direction = playerProvider.Player.Position - Position;
-                direction.Normalize();
-            }
-
-            Body.ApplyForce(direction * 20);
-        }
-
         /// <inheritdoc/>
         public override void Draw(SpriteBatch spriteBatch, Effect effect)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
 
-            if (direction == new Vector2(0, -1))
+            if (Direction == new Vector2(0, -1))
             {
                 animator.DrawAnimation("North", screenPos, spriteBatch, CurrentBlinkFrame);
             }
-            else if (direction == new Vector2(1, 0))
+            else if (Direction == new Vector2(1, 0))
             {
                 animator.DrawAnimation("East", screenPos, spriteBatch, CurrentBlinkFrame);
             }
-            else if (direction == new Vector2(0, 1))
+            else if (Direction == new Vector2(0, 1))
             {
                 animator.DrawAnimation("South", screenPos, spriteBatch, CurrentBlinkFrame);
             }
-            else if (direction == new Vector2(-1, 0))
+            else if (Direction == new Vector2(-1, 0))
             {
                 animator.DrawAnimation("West", screenPos, spriteBatch, CurrentBlinkFrame);
             }

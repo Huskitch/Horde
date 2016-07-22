@@ -75,7 +75,7 @@ namespace HoardeGame.Entities
             if (fixtureB.Body == playerProvider.Player.Body)
             {
                 resourceProvider.GetSoundEffect("Gem").Play();
-                playerProvider.Player.Gems++;
+                playerProvider.Player.Gems[2]++;
                 Removed = true;
 
                 return false;

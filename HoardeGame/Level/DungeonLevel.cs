@@ -252,7 +252,7 @@ namespace HoardeGame.Level
         /// <param name="gameTime"><see cref="GameTime"/></param>
         public void Update(GameTime gameTime)
         {
-            World.Step(1f / 30f);
+            World.Step(Math.Min((float)gameTime.ElapsedGameTime.TotalMilliseconds * 0.001f, 1f / 30f));
 
             foreach (Tile tile in MapTiles)
             {
