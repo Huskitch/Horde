@@ -82,10 +82,12 @@ namespace HoardeGame.Level
         /// <summary>
         /// Finds an epty 5x5 space for the player to spawn
         /// </summary>
+        /// <param name="size">Size of the spawn area in tiles</param>
+        /// <param name="center">Whether to return the center of the area</param>
         /// <returns>Spawn point for player</returns>
-        public Vector2 GetSpawnPosition()
+        public Vector2 GetSpawnPosition(int size = 5, bool center = true)
         {
-            return levelGen.GetSpawnPosition();
+            return levelGen.GetSpawnPosition(size, center);
         }
 
         /// <summary>

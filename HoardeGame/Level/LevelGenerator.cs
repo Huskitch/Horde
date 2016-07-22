@@ -65,8 +65,10 @@ namespace HoardeGame.Level
         /// <summary>
         /// Finds an epty 5x5 space for the player to spawn
         /// </summary>
+        /// <param name="size">Size of the spawn area in tiles</param>
+        /// <param name="center">Whether to return the center of the area</param>
         /// <returns>Spawn point for player</returns>
-        public Vector2 GetSpawnPosition()
+        public Vector2 GetSpawnPosition(int size = 5, bool center = true)
         {
             int[,] map = Map.Clone() as int[,];
             Point? nextWall = FindWall(ref map);
@@ -74,13 +76,21 @@ namespace HoardeGame.Level
             while (nextWall != null)
             {
                 nextWall = FindWall(ref map);
-                FillInWall(ref map, nextWall);
+                FillInWall(ref map, nextWall, size);
             }
 
             List<Point> emptySpaces = FindEmptySpaces(ref map);
             Random rnd = new Random();
 
             Vector2 position = emptySpaces[rnd.Next(emptySpaces.Count)].ToVector2() * 32 + new Vector2(0, 16);
+
+            if (!center)
+            {
+                float firstSign = rnd.Next(2) == 1 ? -1 : 1;
+                float secondSign = rnd.Next(2) == 1 ? -1 : 1;
+
+                position += new Vector2((float)(rnd.NextDouble() * size * 16) * firstSign, (float)(rnd.NextDouble() * size * 16) * secondSign);
+            }
 
             return ConvertUnits.ToSimUnits(position);
         }
@@ -268,16 +278,19 @@ namespace HoardeGame.Level
             return null;
         }
 
-        private void FillInWall(ref int[,] map, Point? wallPosition)
+        private void FillInWall(ref int[,] map, Point? wallPosition, int size)
         {
+            // If size is odd then EVEN
+            int sizeHalf = size / 2;
+
             if (wallPosition == null)
             {
                 return;
             }
 
-            for (int x = wallPosition.Value.X - 2; x < wallPosition.Value.X + 2; x++)
+            for (int x = wallPosition.Value.X - sizeHalf; x < wallPosition.Value.X + sizeHalf; x++)
             {
-                for (int y = wallPosition.Value.Y - 2; y < wallPosition.Value.Y + 2; y++)
+                for (int y = wallPosition.Value.Y - sizeHalf; y < wallPosition.Value.Y + sizeHalf; y++)
                 {
                     if (IsOutOfBounds(x, y))
                     {
