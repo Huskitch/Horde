@@ -97,7 +97,11 @@ namespace HoardeGame.Entities
             if (fixtureB.CollisionCategories == Category.Cat2)
             {
                 Health -= playerProvider.Player.Weapon.Damage;
-                Hit();
+
+                if (!IsHit())
+                {
+                    Hit();
+                }
 
                 if (Health <= 0)
                 {

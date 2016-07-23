@@ -70,6 +70,7 @@
     <Compile Include="Graphics\Rendering\AnimatedSprite.cs" />
     <Compile Include="Graphics\Rendering\Animation.cs" />
     <Compile Include="Graphics\Rendering\Camera.cs" />
+    <Compile Include="Graphics\Rendering\IDrawable.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\GuiBase.cs" />
     <Compile Include="GUI\Label.cs" />

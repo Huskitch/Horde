@@ -8,18 +8,26 @@ using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using IDrawable = HoardeGame.Graphics.Rendering.IDrawable;
 
 namespace HoardeGame.Level
 {
     /// <summary>
     /// A representation of a tile in a <see cref="DungeonLevel"/>
     /// </summary>
-    public class Tile
+    public class Tile : IDrawable
     {
         /// <summary>
         /// Gets or sets the position of this tile
         /// </summary>
         public Vector2 Position { get; set; }
+
+        /// <summary>
+        /// Gets or sets the position of this tile
+        /// </summary>
+        public Vector2 ScreenPosition => ConvertUnits.ToDisplayUnits(Position);
+
+        public float Depth { get; private set; }
 
         /// <summary>
         /// Gets the size of this tile
@@ -40,13 +48,15 @@ namespace HoardeGame.Level
         {
             Scale = scale;
             this.texture = texture;
-            Position = pos;
+            Position = pos / 32f;
+            Depth = 0;
 
             if (collide)
             {
                 Fixture fixture = FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(32), ConvertUnits.ToSimUnits(32), 1f, ConvertUnits.ToSimUnits(pos), level.Body);
                 fixture.CollisionCategories = Category.Cat4;
                 fixture.CollidesWith = Category.All;
+                Depth = Position.Y;
             }
         }
 
@@ -62,9 +72,9 @@ namespace HoardeGame.Level
         /// Draw the tile
         /// </summary>
         /// <param name="spriteBatch"><see cref="SpriteBatch"/></param>
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
         {
-            spriteBatch.Draw(texture, new Rectangle((int)Position.X, (int)Position.Y, (int)Scale.X, (int)Scale.Y), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, new Rectangle((int)ScreenPosition.X, (int)ScreenPosition.Y, (int)Scale.X, (int)Scale.Y), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
         }
     }
 }

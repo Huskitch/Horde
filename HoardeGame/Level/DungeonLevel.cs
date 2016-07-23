@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Entities;
@@ -44,8 +45,9 @@ namespace HoardeGame.Level
         private readonly LevelGenerator levelGen;
         private readonly List<EntityBase> entities;
         private readonly IResourceProvider resourceProvider;
-        private IPlayerProvider playerProvider;
+        private readonly IPlayerProvider playerProvider;
 
+        private List<Graphics.Rendering.IDrawable> renderList = new List<Graphics.Rendering.IDrawable>();
         private int[,] map;
         private int mapWidth = 1;
         private int mapHeight = 1;
@@ -139,7 +141,7 @@ namespace HoardeGame.Level
             for (int i = 0; i < 5; i++)
             {
                 EntityChest chest = new EntityChest(this, resourceProvider, playerProvider, Theme.ChestInfo);
-                entities.Add(chest);
+                AddEntity(chest);
             }
         }
 
@@ -212,6 +214,7 @@ namespace HoardeGame.Level
         public void AddEntity(EntityBase entity)
         {
             entity.Start();
+            renderList.Add(entity);
             entities.Add(entity);
         }
 
@@ -221,6 +224,7 @@ namespace HoardeGame.Level
         /// <param name="entity"><see cref="EntityBase"/> to remove</param>
         public void RemoveEntity(EntityBase entity)
         {
+            renderList.Remove(entity);
             entities.Remove(entity);
         }
 
@@ -285,17 +289,14 @@ namespace HoardeGame.Level
             Effect effect = resourceProvider.GetEffect("SpriteEffect");
             EffectParameter parameter = effect.Parameters["Blink"];
 
+            renderList = renderList.AsParallel().OrderBy(drawable => drawable.Depth).ToList();
+
             using (spriteBatch.Use(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, effect, camera.Transformation(graphicsDevice)))
             {
-                foreach (Tile tile in MapTiles)
+                renderList.ForEach(drawable =>
                 {
-                    tile.Draw(spriteBatch);
-                }
-
-                foreach (EntityBase entity in entities)
-                {
-                    entity.Draw(spriteBatch, parameter);
-                }
+                    drawable.Draw(spriteBatch, parameter);
+                });
             }
         }
 
@@ -310,7 +311,9 @@ namespace HoardeGame.Level
                 {
                     if (map[x, y] != 1)
                     {
-                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32 + 24), new Vector2(32, 32), resourceProvider.GetTexture(Theme.FloorTextureName), false, this));
+                        Tile tile = new Tile(new Vector2(x * 32, y * 32 + 24), new Vector2(32, 32), resourceProvider.GetTexture(Theme.FloorTextureName), false, this);
+                        MapTiles.Add(tile);
+                        renderList.Add(tile);
                     }
                 }
             }
@@ -321,7 +324,9 @@ namespace HoardeGame.Level
                 {
                     if (map[x, y] == 1)
                     {
-                        MapTiles.Add(new Tile(new Vector2(x * 32, y * 32), new Vector2(32, 56), resourceProvider.GetTexture(Theme.WallTextureName), true, this));
+                        Tile tile = new Tile(new Vector2(x * 32, y * 32), new Vector2(32, 56), resourceProvider.GetTexture(Theme.WallTextureName), true, this);
+                        MapTiles.Add(tile);
+                        renderList.Add(tile);
                     }
                 }
             }

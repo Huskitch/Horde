@@ -2,18 +2,20 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using HoardeGame.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using IDrawable = HoardeGame.Graphics.Rendering.IDrawable;
 
 namespace HoardeGame.Entities
 {
     /// <summary>
     /// Base class for entities
     /// </summary>
-    public abstract class EntityBase
+    public abstract class EntityBase : IDrawable
     {
         private readonly Color[] blinkFrames =
         {
@@ -78,6 +80,11 @@ namespace HoardeGame.Entities
         /// Gets the velocity of the <see cref="Body"/>
         /// </summary>
         public Vector2 Velocity => Body.LinearVelocity;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public float Depth => Position.Y;
 
         /// <summary>
         /// Gets the value of the current blink frame
