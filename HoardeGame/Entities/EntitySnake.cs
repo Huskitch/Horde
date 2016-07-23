@@ -58,29 +58,29 @@ namespace HoardeGame.Entities
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, Effect effect)
+        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
 
             if (Direction == new Vector2(0, -1))
             {
-                animator.DrawAnimation("North", screenPos, spriteBatch, CurrentBlinkFrame);
+                animator.DrawAnimation("North", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
             }
             else if (Direction == new Vector2(1, 0))
             {
-                animator.DrawAnimation("East", screenPos, spriteBatch, CurrentBlinkFrame);
+                animator.DrawAnimation("East", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
             }
             else if (Direction == new Vector2(0, 1))
             {
-                animator.DrawAnimation("South", screenPos, spriteBatch, CurrentBlinkFrame);
+                animator.DrawAnimation("South", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
             }
             else if (Direction == new Vector2(-1, 0))
             {
-                animator.DrawAnimation("West", screenPos, spriteBatch, CurrentBlinkFrame);
+                animator.DrawAnimation("West", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
             }
             else
             {
-                animator.DrawAnimation("South", screenPos, spriteBatch, CurrentBlinkFrame);
+                animator.DrawAnimation("South", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
             }
         }
     }

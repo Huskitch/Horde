@@ -209,7 +209,7 @@ namespace HoardeGame.Entities
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, Effect effect)
+        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
         {
             if (Dead)
             {
@@ -220,42 +220,42 @@ namespace HoardeGame.Entities
 
             if (Velocity.Length() < 0.1f)
             {
-                animator.DrawAnimation("Idle", screenPos, spriteBatch, CurrentBlinkFrame);
+                animator.DrawAnimation("Idle", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
             }
             else
             {
                 switch (direction)
                 {
                     case Directions.NORTH:
-                        animator.DrawAnimation("North", screenPos, spriteBatch, CurrentBlinkFrame);
+                        animator.DrawAnimation("North", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.SOUTH:
-                        animator.DrawAnimation("South", screenPos, spriteBatch, CurrentBlinkFrame);
+                        animator.DrawAnimation("South", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.WEST:
-                        animator.DrawAnimation("West", screenPos, spriteBatch, CurrentBlinkFrame);
+                        animator.DrawAnimation("West", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.EAST:
-                        animator.DrawAnimation("East", screenPos, spriteBatch, CurrentBlinkFrame);
+                        animator.DrawAnimation("East", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.NORTHEAST:
-                        animator.DrawAnimation("NorthEast", screenPos, spriteBatch, CurrentBlinkFrame);
+                        animator.DrawAnimation("NorthEast", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.NORTHWEST:
-                        animator.DrawAnimation("NorthWest", screenPos, spriteBatch, CurrentBlinkFrame);
+                        animator.DrawAnimation("NorthWest", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.SOUTHEAST:
-                        animator.DrawAnimation("SouthEast", screenPos, spriteBatch, CurrentBlinkFrame);
+                        animator.DrawAnimation("SouthEast", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.SOUTHWEST:
-                        animator.DrawAnimation("SouthWest", screenPos, spriteBatch, CurrentBlinkFrame);
+                        animator.DrawAnimation("SouthWest", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
                         break;
                 }
             }
 
-            Weapon.Draw(spriteBatch, effect);
+            Weapon.Draw(spriteBatch, parameter);
 
-            base.Draw(spriteBatch, effect);
+            base.Draw(spriteBatch, parameter);
         }
     }
 }

@@ -59,10 +59,10 @@ namespace HoardeGame.Entities
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, Effect effect)
+        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
         {
             spriteBatch.Draw(resourceProvider.GetTexture("EntityKey"), ScreenPosition, Color.White);
-            base.Draw(spriteBatch, effect);
+            base.Draw(spriteBatch, parameter);
         }
 
         private bool Collect(Fixture fixtureA, Fixture fixtureB, Contact contact)

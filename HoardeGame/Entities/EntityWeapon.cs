@@ -86,14 +86,14 @@ namespace HoardeGame.Entities
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, Effect effect)
+        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
         {
             foreach (EntityBullet bullet in bullets)
             {
-                bullet.Draw(spriteBatch, effect);
+                bullet.Draw(spriteBatch, parameter);
             }
 
-            base.Draw(spriteBatch, effect);
+            base.Draw(spriteBatch, parameter);
         }
     }
 }

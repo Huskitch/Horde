@@ -65,7 +65,7 @@ namespace HoardeGame.Entities
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, Effect effect)
+        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position) - new Vector2(32, 32);
             spriteBatch.Draw(resourceProvider.GetTexture("Drill"), screenPos, Color.White);

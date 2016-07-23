@@ -282,20 +282,19 @@ namespace HoardeGame.Level
         /// <param name="graphicsDevice"><see cref="GraphicsDevice"/></param>
         public void Draw(SpriteBatch spriteBatch, Camera camera, GraphicsDevice graphicsDevice)
         {
-            using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, null, camera.Transformation(graphicsDevice)))
+            Effect effect = resourceProvider.GetEffect("SpriteEffect");
+            EffectParameter parameter = effect.Parameters["Blink"];
+
+            using (spriteBatch.Use(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, effect, camera.Transformation(graphicsDevice)))
             {
                 foreach (Tile tile in MapTiles)
                 {
                     tile.Draw(spriteBatch);
                 }
-            }
 
-            Effect effect = resourceProvider.GetEffect("SpriteEffect");
-            using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, effect, camera.Transformation(graphicsDevice)))
-            {
                 foreach (EntityBase entity in entities)
                 {
-                    entity.Draw(spriteBatch, effect);
+                    entity.Draw(spriteBatch, parameter);
                 }
             }
         }

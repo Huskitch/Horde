@@ -101,13 +101,13 @@ namespace HoardeGame.Entities
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, Effect effect)
+        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
         {
             int positionOnTheYAxisOfTheCoordinateSystem = contentsList.Count * 10 + 20;
 
             if (Vector2.Distance(playerProvider.Player.Position, Position) < 3)
             {
-                animator.DrawAnimation("Open", ScreenPosition, spriteBatch, true);
+                animator.DrawAnimation("Open", ScreenPosition, spriteBatch, Color.White);
                 spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), new Rectangle((int)ScreenPosition.X - 14, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem, 60, positionOnTheYAxisOfTheCoordinateSystem), new Color(0, 0, 5, 0.3f));
                 spriteBatch.DrawString(resourceProvider.GetFont("BigFont"), "Contents", new Vector2((int)ScreenPosition.X - 8, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem), Color.White, 0f, Vector2.Zero, new Vector2(0.35f, 0.35f), SpriteEffects.None, 0f);
 

@@ -64,10 +64,10 @@ namespace HoardeGame.Entities
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, Effect effect)
+        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
         {
-            animator.DrawAnimation("Bounce", ScreenPosition, spriteBatch);
-            base.Draw(spriteBatch, effect);
+            animator.DrawAnimation("Bounce", ScreenPosition, spriteBatch, Color.White);
+            base.Draw(spriteBatch, parameter);
         }
 
         private bool Collect(Fixture fixtureA, Fixture fixtureB, Contact contact)

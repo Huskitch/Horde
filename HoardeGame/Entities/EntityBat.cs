@@ -57,10 +57,10 @@ namespace HoardeGame.Entities
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, Effect effect)
+        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            animator.DrawAnimation("Flap", screenPos, spriteBatch, CurrentBlinkFrame);
+            animator.DrawAnimation("Flap", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
         }
     }
 }

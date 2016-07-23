@@ -77,12 +77,12 @@ namespace HoardeGame.Graphics.Rendering
         /// <param name="animation">Name of the <see cref="Animation"/></param>
         /// <param name="position">Position where to draw the <see cref="Animation"/></param>
         /// <param name="spriteBatch"><see cref="SpriteFont"/> to draw the animation with</param>
-        public void DrawAnimation(string animation, Vector2 position, SpriteBatch spriteBatch, bool looping = true)
+        public void DrawAnimation(string animation, Vector2 position, SpriteBatch spriteBatch, Color color, bool looping = true)
         {
             Animation selectedAnim = animations[animation];
             selectedAnim.Looping = looping;
             lastUsedAnimation = selectedAnim;
-            spriteBatch.Draw(sheet, new Rectangle((int)position.X, (int)position.Y, selectedAnim.FrameSize, selectedAnim.FrameSize), selectedAnim.AnimRect, Color.White);
+            spriteBatch.Draw(sheet, new Rectangle((int)position.X, (int)position.Y, selectedAnim.FrameSize, selectedAnim.FrameSize), selectedAnim.AnimRect, color);
         }
 
         /// <summary>
@@ -92,11 +92,16 @@ namespace HoardeGame.Graphics.Rendering
         /// <param name="position">Position where to draw the <see cref="Animation"/></param>
         /// <param name="spriteBatch"><see cref="SpriteFont"/> to draw the animation with</param>
         /// <param name="white">White value, should only be used with sprite shader</param>
-        public void DrawAnimation(string animation, Vector2 position, SpriteBatch spriteBatch, float white)
+        public void DrawAnimation(string animation, Vector2 position, SpriteBatch spriteBatch, Color color, EffectParameter parameter, Color parameterValue)
         {
             Animation selectedAnim = animations[animation];
             lastUsedAnimation = selectedAnim;
-            spriteBatch.Draw(sheet, new Rectangle((int)position.X, (int)position.Y, selectedAnim.FrameSize, selectedAnim.FrameSize), selectedAnim.AnimRect, new Color(1 - white, 1 - white, 1 - white, 1));
+
+            parameter.SetValue(parameterValue.ToVector4());
+
+            spriteBatch.Draw(sheet, new Rectangle((int)position.X, (int)position.Y, selectedAnim.FrameSize, selectedAnim.FrameSize), selectedAnim.AnimRect, color);
+
+            parameter.SetValue(Color.Black.ToVector4());
         }
 
         /// <summary>
