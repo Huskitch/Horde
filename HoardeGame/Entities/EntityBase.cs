@@ -81,9 +81,7 @@ namespace HoardeGame.Entities
         /// </summary>
         public Vector2 Velocity => Body.LinearVelocity;
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <inheritdoc/>
         public float Depth => Position.Y;
 
         /// <summary>
@@ -170,7 +168,7 @@ namespace HoardeGame.Entities
         /// Draw the entity
         /// </summary>
         /// <param name="spriteBatch"><see cref="GameTime"/></param>
-        /// <param name="parameter"></param>
+        /// <param name="parameter"><see cref="EffectParameter"/> for flashing effect</param>
         public virtual void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
         {
         }

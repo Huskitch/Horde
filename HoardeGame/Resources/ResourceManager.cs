@@ -80,8 +80,7 @@ namespace HoardeGame.Resources
         /// <param name="content"><see cref="ContentManager"/></param>
         public void LoadEffects(ContentManager content)
         {
-            //effects.Add("SpriteEffect", content.Load<Effect>("sprite"));
-            effects.Add("SpriteEffect", content.Load<Effect>("sprite2"));
+            effects.Add("SpriteEffect", content.Load<Effect>("sprite"));
         }
 
         /// <summary>

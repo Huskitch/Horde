@@ -8,6 +8,7 @@
 #endif
 
 Texture2D SpriteTexture;
+float4 Blink;
 
 sampler2D SpriteTextureSampler = sampler_state
 {
@@ -24,7 +25,9 @@ struct VertexShaderOutput
 float4 MainPS(VertexShaderOutput input) : COLOR
 {
 	float4 color = tex2D(SpriteTextureSampler, input.TextureCoordinates);
-	return float4(color.r + (1 - input.Color.r), color.g + (1 - input.Color.g), color.b + (1 - input.Color.b), color.a * input.Color.a);
+	color.rgb += Blink.rgb;
+
+	return color * input.Color;
 }
 
 technique SpriteDrawing

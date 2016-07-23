@@ -77,6 +77,8 @@ namespace HoardeGame.Graphics.Rendering
         /// <param name="animation">Name of the <see cref="Animation"/></param>
         /// <param name="position">Position where to draw the <see cref="Animation"/></param>
         /// <param name="spriteBatch"><see cref="SpriteFont"/> to draw the animation with</param>
+        /// <param name="color"><see cref="Color"/> tint of the sprite</param>
+        /// <param name="looping">Whether the animation should loop</param>
         public void DrawAnimation(string animation, Vector2 position, SpriteBatch spriteBatch, Color color, bool looping = true)
         {
             Animation selectedAnim = animations[animation];
@@ -91,7 +93,9 @@ namespace HoardeGame.Graphics.Rendering
         /// <param name="animation">Name of the <see cref="Animation"/></param>
         /// <param name="position">Position where to draw the <see cref="Animation"/></param>
         /// <param name="spriteBatch"><see cref="SpriteFont"/> to draw the animation with</param>
-        /// <param name="white">White value, should only be used with sprite shader</param>
+        /// <param name="color"><see cref="Color"/> tint of the sprite</param>
+        /// <param name="parameter"><see cref="EffectParameter"/> for flashing</param>
+        /// <param name="parameterValue"><see cref="Color"/> for flashing</param>
         public void DrawAnimation(string animation, Vector2 position, SpriteBatch spriteBatch, Color color, EffectParameter parameter, Color parameterValue)
         {
             Animation selectedAnim = animations[animation];

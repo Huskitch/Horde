@@ -21,12 +21,16 @@ namespace HoardeGame.Graphics.Rendering
         /// </summary>
         public Rectangle AnimRect { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the animation is looping
+        /// </summary>
+        public bool Looping { get; set; }
+
         private readonly int layer;
         private readonly int numFrames;
         private readonly int speed;
         private int framePosition;
         private float frameTimer;
-        public bool Looping { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Animation"/> class.
@@ -62,7 +66,9 @@ namespace HoardeGame.Graphics.Rendering
                 else
                 {
                     if (!Looping)
-                    framePosition = 1;
+                    {
+                        framePosition = 1;
+                    }
                 }
 
                 frameTimer = 0;

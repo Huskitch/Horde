@@ -337,9 +337,3 @@
 /processorParam:TextureFormat=Color
 /build:Art/ChestSheet.png
 
-#begin sprite2.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:sprite2.fx
-

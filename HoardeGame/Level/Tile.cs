@@ -17,16 +17,13 @@ namespace HoardeGame.Level
     /// </summary>
     public class Tile : IDrawable
     {
-        /// <summary>
-        /// Gets or sets the position of this tile
-        /// </summary>
+        /// <inheritdoc/>
         public Vector2 Position { get; set; }
 
-        /// <summary>
-        /// Gets or sets the position of this tile
-        /// </summary>
+        /// <inheritdoc/>
         public Vector2 ScreenPosition => ConvertUnits.ToDisplayUnits(Position);
 
+        /// <inheritdoc/>
         public float Depth { get; private set; }
 
         /// <summary>
@@ -72,6 +69,7 @@ namespace HoardeGame.Level
         /// Draw the tile
         /// </summary>
         /// <param name="spriteBatch"><see cref="SpriteBatch"/></param>
+        /// <param name="parameter"><see cref="EffectParameter"/> for flashing effect</param>
         public void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
         {
             spriteBatch.Draw(texture, new Rectangle((int)ScreenPosition.X, (int)ScreenPosition.Y, (int)Scale.X, (int)Scale.Y), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);

@@ -46,8 +46,8 @@ namespace HoardeGame.Level
         private readonly List<EntityBase> entities;
         private readonly IResourceProvider resourceProvider;
         private readonly IPlayerProvider playerProvider;
+        private readonly List<Graphics.Rendering.IDrawable> renderList = new List<Graphics.Rendering.IDrawable>();
 
-        private List<Graphics.Rendering.IDrawable> renderList = new List<Graphics.Rendering.IDrawable>();
         private int[,] map;
         private int mapWidth = 1;
         private int mapHeight = 1;
@@ -289,7 +289,7 @@ namespace HoardeGame.Level
             Effect effect = resourceProvider.GetEffect("SpriteEffect");
             EffectParameter parameter = effect.Parameters["Blink"];
 
-            renderList = renderList.AsParallel().OrderBy(drawable => drawable.Depth).ToList();
+            renderList.Sort((a, b) => a.Depth.CompareTo(b.Depth));
 
             using (spriteBatch.Use(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, effect, camera.Transformation(graphicsDevice)))
             {

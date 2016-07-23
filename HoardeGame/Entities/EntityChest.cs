@@ -94,6 +94,7 @@ namespace HoardeGame.Entities
             }
         }
 
+        /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
             animator.Update(gameTime);

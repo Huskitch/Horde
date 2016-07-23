@@ -39,6 +39,9 @@ namespace HoardeGame.Entities
         private float walkTimer;
         private Random rng = new Random(Guid.NewGuid().GetHashCode());
 
+        /// <summary>
+        /// Gets or sets the damage dealt by this entity
+        /// </summary>
         protected int Damage { get; set; }
 
         /// <summary>
