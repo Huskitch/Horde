@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
+using HoardeGame.Graphics.Rendering;
 using HoardeGame.Level;
 using HoardeGame.Resources;
 using HoardeGame.Themes;
@@ -24,6 +25,7 @@ namespace HoardeGame.Entities
         private readonly IPlayerProvider playerProvider;
         private readonly ChestInfo info;
         private readonly List<string> contentsList = new List<string>();
+        private readonly AnimatedSprite animator;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityChest"/> class.
@@ -50,6 +52,9 @@ namespace HoardeGame.Entities
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 70f;
             Body.FixedRotation = true;
+
+            animator = new AnimatedSprite(resourceProvider.GetTexture("ChestSheet"));
+            animator.AddAnimation("Open", 32, 0, 2, 500);
 
             Health = 3;
 
@@ -89,15 +94,20 @@ namespace HoardeGame.Entities
             }
         }
 
+        public override void Update(GameTime gameTime)
+        {
+            animator.Update(gameTime);
+            base.Update(gameTime);
+        }
+
         /// <inheritdoc/>
         public override void Draw(SpriteBatch spriteBatch, Effect effect)
         {
-            spriteBatch.Draw(resourceProvider.GetTexture("Chest"), ScreenPosition, Color.White);
-
             int positionOnTheYAxisOfTheCoordinateSystem = contentsList.Count * 10 + 20;
 
             if (Vector2.Distance(playerProvider.Player.Position, Position) < 3)
             {
+                animator.DrawAnimation("Open", ScreenPosition, spriteBatch, true);
                 spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), new Rectangle((int)ScreenPosition.X - 14, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem, 60, positionOnTheYAxisOfTheCoordinateSystem), new Color(0, 0, 5, 0.3f));
                 spriteBatch.DrawString(resourceProvider.GetFont("BigFont"), "Contents", new Vector2((int)ScreenPosition.X - 8, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem), Color.White, 0f, Vector2.Zero, new Vector2(0.35f, 0.35f), SpriteEffects.None, 0f);
 
@@ -105,6 +115,10 @@ namespace HoardeGame.Entities
                 {
                     spriteBatch.DrawString(resourceProvider.GetFont("BigFont"), contentsList[i], new Vector2((int)ScreenPosition.X - 8, (int)ScreenPosition.Y - 75 + i * 10), Color.White, 0f, Vector2.Zero, new Vector2(0.3f, 0.3f), SpriteEffects.None, 0f);
                 }
+            }
+            else
+            {
+                spriteBatch.Draw(resourceProvider.GetTexture("Chest"), ScreenPosition, Color.White);
             }
         }
     }

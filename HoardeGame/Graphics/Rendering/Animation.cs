@@ -26,6 +26,7 @@ namespace HoardeGame.Graphics.Rendering
         private readonly int speed;
         private int framePosition;
         private float frameTimer;
+        public bool Looping { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Animation"/> class.
@@ -60,6 +61,7 @@ namespace HoardeGame.Graphics.Rendering
                 }
                 else
                 {
+                    if (!Looping)
                     framePosition = 1;
                 }
 

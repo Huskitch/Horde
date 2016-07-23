@@ -77,9 +77,10 @@ namespace HoardeGame.Graphics.Rendering
         /// <param name="animation">Name of the <see cref="Animation"/></param>
         /// <param name="position">Position where to draw the <see cref="Animation"/></param>
         /// <param name="spriteBatch"><see cref="SpriteFont"/> to draw the animation with</param>
-        public void DrawAnimation(string animation, Vector2 position, SpriteBatch spriteBatch)
+        public void DrawAnimation(string animation, Vector2 position, SpriteBatch spriteBatch, bool looping = true)
         {
             Animation selectedAnim = animations[animation];
+            selectedAnim.Looping = looping;
             lastUsedAnimation = selectedAnim;
             spriteBatch.Draw(sheet, new Rectangle((int)position.X, (int)position.Y, selectedAnim.FrameSize, selectedAnim.FrameSize), selectedAnim.AnimRect, Color.White);
         }
