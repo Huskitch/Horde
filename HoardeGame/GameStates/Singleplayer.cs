@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
 using FarseerPhysics;
 using HoardeGame.Entities;
 using HoardeGame.Extensions;
@@ -54,6 +55,7 @@ namespace HoardeGame.GameStates
         private Label healthLabel;
         private Label armorLabel;
         private Label ammoLabel;
+        private DepthStencilState barDepthStencilState;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SinglePlayer"/> class.
@@ -158,6 +160,38 @@ namespace HoardeGame.GameStates
                 Position = new Vector2(20, graphicsDevice.PresentationParameters.BackBufferHeight - 115),
                 Text = "Ammo: 100"
             };
+
+            AlphaTestEffect alphaTestEffect = new AlphaTestEffect(graphicsDevice)
+            {
+                DiffuseColor = Color.White.ToVector3(),
+                AlphaFunction = CompareFunction.Greater,
+                ReferenceAlpha = 0,
+                World = Matrix.Identity,
+                View = Matrix.Identity,
+                Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) *
+                             Matrix.CreateOrthographicOffCenter(0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height, 0, 0, 1)
+            };
+
+            DepthStencilState beforeDepthStencilState = new DepthStencilState
+            {
+                StencilEnable = true,
+                StencilFunction = CompareFunction.Always,
+                StencilPass = StencilOperation.Replace,
+                ReferenceStencil = 1
+            };
+
+            barDepthStencilState = new DepthStencilState
+            {
+                StencilEnable = true,
+                StencilFunction = CompareFunction.Equal,
+                ReferenceStencil = 1
+            };
+
+            using (spriteBatch.Use(SpriteSortMode.Deferred, null, null, beforeDepthStencilState, null, alphaTestEffect))
+            {
+                spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), new Rectangle(36, 23, 200, 48), Color.White);
+                spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), new Rectangle(21, 48, 144, 48), Color.White);
+            }
         }
 
         /// <inheritdoc/>
@@ -170,12 +204,12 @@ namespace HoardeGame.GameStates
             camera.Position = ConvertUnits.ToDisplayUnits(Player.Position);
 
             healthLabel.Text = Player.Health.ToString();
-            healthLabel.Position = new Vector2(30 + (174 * healthBar.Progress), 27);
+            healthLabel.Position = healthBar.Position + new Vector2(8, 10) + new Vector2(healthBar.BarWidth * Math.Max(healthBar.Progress - 0.17f, 0f), 0);
             healthBar.Progress = Player.Health / 10f;
 
             armorLabel.Text = Player.Armour.ToString();
             armorBar.Progress = Player.Armour / 10f;
-            armorLabel.Position = new Vector2(130 * armorBar.Progress, 55);
+            armorLabel.Position = armorBar.Position + new Vector2(8, 10) + new Vector2(armorBar.BarWidth * Math.Max(armorBar.Progress - 0.23f, 0f), 0);
 
             ammoLabel.Text = $"Ammo: {Player.Ammo}";
         }
@@ -183,7 +217,7 @@ namespace HoardeGame.GameStates
         /// <inheritdoc/>
         public override void Draw(GameTime gameTime, float interp)
         {
-            graphicsDevice.Clear(Color.Black);
+            graphicsDevice.Clear(ClearOptions.Target, Color.Black, 0f, 0);
 
             // GAME SPRITEBATCH
             dungeon.Draw(spriteBatch, camera, graphicsDevice);
@@ -194,10 +228,14 @@ namespace HoardeGame.GameStates
                 minimap.Draw(spriteBatch, minimapRectangle, minimapInner, camera);
             }
 
+            using (spriteBatch.Use(SpriteSortMode.Deferred, null, null, barDepthStencilState))
+            {
+                spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), graphicsDevice.Viewport.Bounds, Color.Black);
+            }
+
             // GUI SPRITEBATCH
             using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone))
             {
-                spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), new Rectangle(36, 23, 200, 48), Color.Black);
                 DoDraw(gameTime, spriteBatch, interp);
 
                 // CARDS

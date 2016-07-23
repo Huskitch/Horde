@@ -178,7 +178,13 @@ namespace HoardeGame.Entities
 
                 if (playerProvider.Player.Armour > 0)
                 {
+                    int remainingDamage = Damage - playerProvider.Player.Armour;
                     playerProvider.Player.Armour -= Damage;
+
+                    if (remainingDamage > 0)
+                    {
+                        playerProvider.Player.Health -= remainingDamage;
+                    }
 
                     if (playerProvider.Player.Armour == 0)
                     {
