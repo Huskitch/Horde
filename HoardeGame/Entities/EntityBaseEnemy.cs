@@ -99,6 +99,20 @@ namespace HoardeGame.Entities
         {
             if (fixtureB.CollisionCategories == Category.Cat2)
             {
+                EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, resourceProvider)
+                {
+                    Color = Color.White,
+                    Damage = playerProvider.Player.Weapon.Damage,
+                    LifeTime = 60,
+                    Body =
+                    {
+                        Position = Position
+                    },
+                    Velocity = -new Vector2(-0.01f, 0.01f)
+                };
+
+                Level.AddEntity(flyingDamageIndicator);
+
                 Health -= playerProvider.Player.Weapon.Damage;
 
                 if (!IsHit())
@@ -173,6 +187,20 @@ namespace HoardeGame.Entities
             }
             else if (fixtureB.CollisionCategories == Category.Cat1 && !playerProvider.Player.IsHit())
             {
+                EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, resourceProvider)
+                {
+                    Color = Color.Red,
+                    Damage = Damage,
+                    LifeTime = 60,
+                    Body =
+                    {
+                        Position = playerProvider.Player.Position
+                    },
+                    Velocity = -new Vector2(-0.01f, 0.01f)
+                };
+
+                Level.AddEntity(flyingDamageIndicator);
+
                 playerProvider.Player.Hit();
                 resourceProvider.GetSoundEffect("Hurt").Play();
 

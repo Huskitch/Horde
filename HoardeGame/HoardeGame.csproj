@@ -52,6 +52,7 @@
     <Compile Include="Entities\EntityBullet.cs" />
     <Compile Include="Entities\EntityChest.cs" />
     <Compile Include="Entities\EntityDrill.cs" />
+    <Compile Include="Entities\EntityFlyingDamageIndicator.cs" />
     <Compile Include="Entities\EntityGem.cs" />
     <Compile Include="Entities\EntityGem2.cs" />
     <Compile Include="Entities\EntityGem3.cs" />

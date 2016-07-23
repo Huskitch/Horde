@@ -40,7 +40,7 @@ namespace HoardeGame.Entities
 
             this.playerProvider = playerProvider;
 
-            Damage = 10;
+            Damage = 1;
             Health = 5;
             MinGemDrop = new[] { 3, 2, 1, 0 };
             MaxGemDrop = new[] { 6, 4, 2, 0 };
