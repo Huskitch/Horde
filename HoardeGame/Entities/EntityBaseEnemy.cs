@@ -106,7 +106,7 @@ namespace HoardeGame.Entities
                     LifeTime = 60,
                     Body =
                     {
-                        Position = Position
+                        Position = Position + new Vector2((float)rng.NextDouble(), (float)rng.NextDouble())
                     },
                     Velocity = -new Vector2(-0.01f, 0.01f)
                 };
@@ -194,7 +194,7 @@ namespace HoardeGame.Entities
                     LifeTime = 60,
                     Body =
                     {
-                        Position = playerProvider.Player.Position
+                        Position = playerProvider.Player.Position + new Vector2((float)rng.NextDouble(), (float)rng.NextDouble())
                     },
                     Velocity = -new Vector2(-0.01f, 0.01f)
                 };
