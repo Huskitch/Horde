@@ -224,6 +224,11 @@ namespace HoardeGame.Entities
                     playerProvider.Player.Health -= Damage;
                 }
 
+                if (playerProvider.Player.Armour < 0)
+                {
+                    playerProvider.Player.Armour = 0;
+                }
+
                 if (playerProvider.Player.Health <= 0)
                 {
                     Health = 0;
