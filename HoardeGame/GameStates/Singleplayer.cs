@@ -268,7 +268,7 @@ namespace HoardeGame.GameStates
 
             keyLabel.Text = Player.ChestKeys.ToString();
 
-            if (Drilling && inputProvider.KeyPressed(Keys.Escape))
+            if (Drilling && (inputProvider.KeyPressed(Keys.Escape) || inputProvider.ButtonPressed(Buttons.B)))
             {
                 Drilling = false;
             }

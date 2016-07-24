@@ -33,6 +33,16 @@ namespace HoardeGame.Input
          MouseState LastMouseState { get; }
 
         /// <summary>
+        /// Gets current <see cref="GamePadState"/>
+        /// </summary>
+        GamePadState GamePadState { get; }
+
+        /// <summary>
+        /// Gets the last frame's <see cref="GamePadState"/>
+        /// </summary>
+        GamePadState LastGamePadState { get; }
+
+        /// <summary>
         /// Gets a value indicating whether left mouse button was pressed this frame
         /// </summary>
         bool LeftClicked { get; }
@@ -41,6 +51,11 @@ namespace HoardeGame.Input
         /// Gets a value indicating whether right mouse button was pressed this frame
         /// </summary>
         bool RightClicked { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the user pressed any activation button this frame
+        /// </summary>
+        bool Activate { get; }
 
         /// <summary>
         /// Update internal state
@@ -54,5 +69,12 @@ namespace HoardeGame.Input
         /// <param name="key">Key to check</param>
         /// <returns>If key was pressed this frame</returns>
         bool KeyPressed(Keys key);
+
+        /// <summary>
+        /// Check if a button was pressed this frame
+        /// </summary>
+        /// <param name="button">Button to check</param>
+        /// <returns>If button was pressed this frame</returns>
+        bool ButtonPressed(Buttons button);
     }
 }

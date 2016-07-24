@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
@@ -67,14 +68,14 @@ namespace HoardeGame.Entities
 
         private enum Directions
         {
-            NORTH,
             EAST,
-            SOUTH,
-            WEST,
             NORTHEAST,
+            NORTH,
             NORTHWEST,
-            SOUTHEAST,
-            SOUTHWEST
+            WEST,
+            SOUTHWEST,
+            SOUTH,
+            SOUTHEAST
         }
 
         private readonly IResourceProvider resourceProvider;
@@ -128,92 +129,50 @@ namespace HoardeGame.Entities
                 return;
             }
 
-            Vector2 velocity = Vector2.Zero;
+            Vector2 velocity = new Vector2(inputProvider.GamePadState.ThumbSticks.Left.X, -inputProvider.GamePadState.ThumbSticks.Left.Y);
 
             if (inputProvider.KeyboardState.IsKeyDown(Keys.S))
             {
-                direction = Directions.SOUTH;
-                velocity.Y++;
+                velocity.Y = 1;
             }
 
             if (inputProvider.KeyboardState.IsKeyDown(Keys.W))
             {
-                direction = Directions.NORTH;
-                velocity.Y--;
+                velocity.Y = -1;
             }
 
             if (inputProvider.KeyboardState.IsKeyDown(Keys.D))
             {
-                if (direction == Directions.SOUTH)
-                {
-                    direction = Directions.SOUTHEAST;
-                }
-                else if (direction == Directions.NORTH)
-                {
-                    direction = Directions.NORTHEAST;
-                }
-                else
-                {
-                    direction = Directions.EAST;
-                }
-
-                velocity.X++;
+                velocity.X = 1;
             }
 
             if (inputProvider.KeyboardState.IsKeyDown(Keys.A))
             {
-                if (direction == Directions.SOUTH)
-                {
-                    direction = Directions.SOUTHWEST;
-                }
-                else if (direction == Directions.NORTH)
-                {
-                    direction = Directions.NORTHWEST;
-                }
-                else
-                {
-                    direction = Directions.WEST;
-                }
-
-                velocity.X--;
+                velocity.X = -1;
             }
 
-            if (inputProvider.KeyboardState.IsKeyDown(Keys.Space) && Ammo > 0)
+            if (velocity != Vector2.Zero)
             {
-                Vector2 direction = Vector2.Zero;
+                direction = GetDirection(velocity);
 
-                switch (this.direction)
-                {
-                    case Directions.NORTH:
-                        direction = new Vector2(0, -1);
-                        break;
-                    case Directions.SOUTH:
-                        direction = new Vector2(0, 1);
-                        break;
-                    case Directions.WEST:
-                        direction = new Vector2(-1, 0);
-                        break;
-                    case Directions.EAST:
-                        direction = new Vector2(1, 0);
-                        break;
-                    case Directions.NORTHEAST:
-                        direction = new Vector2(1, -1);
-                        break;
-                    case Directions.NORTHWEST:
-                        direction = new Vector2(-1, -1);
-                        break;
-                    case Directions.SOUTHEAST:
-                        direction = new Vector2(1, 1);
-                        break;
-                    case Directions.SOUTHWEST:
-                        direction = new Vector2(-1, 1);
-                        break;
-                }
+            }
 
-                if (Weapon.Shoot(direction))
-                {
-                    Ammo--;
-                }
+            Vector2 shootingDirection = new Vector2(inputProvider.GamePadState.ThumbSticks.Right.X, -inputProvider.GamePadState.ThumbSticks.Right.Y);
+
+            if (!inputProvider.GamePadState.IsConnected || shootingDirection == Vector2.Zero)
+            {
+                shootingDirection = GetVector(direction);
+            }
+            else
+            {
+                direction = GetDirection(shootingDirection);
+            }
+
+            shootingDirection.Normalize();
+
+            if ((inputProvider.KeyboardState.IsKeyDown(Keys.Space) || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Ammo > 0 && Weapon.Shoot(shootingDirection))
+            {
+                Ammo--;
             }
 
             Body.ApplyForce(velocity * 50);
@@ -272,6 +231,36 @@ namespace HoardeGame.Entities
             Weapon.Draw(spriteBatch, parameter);
 
             base.Draw(spriteBatch, parameter);
+        }
+
+        private Directions GetDirection(Vector2 velocity)
+        {
+            return (Directions) (((int) Math.Round(Math.Atan2(-velocity.Y, velocity.X) / (2 * Math.PI / 8)) + 8) % 8);
+        }
+
+        private Vector2 GetVector(Directions directions)
+        {
+            switch (directions)
+            {
+                case Directions.NORTH:
+                    return new Vector2(0, -1);
+                case Directions.SOUTH:
+                    return new Vector2(0, 1);
+                case Directions.WEST:
+                    return new Vector2(-1, 0);
+                case Directions.EAST:
+                    return new Vector2(1, 0);
+                case Directions.NORTHEAST:
+                    return new Vector2(1, -1);
+                case Directions.NORTHWEST:
+                    return new Vector2(-1, -1);
+                case Directions.SOUTHEAST:
+                    return new Vector2(1, 1);
+                case Directions.SOUTHWEST:
+                    return new Vector2(-1, 1);
+            }
+
+            return Vector2.Zero;
         }
     }
 }

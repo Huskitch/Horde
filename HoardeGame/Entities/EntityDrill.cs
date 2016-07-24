@@ -56,7 +56,7 @@ namespace HoardeGame.Entities
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
-            if (Vector2.Distance(sp.Player.Position, Position) < 3 && inputProvider.KeyPressed(Microsoft.Xna.Framework.Input.Keys.E) && !sp.Player.Dead)
+            if (Vector2.Distance(sp.Player.Position, Position) < 3 && inputProvider.Activate && !sp.Player.Dead)
             {
                 Activate();
             }
