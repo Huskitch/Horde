@@ -10,6 +10,7 @@ using FarseerPhysics.Factories;
 using HoardeGame.Entities;
 using HoardeGame.Extensions;
 using HoardeGame.Graphics.Rendering;
+using HoardeGame.Input;
 using HoardeGame.Resources;
 using HoardeGame.Themes;
 using Microsoft.Xna.Framework;
@@ -46,6 +47,7 @@ namespace HoardeGame.Level
         private readonly List<EntityBase> entities;
         private readonly IResourceProvider resourceProvider;
         private readonly IPlayerProvider playerProvider;
+        private readonly IInputProvider inputProvider;
         private readonly List<Graphics.Rendering.IDrawable> renderList = new List<Graphics.Rendering.IDrawable>();
 
         private int[,] map;
@@ -58,8 +60,9 @@ namespace HoardeGame.Level
         /// </summary>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="playerProvider"><see cref="IPlayerProvider"/> for accessing the player entity</param>
+        /// <param name="inputProvider"><see cref="IInputProvider"/> for providing input to <see cref="EntityChest"/></param>
         /// <param name="theme"><see cref="Theme"/> of this level</param>
-        public DungeonLevel(IResourceProvider resourceProvider, IPlayerProvider playerProvider, Theme theme)
+        public DungeonLevel(IResourceProvider resourceProvider, IPlayerProvider playerProvider, IInputProvider inputProvider, Theme theme)
         {
             if (theme == null)
             {
@@ -68,6 +71,7 @@ namespace HoardeGame.Level
 
             this.resourceProvider = resourceProvider;
             this.playerProvider = playerProvider;
+            this.inputProvider = inputProvider;
             Theme = theme;
 
             Body = BodyFactory.CreateBody(World);
@@ -82,8 +86,6 @@ namespace HoardeGame.Level
 
             PlaceChests();
             SpawnEnemies();
-
-            Console.WriteLine(World.ContactList.Count);
         }
 
         /// <summary>
@@ -140,7 +142,7 @@ namespace HoardeGame.Level
         {
             for (int i = 0; i < 5; i++)
             {
-                EntityChest chest = new EntityChest(this, resourceProvider, playerProvider, Theme.ChestInfo);
+                EntityChest chest = new EntityChest(this, resourceProvider, playerProvider, inputProvider, Theme.ChestInfo);
                 AddEntity(chest);
             }
         }
@@ -272,9 +274,9 @@ namespace HoardeGame.Level
                 }
             }
 
-            foreach (EntityBase entity in entities)
+            for (int i = 0; i < entities.Count; i++)
             {
-                entity.Update(gameTime);
+                entities[i].Update(gameTime);
             }
         }
 

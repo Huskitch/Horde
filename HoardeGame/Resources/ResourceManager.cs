@@ -107,6 +107,9 @@ namespace HoardeGame.Resources
             textures.Add("Bullet", content.Load<Texture2D>("Art/playerBullet"));
             textures.Add("Drill", content.Load<Texture2D>("Art/drill"));
             textures.Add("EntityKey", content.Load<Texture2D>("Art/KeyEntity"));
+            textures.Add("Health", content.Load<Texture2D>("Art/Heart"));
+            textures.Add("Armour", content.Load<Texture2D>("Art/Shield"));
+            textures.Add("Ammo", content.Load<Texture2D>("Art/Bullets"));
 
             textures.Add("BasicButton", content.Load<Texture2D>("Art/button"));
             textures.Add("BasicButtonHover", content.Load<Texture2D>("Art/buttonHover"));

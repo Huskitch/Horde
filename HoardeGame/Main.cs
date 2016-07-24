@@ -88,11 +88,6 @@ namespace HoardeGame
         /// <inheritdoc/>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                Exit();
-            }
-
             inputProvider.Update(gameTime);
             stateManager.Update(gameTime);
 

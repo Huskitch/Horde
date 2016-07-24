@@ -21,9 +21,25 @@ namespace HoardeGame.Entities
     public class EntityPlayer : EntityBase
     {
         /// <summary>
+        /// Maximum health for the player
+        /// </summary>
+        public const int MaxHealth = 10;
+
+        /// <summary>
+        /// Maximum armour for the player
+        /// </summary>
+        public const int MaxArmour = 10;
+
+        /// <summary>
+        /// Gets or sets the amount of chest keys the player has
+        /// Set to -1 for flashing effect (will display 0)
+        /// </summary>
+        public int ChestKeys { get; set; }
+
+        /// <summary>
         /// Gets the amount of gems the player has
         /// </summary>
-        public int[] Gems { get; } = new int[4];
+        public int[] Gems { get; } = new int[3];
 
         /// <summary>
         /// Gets or sets a value indicating whether the player is dead
@@ -84,8 +100,8 @@ namespace HoardeGame.Entities
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
 
-            Health = 10;
-            Armour = 10;
+            Health = MaxHealth;
+            Armour = MaxArmour;
             Ammo = 100;
             BlinkMultiplier = 1;
 

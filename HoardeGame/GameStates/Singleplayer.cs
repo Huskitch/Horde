@@ -16,6 +16,7 @@ using HoardeGame.State;
 using HoardeGame.Themes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace HoardeGame.GameStates
 {
@@ -55,6 +56,13 @@ namespace HoardeGame.GameStates
         private Label healthLabel;
         private Label armorLabel;
         private Label ammoLabel;
+
+        private Label rubyLabel;
+        private Label emeraldLabel;
+        private Label diamondLabel;
+        private Label keyLabel;
+        private int keyBlinkDuration;
+
         private DepthStencilState barDepthStencilState;
 
         /// <summary>
@@ -88,13 +96,13 @@ namespace HoardeGame.GameStates
                 Size = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight)
             };
 
-            dungeon = new DungeonLevel(resourceProvider, this, themeProvider.GetTheme("temple"));
+            dungeon = new DungeonLevel(resourceProvider, this, inputProvider, themeProvider.GetTheme("temple"));
             dungeon.GenerateLevel(64, 64, 40);
 
             Player = new EntityPlayer(dungeon, inputProvider, resourceProvider);
             dungeon.AddEntity(Player);
 
-            EntityChest chest = new EntityChest(dungeon, resourceProvider, this, themeProvider.GetTheme("temple").ChestInfo)
+            EntityChest chest = new EntityChest(dungeon, resourceProvider, this, inputProvider, themeProvider.GetTheme("temple").ChestInfo)
             {
                 Body =
                 {
@@ -161,6 +169,30 @@ namespace HoardeGame.GameStates
                 Text = "Ammo: 100"
             };
 
+            rubyLabel = new Label(this, "rubyLabel")
+            {
+                Position = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth - 48, 19),
+                Text = "0"
+            };
+
+            emeraldLabel = new Label(this, "emeraldLabel")
+            {
+                Position = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth - 48, 59),
+                Text = "0"
+            };
+
+            diamondLabel = new Label(this, "diamondLabel")
+            {
+                Position = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth - 48, 99),
+                Text = "0"
+            };
+
+            keyLabel = new Label(this, "keyLabel")
+            {
+                Position = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth - 48, 142),
+                Text = "0"
+            };
+
             AlphaTestEffect alphaTestEffect = new AlphaTestEffect(graphicsDevice)
             {
                 DiffuseColor = Color.White.ToVector3(),
@@ -212,6 +244,34 @@ namespace HoardeGame.GameStates
             armorLabel.Position = armorBar.Position + new Vector2(8, 10) + new Vector2(armorBar.BarWidth * Math.Max(armorBar.Progress - 0.23f, 0f), 0);
 
             ammoLabel.Text = $"Ammo: {Player.Ammo}";
+
+            rubyLabel.Text = Player.Gems[0].ToString();
+            emeraldLabel.Text = Player.Gems[1].ToString();
+            diamondLabel.Text = Player.Gems[2].ToString();
+
+            if (keyBlinkDuration > 0)
+            {
+                keyBlinkDuration--;
+
+                if (keyBlinkDuration == 0)
+                {
+                    keyLabel.Color = Color.White;
+                }
+            }
+
+            if (Player.ChestKeys == -1)
+            {
+                keyBlinkDuration = 15;
+                keyLabel.Color = Color.Red;
+                Player.ChestKeys = 0;
+            }
+
+            keyLabel.Text = Player.ChestKeys.ToString();
+
+            if (Drilling && inputProvider.KeyPressed(Keys.Escape))
+            {
+                Drilling = false;
+            }
         }
 
         /// <inheritdoc/>
@@ -234,7 +294,7 @@ namespace HoardeGame.GameStates
             }
 
             // GUI SPRITEBATCH
-            using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.AnisotropicClamp, DepthStencilState.Default, RasterizerState.CullNone))
+            using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone))
             {
                 DoDraw(gameTime, spriteBatch, interp);
 
@@ -247,6 +307,11 @@ namespace HoardeGame.GameStates
                     testCard.Draw(new Vector2(650, 247), 0.75f, gameTime, spriteBatch, interp);
                     testCard.Draw(new Vector2(1075, 247), 0.75f, gameTime, spriteBatch, interp);
                 }
+
+                spriteBatch.Draw(resourceProvider.GetTexture("GemAnimation"), new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 88, 16, 32, 32), new Rectangle(64, 0, 16, 16), Color.White);
+                spriteBatch.Draw(resourceProvider.GetTexture("EmeraldSheet"), new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 88, 56, 32, 32), new Rectangle(64, 0, 16, 16), Color.White);
+                spriteBatch.Draw(resourceProvider.GetTexture("DiamondSheet"), new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 94, 88, 44, 44), new Rectangle(144, 0, 24, 24), Color.White);
+                spriteBatch.Draw(resourceProvider.GetTexture("EntityKey"), new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 88, 136, 32, 32), Color.White);
 
                 if (Player.Dead)
                 {
