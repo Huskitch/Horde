@@ -154,7 +154,6 @@ namespace HoardeGame.Entities
             if (velocity != Vector2.Zero)
             {
                 direction = GetDirection(velocity);
-
             }
 
             Vector2 shootingDirection = new Vector2(inputProvider.GamePadState.ThumbSticks.Right.X, -inputProvider.GamePadState.ThumbSticks.Right.Y);
@@ -235,7 +234,7 @@ namespace HoardeGame.Entities
 
         private Directions GetDirection(Vector2 velocity)
         {
-            return (Directions) (((int) Math.Round(Math.Atan2(-velocity.Y, velocity.X) / (2 * Math.PI / 8)) + 8) % 8);
+            return (Directions)(((int)Math.Round(Math.Atan2(-velocity.Y, velocity.X) / (2 * Math.PI / 8)) + 8) % 8);
         }
 
         private Vector2 GetVector(Directions directions)

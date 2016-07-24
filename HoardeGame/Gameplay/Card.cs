@@ -55,9 +55,9 @@ namespace HoardeGame.Gameplay
         private static readonly Vector2 CardTextureOffset = new Vector2(72, 76);
         private static readonly Vector2 CardNameOffset = new Vector2(135, 65);
         private static readonly Vector2 CardDescriptionOffset = new Vector2(98, 390);
-        private static readonly Vector2 Mana1Offset = new Vector2(128, 485);
-        private static readonly Vector2 Mana2Offset = new Vector2(198, 485);
-        private static readonly Vector2 Mana3Offset = new Vector2(268, 485);
+        private static readonly Vector2 Mana1Offset = new Vector2(126, 487);
+        private static readonly Vector2 Mana2Offset = new Vector2(196, 487);
+        private static readonly Vector2 Mana3Offset = new Vector2(266, 487);
 
         /// <summary>
         /// Gets or sets texture of the card
@@ -141,14 +141,14 @@ namespace HoardeGame.Gameplay
             spriteBatch.Draw(cardTexture, position, null, null, null, 0f, scaleVector, Color.White);
             spriteBatch.Draw(Texture, position + CardTextureOffset * scale, null, null, null, 0f, scaleVector, Color.White);
 
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Name, CardNameOffset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("SmallFont"), Name, CardNameOffset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
 
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Description, CardDescriptionOffset * scale + position - Vector2.One, Color.Gray, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Description, CardDescriptionOffset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("SmallFont"), Description, CardDescriptionOffset * scale + position - Vector2.One, Color.Gray, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("SmallFont"), Description, CardDescriptionOffset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
 
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Price[0].ToString(), Mana1Offset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Price[1].ToString(), Mana2Offset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
-            spriteBatch.DrawString(resourceProvider.GetFont("BasicFont"), Price[2].ToString(), Mana3Offset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("SmallFont"), Price[0].ToString(), Mana1Offset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("SmallFont"), Price[1].ToString(), Mana2Offset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(resourceProvider.GetFont("SmallFont"), Price[2].ToString(), Mana3Offset * scale + position, Color.White, 0f, Vector2.Zero, scaleVector * 1.25f, SpriteEffects.None, 0);
         }
 
         /// <inheritdoc/>

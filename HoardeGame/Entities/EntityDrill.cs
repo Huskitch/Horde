@@ -19,11 +19,24 @@ namespace HoardeGame.Entities
     /// </summary>
     public class EntityDrill : EntityBase
     {
+        /// <summary>
+        /// Maximum health for the drill
+        /// </summary>
+        public const int MaxHealth = 100;
+
+        /// <summary>
+        /// Maximum shield for the drill
+        /// </summary>
+        public const int MaxShield = 100;
+
+        /// <summary>
+        /// Gets or sets the shield of the drill
+        /// </summary>
+        public int Shield { get; set; }
+
         private readonly IInputProvider inputProvider;
         private readonly IResourceProvider resourceProvider;
         private readonly SinglePlayer sp;
-
-        private int Shield;
 
         // This probably isn't the best solution since you can't swap out sp for an interface but having both sp and playerProvider seems useless
 
@@ -40,8 +53,8 @@ namespace HoardeGame.Entities
             this.inputProvider = inputProvider;
             this.sp = sp;
 
-            Health = 100;
-            Shield = 100;
+            Health = MaxHealth;
+            Shield = MaxShield;
 
             FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(96), ConvertUnits.ToSimUnits(96), 1f, Vector2.Zero, Body);
             Body.CollisionCategories = Category.Cat4;

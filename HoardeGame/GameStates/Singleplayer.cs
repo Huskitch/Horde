@@ -35,6 +35,11 @@ namespace HoardeGame.GameStates
         /// </summary>
         public EntityPlayer Player { get; private set; }
 
+        /// <summary>
+        /// Gets the drill entity
+        /// </summary>
+        public EntityDrill Drill { get; private set; }
+
         private readonly Card testCard;
 
         private readonly SpriteBatch spriteBatch;
@@ -51,10 +56,8 @@ namespace HoardeGame.GameStates
         private readonly Rectangle minimapInner;
         private readonly Rectangle screenRectangle;
 
-        private ProgressBar healthBar;
-        private ProgressBar armorBar;
-        private Label healthLabel;
-        private Label armorLabel;
+        private HealthArmourBar playerHealthArmourBar;
+        private HealthArmourBar drillHealthArmourBar;
         private Label ammoLabel;
 
         private Label rubyLabel;
@@ -64,6 +67,7 @@ namespace HoardeGame.GameStates
         private int keyBlinkDuration;
 
         private DepthStencilState barDepthStencilState;
+        private DepthStencilState drillDepthStencilState;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SinglePlayer"/> class.
@@ -111,8 +115,8 @@ namespace HoardeGame.GameStates
             };
             dungeon.AddEntity(chest);
 
-            EntityDrill drill = new EntityDrill(dungeon, inputProvider, resourceProvider, this);
-            dungeon.AddEntity(drill);
+            Drill = new EntityDrill(dungeon, inputProvider, resourceProvider, this);
+            dungeon.AddEntity(Drill);
 
             minimap = new Minimap(resourceProvider);
             minimap.Generate(graphicsDevice, dungeon.GetMap());
@@ -125,44 +129,6 @@ namespace HoardeGame.GameStates
         /// <inheritdoc/>
         public override void Start()
         {
-            healthBar = new ProgressBar(this, resourceProvider, "healthProgressBar")
-            {
-                Position = new Vector2(30, 20),
-                ProgressBarTexture = resourceProvider.GetTexture("BasicProgressBar"),
-                BarHeight = 45,
-                BarStart = new Vector2(1, 1),
-                BarWidth = 200,
-                TargetRectangle = new Rectangle(0, 0, 0, 0),
-                Color = new Color(190, 74, 57),
-                Progress = 1f
-            };
-
-            healthLabel = new Label(this, "healthLabel")
-            {
-                Position = new Vector2(176, 29),
-                Color = Color.LightGray,
-                Text = "10",
-            };
-
-            armorBar = new ProgressBar(this, resourceProvider, "armorProgressBar")
-            {
-                Position = new Vector2(15, 45),
-                ProgressBarTexture = resourceProvider.GetTexture("BasicProgressBar"),
-                BarHeight = 45,
-                BarStart = new Vector2(1, 1),
-                BarWidth = 144,
-                TargetRectangle = new Rectangle(0, 0, 0, 0),
-                Color = new Color(82, 141, 156),
-                Progress = 1f
-            };
-
-            armorLabel = new Label(this, "armorLabel")
-            {
-                Position = new Vector2(130 * armorBar.Progress, 55),
-                Color = Color.LightGray,
-                Text = "10"
-            };
-
             ammoLabel = new Label(this, "ammoLabel")
             {
                 Position = new Vector2(20, graphicsDevice.PresentationParameters.BackBufferHeight - 115),
@@ -193,6 +159,43 @@ namespace HoardeGame.GameStates
                 Text = "0"
             };
 
+            playerHealthArmourBar = new HealthArmourBar(this, resourceProvider, "playerHealthArmourBar")
+            {
+                Armour = Player.Armour,
+                ArmourColor = new Color(82, 141, 156),
+                Color = Color.LightGray,
+                Health = Player.Health,
+                HealthColor = new Color(190, 74, 57),
+                MaxArmour = EntityPlayer.MaxArmour,
+                MaxHealth = EntityPlayer.MaxHealth,
+                Position = new Vector2(30, 20),
+                HealthWidth = 200,
+                ArmourWidth = 144,
+                ArmourOffset = new Vector2(-15, 20),
+                HealthMagicValue = 0.17f,
+                ArmourMagicValue = 0.23f
+            };
+
+            drillHealthArmourBar = new HealthArmourBar(this, resourceProvider, "drillHealthArmourBar", true)
+            {
+                Armour = Player.Armour,
+                ArmourColor = new Color(82, 141, 186),
+                Color = Color.LightGray,
+                Health = Player.Health,
+                HealthColor = new Color(190, 74, 57),
+                MaxArmour = EntityDrill.MaxShield,
+                MaxHealth = EntityDrill.MaxHealth,
+                Position = new Vector2(675, 20),
+                ArmourWidth = 280,
+                HealthWidth = 250,
+                ArmourOffset = new Vector2(-15, 35),
+                HealthMagicValue = 0.19f,
+                ArmourMagicValue = 0.17f
+            };
+
+            playerHealthArmourBar.ApplyChanges();
+            drillHealthArmourBar.ApplyChanges();
+
             AlphaTestEffect alphaTestEffect = new AlphaTestEffect(graphicsDevice)
             {
                 DiffuseColor = Color.White.ToVector3(),
@@ -212,6 +215,14 @@ namespace HoardeGame.GameStates
                 ReferenceStencil = 1
             };
 
+            DepthStencilState beforeDrilDepthStencilState = new DepthStencilState
+            {
+                StencilEnable = true,
+                StencilFunction = CompareFunction.Always,
+                StencilPass = StencilOperation.Replace,
+                ReferenceStencil = 2
+            };
+
             barDepthStencilState = new DepthStencilState
             {
                 StencilEnable = true,
@@ -219,10 +230,23 @@ namespace HoardeGame.GameStates
                 ReferenceStencil = 1
             };
 
+            drillDepthStencilState = new DepthStencilState
+            {
+                StencilEnable = true,
+                StencilFunction = CompareFunction.Equal,
+                ReferenceStencil = 2
+            };
+
             using (spriteBatch.Use(SpriteSortMode.Deferred, null, null, beforeDepthStencilState, null, alphaTestEffect))
             {
                 spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), new Rectangle(36, 23, 200, 48), Color.White);
                 spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), new Rectangle(21, 48, 144, 48), Color.White);
+            }
+
+            using (spriteBatch.Use(SpriteSortMode.Deferred, null, null, beforeDrilDepthStencilState, null, alphaTestEffect))
+            {
+                spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), new Rectangle(678, 22, 253, 48), Color.White);
+                spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), new Rectangle(662, 58, 284, 48), Color.White);
             }
         }
 
@@ -235,13 +259,12 @@ namespace HoardeGame.GameStates
 
             camera.Position = ConvertUnits.ToDisplayUnits(Player.Position);
 
-            healthLabel.Text = Player.Health.ToString();
-            healthLabel.Position = healthBar.Position + new Vector2(8, 10) + new Vector2(healthBar.BarWidth * Math.Max(healthBar.Progress - 0.17f, 0f), 0);
-            healthBar.Progress = Player.Health / 10f;
+            playerHealthArmourBar.Health = Player.Health;
+            playerHealthArmourBar.Armour = Player.Armour;
 
-            armorLabel.Text = Player.Armour.ToString();
-            armorBar.Progress = Player.Armour / 10f;
-            armorLabel.Position = armorBar.Position + new Vector2(8, 10) + new Vector2(armorBar.BarWidth * Math.Max(armorBar.Progress - 0.23f, 0f), 0);
+            drillHealthArmourBar.Check(gameTime, Point.Zero, false);
+            drillHealthArmourBar.Health = Drill.Health;
+            drillHealthArmourBar.Armour = Drill.Shield;
 
             ammoLabel.Text = $"Ammo: {Player.Ammo}";
 
@@ -293,10 +316,23 @@ namespace HoardeGame.GameStates
                 spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), graphicsDevice.Viewport.Bounds, Color.Black);
             }
 
+            if (Vector2.Distance(Player.Position, Drill.Position) < 3)
+            {
+                using (spriteBatch.Use(SpriteSortMode.Deferred, null, null, drillDepthStencilState))
+                {
+                    spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), graphicsDevice.Viewport.Bounds, Color.Black);
+                }
+            }
+
             // GUI SPRITEBATCH
             using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone))
             {
                 DoDraw(gameTime, spriteBatch, interp);
+
+                if (Vector2.Distance(Player.Position, Drill.Position) < 3)
+                {
+                    drillHealthArmourBar.Draw(gameTime, spriteBatch, interp);
+                }
 
                 // CARDS
                 if (Drilling)

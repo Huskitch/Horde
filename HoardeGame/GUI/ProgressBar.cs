@@ -65,7 +65,7 @@ namespace HoardeGame.GUI
         /// <summary>
         /// Initializes a new instance of the <see cref="ProgressBar"/> class.
         /// </summary>
-        /// <param name="state"><see cref="GameState"/> to which this button belongs</param>
+        /// <param name="state"><see cref="GameState"/> to which this progress bar belongs</param>
         /// <param name="id">ID of this control for debugging</param>
         /// <param name="noSub">Whether to subscribe to events in gamestate</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> to use for loading resources</param>
