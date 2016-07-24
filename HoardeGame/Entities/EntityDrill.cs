@@ -23,6 +23,8 @@ namespace HoardeGame.Entities
         private readonly IResourceProvider resourceProvider;
         private readonly SinglePlayer sp;
 
+        private int Shield;
+
         // This probably isn't the best solution since you can't swap out sp for an interface but having both sp and playerProvider seems useless
 
         /// <summary>
@@ -37,6 +39,9 @@ namespace HoardeGame.Entities
             this.resourceProvider = resourceProvider;
             this.inputProvider = inputProvider;
             this.sp = sp;
+
+            Health = 100;
+            Shield = 100;
 
             FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(96), ConvertUnits.ToSimUnits(96), 1f, Vector2.Zero, Body);
             Body.CollisionCategories = Category.Cat4;
