@@ -127,10 +127,10 @@ namespace HoardeGame.Entities
                     resourceProvider.GetSoundEffect("Death").Play();
                     Random random = new Random();
 
-                    int gemCount1 = random.Next(MinGemDrop[0], MaxGemDrop[0]);
-                    int gemCount2 = random.Next(MinGemDrop[1], MaxGemDrop[1]);
-                    int gemCount3 = random.Next(MinGemDrop[2], MaxGemDrop[2]);
-                    int keyCount = random.Next(MinGemDrop[3], MaxGemDrop[3]);
+                    int gemCount1 = random.Next(MinGemDrop[0], MaxGemDrop[0] + 1);
+                    int gemCount2 = random.Next(MinGemDrop[1], MaxGemDrop[1] + 1);
+                    int gemCount3 = random.Next(MinGemDrop[2], MaxGemDrop[2] + 1);
+                    int keyCount = random.Next(MinGemDrop[3], MaxGemDrop[3] + 1);
 
                     for (int i = 0; i < gemCount1; i++)
                     {

@@ -1,4 +1,4 @@
-﻿// <copyright file="EntityKey.cs" company="Kuub Studios">
+﻿// <copyright file="EntityAmmo.cs" company="Kuub Studios">
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
@@ -15,21 +15,21 @@ using Microsoft.Xna.Framework.Graphics;
 namespace HoardeGame.Entities
 {
     /// <summary>
-    /// Key entity
+    /// Ammo drop entity
     /// </summary>
-    public class EntityKey : EntityBase
+    public class EntityAmmo : EntityBase
     {
         private readonly AnimatedSprite animator;
         private readonly IPlayerProvider playerProvider;
         private readonly IResourceProvider resourceProvider;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EntityKey"/> class.
+        /// Initializes a new instance of the <see cref="EntityAmmo"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="playerProvider"><see cref="IPlayerProvider"/> for accessing the player entity</param>
-        public EntityKey(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level)
+        public EntityAmmo(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level)
         {
             this.playerProvider = playerProvider;
             this.resourceProvider = resourceProvider;
@@ -47,7 +47,7 @@ namespace HoardeGame.Entities
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
-            if (Vector2.Distance(Position, playerProvider.Player.Position) < 2)
+            if (Vector2.Distance(Position, playerProvider.Player.Position) < 1.5f)
             {
                 Vector2 direction = playerProvider.Player.Position - Position;
                 direction.Normalize();
@@ -61,7 +61,7 @@ namespace HoardeGame.Entities
         /// <inheritdoc/>
         public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
         {
-            spriteBatch.Draw(resourceProvider.GetTexture("EntityKey"), ScreenPosition, Color.White);
+            spriteBatch.Draw(resourceProvider.GetTexture("Ammo"), ScreenPosition, Color.White);
             base.Draw(spriteBatch, parameter);
         }
 
@@ -70,7 +70,7 @@ namespace HoardeGame.Entities
             if (fixtureB.Body == playerProvider.Player.Body)
             {
                 resourceProvider.GetSoundEffect("Gem").Play();
-                playerProvider.Player.ChestKeys++;
+                playerProvider.Player.Ammo += 10;
                 Removed = true;
 
                 return false;

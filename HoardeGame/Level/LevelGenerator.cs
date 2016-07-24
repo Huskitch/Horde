@@ -87,7 +87,6 @@ namespace HoardeGame.Level
             }
 
             List<Point> emptySpaces = FindEmptySpaces(ref map).Shuffle() as List<Point>;
-            Console.WriteLine($"For size {size} there are {emptySpaces.Count} empty spaces");
             Random rnd = new Random();
 
             Vector2 position = emptySpaces[0].ToVector2();

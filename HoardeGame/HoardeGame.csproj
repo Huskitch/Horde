@@ -56,6 +56,9 @@
     <Compile Include="Entities\EntityGem.cs" />
     <Compile Include="Entities\EntityGem2.cs" />
     <Compile Include="Entities\EntityGem3.cs" />
+    <Compile Include="Entities\EntityArmour.cs" />
+    <Compile Include="Entities\EntityAmmo.cs" />
+    <Compile Include="Entities\EntityHealth.cs" />
     <Compile Include="Entities\EntityKey.cs" />
     <Compile Include="Entities\EntityPlayer.cs" />
     <Compile Include="Entities\EntitySnake.cs" />
