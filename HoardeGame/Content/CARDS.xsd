@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
+    <xsd:element name="Cards">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element maxOccurs="unbounded" name="Card">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Name" type="xsd:string" />
+                            <xsd:element name="TextureName" type="xsd:string" />
+                            <xsd:element name="Rarity" type="xsd:string" />
+                            <xsd:element name="Type" type="xsd:string" />
+                            <xsd:element name="Description" type="xsd:string" />
+                            <xsd:element name="Price">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element maxOccurs="unbounded" name="int" type="xsd:unsignedByte" />
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                        <xsd:attribute name="ID" type="xsd:string" use="required" />
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xs:schema>
