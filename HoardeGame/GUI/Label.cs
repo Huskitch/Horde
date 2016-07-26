@@ -115,7 +115,7 @@ namespace HoardeGame.GUI
 
             try
             {
-                OnMouseOver.Invoke();
+                OnMouseOver?.Invoke();
             }
             catch
             {
@@ -129,7 +129,7 @@ namespace HoardeGame.GUI
 
             try
             {
-                OnClick.Invoke();
+                OnClick?.Invoke();
             }
             catch
             {
