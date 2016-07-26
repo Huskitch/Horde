@@ -148,11 +148,6 @@ namespace HoardeGame.Entities
                 velocity.X = -1;
             }
 
-            if (velocity != Vector2.Zero)
-            {
-                direction = GetDirection(velocity);
-            }
-
             Vector2 shootingDirection = new Vector2(inputProvider.GamePadState.ThumbSticks.Right.X, -inputProvider.GamePadState.ThumbSticks.Right.Y);
 
             if (!inputProvider.GamePadState.IsConnected || shootingDirection == Vector2.Zero)
@@ -167,6 +162,12 @@ namespace HoardeGame.Entities
             }
 
             shootingDirection.Normalize();
+
+
+            if (velocity != Vector2.Zero)
+            {
+                direction = GetDirection(shootingDirection);
+            }
 
             if ((inputProvider.KeyboardState.IsKeyDown(Keys.Space) || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Ammo > 0 && Weapon.Shoot(shootingDirection))
             {
