@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
 using FarseerPhysics;
 using HoardeGame.Entities;
 using HoardeGame.Extensions;
@@ -55,18 +56,69 @@ namespace HoardeGame.GameStates
                 Size = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight)
             };
 
-            dungeon = new DungeonLevel(resourceProvider, this, inputProvider, themeProvider.GetTheme("temple"));
-            dungeon.GenerateLevel(10, 10, 40);
+            dungeon = new DungeonLevel(resourceProvider, this, inputProvider, themeProvider.GetTheme("temple"), false);
 
-            Player = new EntityFakePlayer(dungeon, resourceProvider);
+            int[,] map = new int[18, 10];
+
+            for (int x = 0; x < map.GetLength(0); x++)
+            {
+                map[x, 0] = 1;
+                map[x, map.GetLength(1) - 1] = 1;
+            }
+
+            for (int y = 0; y < map.GetLength(1); y++)
+            {
+                map[0, y] = 1;
+                map[map.GetLength(0) - 1, y] = 1;
+            }
+
+            dungeon.LoadLevel(map.GetLength(0), map.GetLength(1), map);
+
+            Random random = new Random();
+
+            Player = new EntityFakePlayer(dungeon, resourceProvider)
+            {
+                Body =
+                {
+                    Position = new Vector2(2, 5)
+                }
+            };
+
             dungeon.AddEntity((EntityBase)Player);
+
+            for (int i = 0; i < 3; i++)
+            {
+                EntityBat bat = new EntityBat(dungeon, resourceProvider, this)
+                {
+                    Body =
+                    {
+                        Position = new Vector2(13, 5) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                    }
+                };
+
+                dungeon.AddEntity(bat);
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                EntitySnake snake = new EntitySnake(dungeon, resourceProvider, this)
+                {
+                    Body =
+                    {
+                        Position = new Vector2(13, 5) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                    }
+                };
+
+                dungeon.AddEntity(snake);
+            }
+
+            camera.Position = ConvertUnits.ToDisplayUnits(new Vector2(9, 5));
         }
 
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
             dungeon.Update(gameTime);
-            camera.Position = ConvertUnits.ToDisplayUnits(Player.Position);
         }
 
         /// <inheritdoc/>

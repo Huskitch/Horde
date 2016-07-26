@@ -63,7 +63,8 @@ namespace HoardeGame.Level
         /// <param name="playerProvider"><see cref="IPlayerProvider"/> for accessing the player entity</param>
         /// <param name="inputProvider"><see cref="IInputProvider"/> for providing input to <see cref="EntityChest"/></param>
         /// <param name="theme"><see cref="Theme"/> of this level</param>
-        public DungeonLevel(IResourceProvider resourceProvider, IPlayerProvider playerProvider, IInputProvider inputProvider, Theme theme)
+        /// <param name="generateEntities">Whether to generate default entites (enemies and chests)</param>
+        public DungeonLevel(IResourceProvider resourceProvider, IPlayerProvider playerProvider, IInputProvider inputProvider, Theme theme, bool generateEntities = true)
         {
             if (theme == null)
             {
@@ -85,8 +86,11 @@ namespace HoardeGame.Level
             MapTiles = new List<Tile>();
             entities = new List<EntityBase>();
 
-            PlaceChests();
-            SpawnEnemies();
+            if (generateEntities)
+            {
+                PlaceChests();
+                SpawnEnemies();
+            }
         }
 
         /// <summary>
@@ -208,6 +212,22 @@ namespace HoardeGame.Level
                 Console.WriteLine($"Contacts: {World.ContactList.Count} / 1000");
                 maxIters--;
             }
+        }
+
+        /// <summary>
+        /// Loads an existing<see cref="DungeonLevel"/>
+        /// </summary>
+        /// <param name="width">Width of the <see cref="DungeonLevel"/></param>
+        /// <param name="height">Height of the <see cref="DungeonLevel"/></param>
+        /// <param name="map">Map data</param>
+        public void LoadLevel(int width, int height, int[,] map)
+        {
+            this.map = map;
+
+            mapWidth = width;
+            mapHeight = height;
+
+            LoadTiles();
         }
 
         /// <summary>
