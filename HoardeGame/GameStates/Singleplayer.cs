@@ -303,7 +303,7 @@ namespace HoardeGame.GameStates
 
             keyLabel.Text = Player.ChestKeys.ToString();
 
-            if (!Drilling && inputProvider.Back)
+            if (!Drilling && inputProvider.KeybindPressed("PauseGame"))
             {
                 stateManager.Switch(stateManager.GameStates.First(state => state.GetType() == typeof(MainMenu)));
             }

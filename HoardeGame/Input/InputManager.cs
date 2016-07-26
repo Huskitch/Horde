@@ -2,6 +2,8 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -36,11 +38,20 @@ namespace HoardeGame.Input
         /// <inheritdoc/>
         public bool RightClicked => LastMouseState.RightButton == ButtonState.Released && MouseState.RightButton == ButtonState.Pressed;
 
-        /// <inheritdoc/>
-        public bool Activate => KeyPressed(Keys.E) || ButtonPressed(Buttons.A);
+        private readonly Dictionary<string, Func<bool>> keybinds = new Dictionary<string, Func<bool>>();
 
-        /// <inheritdoc/>
-        public bool Back => KeyPressed(Keys.Escape) || ButtonPressed(Buttons.Back);
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InputManager"/> class.
+        /// </summary>
+        public InputManager()
+        {
+            keybinds.Add("Activate", () => KeyPressed(Keys.E) || ButtonPressed(Buttons.A));
+            keybinds.Add("Back", () => KeyPressed(Keys.Escape) || ButtonPressed(Buttons.B));
+            keybinds.Add("StartGame", () => KeyPressed(Keys.Enter) || ButtonPressed(Buttons.A));
+            keybinds.Add("PauseGame", () => KeyPressed(Keys.Escape) || ButtonPressed(Buttons.Start));
+            keybinds.Add("ExitPausedGame", () => ButtonPressed(Buttons.B));
+            keybinds.Add("ExitGame", () => ButtonPressed(Buttons.B) || KeyPressed(Keys.Escape));
+        }
 
         /// <inheritdoc/>
         public void Update(GameTime gameTime)
@@ -60,5 +71,16 @@ namespace HoardeGame.Input
 
         /// <inheritdoc/>
         public bool ButtonPressed(Buttons button) => LastGamePadState.IsButtonUp(button) && GamePadState.IsButtonDown(button);
+
+        /// <inheritdoc/>
+        public bool KeybindPressed(string keybind)
+        {
+            if (keybinds.ContainsKey(keybind))
+            {
+                return keybinds[keybind]();
+            }
+
+            throw new ArgumentException($"Keybind {keybind} is not valid", nameof(keybind));
+        }
     }
 }

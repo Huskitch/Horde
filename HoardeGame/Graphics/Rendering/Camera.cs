@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using FarseerPhysics;
 using HoardeGame.Level;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -74,6 +75,19 @@ namespace HoardeGame.Graphics.Rendering
                             0));
 
             return Transform;
+        }
+
+        /// <summary>
+        /// Calculated the world position from a screen position
+        /// </summary>
+        /// <param name="screenPos">Position on screen in pixels</param>
+        /// <param name="graphicsDevice"><see cref="GraphicsDevice"/> for screen size checking</param>
+        /// <returns>Position in world in meters</returns>
+        public Vector2 GetWolrdPosFromScreenPos(Vector2 screenPos, GraphicsDevice graphicsDevice)
+        {
+            Vector2 distanceFromCenter = screenPos - new Vector2(graphicsDevice.Viewport.Width / 2f, graphicsDevice.Viewport.Height / 2f);
+
+            return ConvertUnits.ToSimUnits(Position + distanceFromCenter);
         }
     }
 }

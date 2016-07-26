@@ -224,7 +224,7 @@ namespace HoardeGame.Entities
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
-            if (contentsList.Count > 0 && Vector2.Distance(playerProvider.Player.Position, Position) < 3 && inputProvider.Activate)
+            if (contentsList.Count > 0 && Vector2.Distance(playerProvider.Player.Position, Position) < 3 && inputProvider.KeybindPressed("Activate"))
             {
                 if (playerProvider.Player.ChestKeys > 0)
                 {

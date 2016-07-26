@@ -25,12 +25,12 @@ namespace HoardeGame.Input
         /// <summary>
         /// Gets current <see cref="MouseState"/>
         /// </summary>
-         MouseState MouseState { get; }
+        MouseState MouseState { get; }
 
         /// <summary>
         /// Gets last frame's <see cref="MouseState"/>
         /// </summary>
-         MouseState LastMouseState { get; }
+        MouseState LastMouseState { get; }
 
         /// <summary>
         /// Gets current <see cref="GamePadState"/>
@@ -53,16 +53,6 @@ namespace HoardeGame.Input
         bool RightClicked { get; }
 
         /// <summary>
-        /// Gets a value indicating whether the user pressed any activation button this frame
-        /// </summary>
-        bool Activate { get; }
-
-        /// <summary>
-        /// Gets a value indicating whether the use press any back button this frame
-        /// </summary>
-        bool Back { get; }
-
-        /// <summary>
         /// Update internal state
         /// </summary>
         /// <param name="gameTime"><see cref="GameTime"/></param>
@@ -81,5 +71,12 @@ namespace HoardeGame.Input
         /// <param name="button">Button to check</param>
         /// <returns>If button was pressed this frame</returns>
         bool ButtonPressed(Buttons button);
+
+        /// <summary>
+        /// Check if a keybing was pressed this frame
+        /// </summary>
+        /// <param name="keybind">Name of the keybing</param>
+        /// <returns>Whether the keybing was pressed this frame</returns>
+        bool KeybindPressed(string keybind);
     }
 }

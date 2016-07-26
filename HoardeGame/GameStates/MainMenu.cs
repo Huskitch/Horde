@@ -11,6 +11,7 @@ using HoardeGame.Resources;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace HoardeGame.GameStates
 {
@@ -27,6 +28,7 @@ namespace HoardeGame.GameStates
         private readonly StateManager stateManager;
 
         private Button playButton;
+        private Button exitButton;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainMenu"/> class.
@@ -65,33 +67,22 @@ namespace HoardeGame.GameStates
                 CustomFont = resourceProvider.GetFont("BigFont")
             };
 
-            new Button(this, "exitButton")
+            exitButton = new Button(this, "exitButton")
             {
                 Color = Color.White,
                 OnClick = () =>
                 {
                     main.Exit();
                 },
-                Text = "Exit",
+                Text = "Exit [Escape / B]",
                 Position = new Vector2(20, graphicsDevice.Viewport.Height - resourceProvider.GetFont("SmallFont").LineSpacing * 1.5f)
             };
 
             playButton = new Button(this, "playButton")
             {
                 Color = Color.White,
-                OnClick = () =>
-                {
-                    if (stateManager.GameStates.Contains(main.SinglePlayer))
-                    {
-                        stateManager.Switch(main.SinglePlayer);
-                    }
-                    else
-                    {
-                        stateManager.GameStates.Remove(main.MenuDemo);
-                        stateManager.Push(main.SinglePlayer);
-                    }
-                },
-                Text = "Play",
+                OnClick = () => Play(),
+                Text = "Play [Enter / A]",
                 Position = new Vector2(20, graphicsDevice.Viewport.Height - resourceProvider.GetFont("SmallFont").LineSpacing * 3f)
             };
         }
@@ -105,18 +96,41 @@ namespace HoardeGame.GameStates
             }
 
             DoCheck(gameTime, new Point(inputProvider.MouseState.X, inputProvider.MouseState.Y), inputProvider.LeftClicked);
+
             if (stateManager.GameStates.Contains(main.SinglePlayer))
             {
-                playButton.Text = "Resume";
+                playButton.Text = "Resume [Esc / Start]";
+                exitButton.Text = "Exit [Alt + F4 / B]";
+            }
+            else
+            {
+                playButton.Text = "Play [Enter / A]";
+                exitButton.Text = "Exit [Esc / B]";
+            }
 
-                if (inputProvider.Back)
+            if (stateManager.GameStates.Contains(main.SinglePlayer))
+            {
+                if (inputProvider.KeybindPressed("PauseGame"))
                 {
-                    stateManager.Switch(stateManager.GameStates.First(state => state.GetType() == typeof(SinglePlayer)));
+                    Play();
+                }
+
+                if (inputProvider.KeybindPressed("ExitPausedGame"))
+                {
+                    main.Exit();
                 }
             }
             else
             {
-                playButton.Text = "Play";
+                if (inputProvider.KeybindPressed("StartGame"))
+                {
+                    Play();
+                }
+
+                if (inputProvider.KeybindPressed("ExitGame"))
+                {
+                    main.Exit();
+                }
             }
         }
 
@@ -132,6 +146,19 @@ namespace HoardeGame.GameStates
             {
                 spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), graphicsDevice.Viewport.Bounds, new Color(0, 0, 0, 150));
                 DoDraw(gameTime, spriteBatch, interpolation);
+            }
+        }
+
+        private void Play()
+        {
+            if (stateManager.GameStates.Contains(main.SinglePlayer))
+            {
+                stateManager.Switch(stateManager.GameStates.First(state => state.GetType() == typeof(SinglePlayer)));
+            }
+            else
+            {
+                stateManager.GameStates.Remove(main.MenuDemo);
+                stateManager.Push(main.SinglePlayer);
             }
         }
     }
