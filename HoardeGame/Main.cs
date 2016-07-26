@@ -100,13 +100,15 @@ namespace HoardeGame
             MainMenu = new MainMenu(spriteBatch, GraphicsDevice, inputProvider, resourceProvider, this, stateManager);
             MenuDemo = new MenuDemo(spriteBatch, resourceProvider, GraphicsDevice, inputProvider, themeProvider);
 
-            //stateManager.Push(MenuDemo);
-            //stateManager.Push(SinglePlayer);
-            stateManager.Push(MainMenu);
-
-            if (arguments.FirstOrDefault(s => s.ToLower() == "+skipmenu") != null)
+            if (arguments.FirstOrDefault(s => s.ToLower() == "-skipmenu") != null)
             {
-                //stateManager.Switch(SinglePlayer);
+                stateManager.Push(MainMenu);
+                stateManager.Push(SinglePlayer);
+            }
+            else
+            {
+                stateManager.Push(MenuDemo);
+                stateManager.Push(MainMenu);
             }
         }
 

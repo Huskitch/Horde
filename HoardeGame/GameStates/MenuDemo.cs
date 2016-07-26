@@ -29,6 +29,7 @@ namespace HoardeGame.GameStates
         public IPlayer Player { get; }
 
         private readonly SpriteBatch spriteBatch;
+        private readonly GraphicsDevice graphicsDevice;
         private readonly IResourceProvider resourceProvider;
 
         private readonly Camera camera;
@@ -46,6 +47,7 @@ namespace HoardeGame.GameStates
         {
             this.spriteBatch = spriteBatch;
             this.resourceProvider = resourceProvider;
+            this.graphicsDevice = graphicsDevice;
 
             camera = new Camera
             {
@@ -54,7 +56,7 @@ namespace HoardeGame.GameStates
             };
 
             dungeon = new DungeonLevel(resourceProvider, this, inputProvider, themeProvider.GetTheme("temple"));
-            dungeon.GenerateLevel(64, 64, 40);
+            dungeon.GenerateLevel(10, 10, 40);
 
             Player = new EntityFakePlayer(dungeon, resourceProvider);
             dungeon.AddEntity((EntityBase)Player);
@@ -70,10 +72,7 @@ namespace HoardeGame.GameStates
         /// <inheritdoc/>
         public override void Draw(GameTime gameTime, float interpolation)
         {
-            using (spriteBatch.Use())
-            {
-                spriteBatch.Draw(resourceProvider.GetTexture("DiamondSheet"), new Vector2(100, 100), Color.White);
-            }
+            dungeon.Draw(spriteBatch, camera, graphicsDevice);
         }
     }
 }
