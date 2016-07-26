@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
@@ -11,6 +12,7 @@ using HoardeGame.Graphics.Rendering;
 using HoardeGame.Input;
 using HoardeGame.Level;
 using HoardeGame.Resources;
+using HoardeGame.Weapons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -70,6 +72,8 @@ namespace HoardeGame.Entities
 
         private readonly IResourceProvider resourceProvider;
         private Directions direction;
+
+        private IWeaponProvider weaponProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
