@@ -2,7 +2,9 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-namespace HoardeGame.Entities
+using HoardeGame.Entities;
+
+namespace HoardeGame.Gameplay
 {
     /// <summary>
     /// Defines a provider of the player entity
@@ -12,6 +14,6 @@ namespace HoardeGame.Entities
         /// <summary>
         /// Gets the player entity
         /// </summary>
-        EntityPlayer Player { get; }
+        IPlayer Player { get; }
     }
 }

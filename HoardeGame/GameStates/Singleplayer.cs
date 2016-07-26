@@ -34,7 +34,7 @@ namespace HoardeGame.GameStates
         /// <summary>
         /// Gets the player entity
         /// </summary>
-        public EntityPlayer Player { get; private set; }
+        public IPlayer Player { get; private set; }
 
         /// <summary>
         /// Gets the drill entity
@@ -52,11 +52,12 @@ namespace HoardeGame.GameStates
         private readonly StateManager stateManager;
 
         private readonly Camera camera;
-        private readonly DungeonLevel dungeon;
         private readonly Minimap minimap;
         private readonly Rectangle minimapRectangle;
         private readonly Rectangle minimapInner;
         private readonly Rectangle screenRectangle;
+
+        private DungeonLevel dungeon;
 
         private HealthArmourBar playerHealthArmourBar;
         private HealthArmourBar drillHealthArmourBar;
@@ -103,11 +104,23 @@ namespace HoardeGame.GameStates
                 Size = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight)
             };
 
+            minimap = new Minimap(resourceProvider);
+
+            // minimap.Generate(graphicsDevice, dungeon.GetSearchMap());
+            minimapRectangle = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 280, graphicsDevice.PresentationParameters.BackBufferHeight - 280, 260, 260);
+            minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 278, graphicsDevice.PresentationParameters.BackBufferHeight - 278, 256, 256);
+        }
+
+        /// <inheritdoc/>
+        public override void Start()
+        {
+            Paused = false;
+
             dungeon = new DungeonLevel(resourceProvider, this, inputProvider, themeProvider.GetTheme("temple"));
             dungeon.GenerateLevel(64, 64, 40);
 
             Player = new EntityPlayer(dungeon, inputProvider, resourceProvider);
-            dungeon.AddEntity(Player);
+            dungeon.AddEntity((EntityPlayer)Player);
 
             EntityChest chest = new EntityChest(dungeon, resourceProvider, this, inputProvider, themeProvider.GetTheme("temple").ChestInfo)
             {
@@ -121,18 +134,7 @@ namespace HoardeGame.GameStates
             Drill = new EntityDrill(dungeon, inputProvider, resourceProvider, this);
             dungeon.AddEntity(Drill);
 
-            minimap = new Minimap(resourceProvider);
             minimap.Generate(graphicsDevice, dungeon.GetMap());
-
-            // minimap.Generate(graphicsDevice, dungeon.GetSearchMap());
-            minimapRectangle = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 280, graphicsDevice.PresentationParameters.BackBufferHeight - 280, 260, 260);
-            minimapInner = new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 278, graphicsDevice.PresentationParameters.BackBufferHeight - 278, 256, 256);
-        }
-
-        /// <inheritdoc/>
-        public override void Start()
-        {
-            Paused = false;
 
             ammoLabel = new Label(this, "ammoLabel")
             {

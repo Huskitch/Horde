@@ -103,6 +103,7 @@ namespace HoardeGame.State
 
             if (!GameStates.Remove(gameState))
             {
+                ActiveGameState?.Resume();
                 throw new ArgumentException(gameState + " is not on the stack");
             }
 

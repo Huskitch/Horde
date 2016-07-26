@@ -52,6 +52,7 @@
     <Compile Include="Entities\EntityBullet.cs" />
     <Compile Include="Entities\EntityChest.cs" />
     <Compile Include="Entities\EntityDrill.cs" />
+    <Compile Include="Entities\EntityFakePlayer.cs" />
     <Compile Include="Entities\EntityFlyingDamageIndicator.cs" />
     <Compile Include="Entities\EntityGem.cs" />
     <Compile Include="Entities\EntityGem2.cs" />
@@ -62,7 +63,7 @@
     <Compile Include="Entities\EntityKey.cs" />
     <Compile Include="Entities\EntityPlayer.cs" />
     <Compile Include="Entities\EntitySnake.cs" />
-    <Compile Include="Entities\IPlayerProvider.cs" />
+    <Compile Include="Gameplay\IPlayerProvider.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Extensions\SpriteBatchExtensions.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Gameplay\CardManager.cs" />
     <Compile Include="Gameplay\ICardProvider.cs" />
     <Compile Include="Entities\EntityWeapon.cs" />
+    <Compile Include="Gameplay\IPlayer.cs" />
     <Compile Include="GameStates\MainMenu.cs" />
     <Compile Include="GameStates\MenuDemo.cs" />
     <Compile Include="GameStates\SinglePlayer.cs" />

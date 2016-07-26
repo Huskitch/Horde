@@ -9,6 +9,7 @@ using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Entities;
 using HoardeGame.Extensions;
+using HoardeGame.Gameplay;
 using HoardeGame.Graphics.Rendering;
 using HoardeGame.Input;
 using HoardeGame.Resources;

@@ -6,6 +6,7 @@ using System;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
+using HoardeGame.Gameplay;
 using HoardeGame.Graphics.Rendering;
 using HoardeGame.Input;
 using HoardeGame.Level;
@@ -19,7 +20,7 @@ namespace HoardeGame.Entities
     /// <summary>
     /// Player entity
     /// </summary>
-    public class EntityPlayer : EntityBase
+    public class EntityPlayer : EntityBase, IPlayer
     {
         /// <summary>
         /// Maximum health for the player
@@ -37,30 +38,19 @@ namespace HoardeGame.Entities
         /// </summary>
         public int ChestKeys { get; set; }
 
-        /// <summary>
-        /// Gets the amount of gems the player has
-        /// </summary>
+        /// <inheritdoc/>
         public int[] Gems { get; } = new int[3];
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the player is dead
-        /// Can't just remove the entity because that would break everything
-        /// </summary>
+        /// <inheritdoc/>
         public bool Dead { get; set; }
 
-        /// <summary>
-        /// Gets or sets the amount of ammo the player has
-        /// </summary>
+        /// <inheritdoc/>
         public int Ammo { get; set; }
 
-        /// <summary>
-        /// Gets or sets the armour of the player
-        /// </summary>
+        /// <inheritdoc/>
         public int Armour { get; set; }
 
-        /// <summary>
-        /// Gets or sets the weapon of the player
-        /// </summary>
+        /// <inheritdoc/>
         public EntityWeapon Weapon { get; set; }
 
         private AnimatedSprite animator;

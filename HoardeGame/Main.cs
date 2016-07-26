@@ -22,16 +22,27 @@ namespace HoardeGame
     /// </summary>
     public class Main : Game
     {
+        /// <summary>
+        /// Gets the <see cref="MainMenu"/> <see cref="GameState"/>
+        /// </summary>
+        public MainMenu MainMenu { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="MenuDemo"/> <see cref="GameState"/>
+        /// </summary>
+        public MenuDemo MenuDemo { get; private set; }
+
+        /// <summary>
+        /// Gets the <see cref="SinglePlayer"/> <see cref="GameState"/>
+        /// </summary>
+        public SinglePlayer SinglePlayer { get; private set; }
+
         private readonly GraphicsDeviceManager graphics;
         private readonly StateManager stateManager;
         private readonly IInputProvider inputProvider;
         private readonly ICardProvider cardProvider;
         private readonly IResourceProvider resourceProvider;
         private readonly IThemeProvider themeProvider;
-
-        private MainMenu mainMenu;
-        private MenuDemo menuDemo;
-        private SinglePlayer singlePlayer;
 
         private SpriteBatch spriteBatch;
 
@@ -85,20 +96,17 @@ namespace HoardeGame
 
             string[] arguments = Environment.GetCommandLineArgs();
 
-            singlePlayer = new SinglePlayer(resourceProvider, inputProvider, cardProvider, themeProvider, spriteBatch, GraphicsDevice, stateManager);
-            mainMenu = new MainMenu(spriteBatch, GraphicsDevice, inputProvider, resourceProvider, this, stateManager);
-            menuDemo = new MenuDemo(spriteBatch, resourceProvider);
+            SinglePlayer = new SinglePlayer(resourceProvider, inputProvider, cardProvider, themeProvider, spriteBatch, GraphicsDevice, stateManager);
+            MainMenu = new MainMenu(spriteBatch, GraphicsDevice, inputProvider, resourceProvider, this, stateManager);
+            MenuDemo = new MenuDemo(spriteBatch, resourceProvider, GraphicsDevice, inputProvider, themeProvider);
+
+            //stateManager.Push(MenuDemo);
+            //stateManager.Push(SinglePlayer);
+            stateManager.Push(MainMenu);
 
             if (arguments.FirstOrDefault(s => s.ToLower() == "+skipmenu") != null)
             {
-                stateManager.Push(singlePlayer);
-            }
-            else
-            {
-                stateManager.Push(menuDemo);
-                stateManager.Push(mainMenu);
-
-                menuDemo.Resume();
+                //stateManager.Switch(SinglePlayer);
             }
         }
 
