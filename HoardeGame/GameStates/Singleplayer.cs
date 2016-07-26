@@ -247,7 +247,7 @@ namespace HoardeGame.GameStates
             using (spriteBatch.Use(SpriteSortMode.Deferred, null, null, beforeDepthStencilState, null, alphaTestEffect))
             {
                 spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), new Rectangle(36, 23, 200, 48), Color.White);
-                spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), new Rectangle(21, 48, 144, 48), Color.White);
+                spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), new Rectangle(21, 43, 144, 48), Color.White);
             }
 
             using (spriteBatch.Use(SpriteSortMode.Deferred, null, null, beforeDrilDepthStencilState, null, alphaTestEffect))
