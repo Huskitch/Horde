@@ -71,6 +71,7 @@
     <Compile Include="Gameplay\ICardProvider.cs" />
     <Compile Include="Entities\EntityWeapon.cs" />
     <Compile Include="GameStates\MainMenu.cs" />
+    <Compile Include="GameStates\MenuDemo.cs" />
     <Compile Include="GameStates\SinglePlayer.cs" />
     <Compile Include="Graphics\Rendering\AnimatedSprite.cs" />
     <Compile Include="Graphics\Rendering\Animation.cs" />

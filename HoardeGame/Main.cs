@@ -29,6 +29,10 @@ namespace HoardeGame
         private readonly IResourceProvider resourceProvider;
         private readonly IThemeProvider themeProvider;
 
+        private MainMenu mainMenu;
+        private MenuDemo menuDemo;
+        private SinglePlayer singlePlayer;
+
         private SpriteBatch spriteBatch;
 
         /// <summary>
@@ -81,19 +85,20 @@ namespace HoardeGame
 
             string[] arguments = Environment.GetCommandLineArgs();
 
-            stateManager.Push(new SinglePlayer(resourceProvider, inputProvider, cardProvider, themeProvider, spriteBatch, GraphicsDevice, stateManager));
+            singlePlayer = new SinglePlayer(resourceProvider, inputProvider, cardProvider, themeProvider, spriteBatch, GraphicsDevice, stateManager);
+            mainMenu = new MainMenu(spriteBatch, GraphicsDevice, inputProvider, resourceProvider, this, stateManager);
+            menuDemo = new MenuDemo(spriteBatch, resourceProvider);
 
-            // Step a few times so the menu doesn't look ugly
-            for (int i = 0; i < 10; i++)
+            if (arguments.FirstOrDefault(s => s.ToLower() == "+skipmenu") != null)
             {
-                stateManager.Update(new GameTime());
+                stateManager.Push(singlePlayer);
             }
-
-            stateManager.Push(new MainMenu(spriteBatch, GraphicsDevice, inputProvider, resourceProvider, this, stateManager));
-
-            if (arguments.FirstOrDefault(s => s.ToLower() == "-skipmenu") != null)
+            else
             {
-                stateManager.Switch(stateManager.GameStates.First(state => state.GetType() == typeof(SinglePlayer)));
+                stateManager.Push(menuDemo);
+                stateManager.Push(mainMenu);
+
+                menuDemo.Resume();
             }
         }
 
