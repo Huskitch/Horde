@@ -11,6 +11,7 @@ using HoardeGame.Input;
 using HoardeGame.Resources;
 using HoardeGame.State;
 using HoardeGame.Themes;
+using HoardeGame.Weapons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -43,6 +44,7 @@ namespace HoardeGame
         private readonly ICardProvider cardProvider;
         private readonly IResourceProvider resourceProvider;
         private readonly IThemeProvider themeProvider;
+        private readonly IWeaponProvider weaponProvider;
 
         private SpriteBatch spriteBatch;
 
@@ -62,6 +64,7 @@ namespace HoardeGame
             inputProvider = new InputManager();
             cardProvider = new CardManager(resourceProvider);
             themeProvider = new ThemeManager();
+            weaponProvider = new WeaponManager();
             stateManager = new StateManager();
 
             graphics.PreferredBackBufferWidth = 1600;
@@ -77,12 +80,6 @@ namespace HoardeGame
         }
 
         /// <inheritdoc/>
-        protected override void Initialize()
-        {
-            base.Initialize();
-        }
-
-        /// <inheritdoc/>
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -93,6 +90,8 @@ namespace HoardeGame
             (cardProvider as CardManager).LoadXmlFile("Content/CARDS.xml");
 
             (themeProvider as ThemeManager).LoadXmlFile("Content/THEMES.xml", resourceProvider);
+
+            (weaponProvider as WeaponManager).LoadXmlFile("Content/WEAPONS.xml", resourceProvider);
 
             string[] arguments = Environment.GetCommandLineArgs();
 

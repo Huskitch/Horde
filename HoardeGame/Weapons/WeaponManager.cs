@@ -1,28 +1,34 @@
-﻿using System;
+﻿// <copyright file="WeaponManager.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using HoardeGame.Resources;
 using HoardeGame.Themes;
-using HoardeGame.Weapons;
 
 namespace HoardeGame.Weapons
 {
-    public class WeaponManager : Weapons.IWeaponProvider
+    /// <summary>
+    /// Manager for weapons
+    /// </summary>
+    public class WeaponManager : IWeaponProvider
     {
-        private readonly Dictionary<string, Weapon> weapons = new Dictionary<string, Weapon>();
+        /// <summary>
+        /// Gets the weapon dictionary
+        /// </summary>
+        public Dictionary<string, Weapon> Weapons { get; private set; } = new Dictionary<string, Weapon>();
 
         /// <summary>
-        /// Load cards from a file
+        /// Load weapons from a file
         /// </summary>
         /// <param name="filename">XML file to load from</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for asset validation</param>
         public void LoadXmlFile(string filename, IResourceProvider resourceProvider)
         {
-            weapons.Clear();
+            Weapons.Clear();
 
             XmlSerializer ser = new XmlSerializer(typeof(List<Weapon>), new XmlRootAttribute("Weapons"));
             TextReader reader = new StreamReader(filename);
@@ -36,22 +42,22 @@ namespace HoardeGame.Weapons
             foreach (var weapon in weaponList)
             {
                 weapon.Validate(resourceProvider);
-                weapons.Add(weapon.id, weapon);
+                Weapons.Add(weapon.id, weapon);
             }
 
             reader.Close();
         }
 
         /// <summary>
-        /// Save cards to file
+        /// Save weapons to file
         /// </summary>
         /// <param name="filename">XML file to save to</param>
         public void SaveXmlFile(string filename)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(List<Theme>), new XmlRootAttribute("Themes"));
+            XmlSerializer ser = new XmlSerializer(typeof(List<Weapon>), new XmlRootAttribute("Weapons"));
             TextWriter writer = new StreamWriter(filename);
 
-            ser.Serialize(writer, weapons.Values.ToList());
+            ser.Serialize(writer, Weapons.Values.ToList());
 
             writer.Close();
         }
@@ -59,12 +65,7 @@ namespace HoardeGame.Weapons
         /// <inheritdoc/>
         public Weapon GetWeapon(string name)
         {
-            return !weapons.ContainsKey(name) ? null : weapons[name];
-        }
-
-        public Dictionary<string, Weapon> GetWeapons()
-        {
-            return weapons;
+            return !Weapons.ContainsKey(name) ? null : Weapons[name];
         }
     }
 }

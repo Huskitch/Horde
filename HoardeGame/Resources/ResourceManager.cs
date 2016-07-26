@@ -122,6 +122,8 @@ namespace HoardeGame.Resources
 
             textures.Add("healthBG", content.Load<Texture2D>("Art/healthBG"));
             textures.Add("ChestSheet", content.Load<Texture2D>("Art/ChestSheet"));
+
+            textures.Add("testweapon", content.Load<Texture2D>("Art/testweapon"));
         }
 
         /// <summary>

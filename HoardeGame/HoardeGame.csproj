@@ -102,7 +102,7 @@
     <Compile Include="Themes\IThemeProvider.cs" />
     <Compile Include="Themes\Theme.cs" />
     <Compile Include="Themes\ThemeManager.cs" />
-    <Compile Include="Weapons\IWeaponManager.cs" />
+    <Compile Include="Weapons\IWeaponProvider.cs" />
     <Compile Include="Weapons\Weapon.cs" />
     <Compile Include="Weapons\WeaponManager.cs" />
   </ItemGroup>
