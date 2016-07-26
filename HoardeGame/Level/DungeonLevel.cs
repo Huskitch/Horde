@@ -317,13 +317,7 @@ namespace HoardeGame.Level
                         MapTiles.Add(tile);
                         renderList.Add(tile);
                     }
-                }
-            }
 
-            for (int x = 0; x < mapWidth; x++)
-            {
-                for (int y = 0; y < mapHeight; y++)
-                {
                     if (map[x, y] == 1)
                     {
                         Tile tile = new Tile(new Vector2(x * 32, y * 32), new Vector2(32, 56), resourceProvider.GetTexture(Theme.WallTextureName), true, this);

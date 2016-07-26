@@ -119,11 +119,20 @@
     <Content Include="Content\THEMES.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\WEAPONS.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <MonoGameContentReference Include="Content\Content.mgcb" />
+    <None Include="Content\CARDS.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Content\WEAPONS.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="HoardeGame.ruleset" />
     <None Include="packages.config" />
     <AdditionalFiles Include="stylecop.json" />

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
+    <xsd:element name="Weapons">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Weapon" maxOccurs="unbounded">
+                    <xsd:complexType>
+                        <xsd:sequence>
+                            <xsd:element name="Name" type="xsd:string" />
+                            <xsd:element name="Texture" type="xsd:string" />
+                            <xsd:element name="Bullets">
+                                <xsd:complexType>
+                                    <xsd:sequence>
+                                        <xsd:element name="Bullet" maxOccurs="unbounded" minOccurs="1">
+                                            <xsd:complexType>
+                                                <xsd:sequence>
+                                                    <xsd:element name="Texture" type="xsd:string" />
+                                                    <xsd:element name="Delay" type="xsd:decimal" />
+                                                    <xsd:element name="Speed" type="xsd:decimal" />
+                                                    <xsd:element name="Offset" type="xsd:int" />
+                                                    <xsd:element name="Count" type="xsd:int" />
+                                                </xsd:sequence>
+                                                <xsd:attribute name="type" type="xsd:string" use="required" />
+                                            </xsd:complexType>
+                                        </xsd:element>
+                                    </xsd:sequence>
+                                </xsd:complexType>
+                            </xsd:element>
+                        </xsd:sequence>
+                        <xsd:attribute name="id" type="xsd:string" use="required" />
+                    </xsd:complexType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+</xs:schema>
