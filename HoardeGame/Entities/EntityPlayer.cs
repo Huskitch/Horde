@@ -8,6 +8,7 @@ using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Gameplay;
+using HoardeGame.GameStates;
 using HoardeGame.Graphics.Rendering;
 using HoardeGame.Input;
 using HoardeGame.Level;
@@ -75,16 +76,18 @@ namespace HoardeGame.Entities
 
         private IWeaponProvider weaponProvider;
 
+        private readonly SinglePlayer singlePlayer;
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> in which the player will spawn</param>
         /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        public EntityPlayer(DungeonLevel level, IInputProvider inputProvider, IResourceProvider resourceProvider) : base(level)
+        public EntityPlayer(DungeonLevel level, IInputProvider inputProvider, IResourceProvider resourceProvider, SinglePlayer singlePlayer) : base(level)
         {
             this.inputProvider = inputProvider;
             this.resourceProvider = resourceProvider;
+            this.singlePlayer = singlePlayer;
 
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10), 1f, Body);
             Body.Position = Level.GetSpawnPosition();
@@ -154,7 +157,9 @@ namespace HoardeGame.Entities
 
             if (!inputProvider.GamePadState.IsConnected || shootingDirection == Vector2.Zero)
             {
-                shootingDirection = GetVector(direction);
+                Vector2 target = singlePlayer.camera.GetWolrdPosFromScreenPos(inputProvider.MouseState.Position.ToVector2(), singlePlayer.graphicsDevice) - Position;
+                target.Normalize();
+                shootingDirection = target;
             }
             else
             {
