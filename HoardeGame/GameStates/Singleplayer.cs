@@ -301,14 +301,14 @@ namespace HoardeGame.GameStates
 
             keyLabel.Text = Player.ChestKeys.ToString();
 
-            if (Drilling && (inputProvider.KeyPressed(Keys.Escape) || inputProvider.ButtonPressed(Buttons.B)))
-            {
-                Drilling = false;
-            }
-
             if (!Drilling && inputProvider.Back)
             {
                 stateManager.Switch(stateManager.GameStates.First(state => state.GetType() == typeof(MainMenu)));
+            }
+
+            if (Drilling && (inputProvider.KeyPressed(Keys.Escape) || inputProvider.ButtonPressed(Buttons.B)))
+            {
+                Drilling = false;
             }
         }
 
