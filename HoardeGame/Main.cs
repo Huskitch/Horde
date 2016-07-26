@@ -73,7 +73,7 @@ namespace HoardeGame
             graphics.ApplyChanges();
 
             Window.Title = "HORDE PROTOTYPE";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
 
             // 32 pixels = 1 meter
             ConvertUnits.SetDisplayUnitToSimUnitRatio(32f);

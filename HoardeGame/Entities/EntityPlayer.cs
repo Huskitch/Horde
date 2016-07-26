@@ -163,13 +163,12 @@ namespace HoardeGame.Entities
 
             shootingDirection.Normalize();
 
-
             if (velocity != Vector2.Zero)
             {
                 direction = GetDirection(shootingDirection);
             }
 
-            if ((inputProvider.KeyboardState.IsKeyDown(Keys.Space) || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Ammo > 0 && Weapon.Shoot(shootingDirection))
+            if ((inputProvider.MouseState.LeftButton == ButtonState.Pressed || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Ammo > 0 && Weapon.Shoot(shootingDirection))
             {
                 Ammo--;
             }
