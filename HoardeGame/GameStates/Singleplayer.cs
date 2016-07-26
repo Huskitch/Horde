@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Linq;
 using FarseerPhysics;
 using HoardeGame.Entities;
 using HoardeGame.Extensions;
@@ -48,6 +49,7 @@ namespace HoardeGame.GameStates
         private readonly ICardProvider cardProvider;
         private readonly IResourceProvider resourceProvider;
         private readonly IThemeProvider themeProvider;
+        private readonly StateManager stateManager;
 
         private readonly Camera camera;
         private readonly DungeonLevel dungeon;
@@ -74,12 +76,12 @@ namespace HoardeGame.GameStates
         /// </summary>
         /// <param name="spriteBatch"><see cref="SpriteBatch"/> to draw with</param>
         /// <param name="graphicsDevice"><see cref="GraphicsDevice"/> to draw with</param>
-        /// <param name="window"><see cref="GameWindow"/> to draw in</param>
         /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
         /// <param name="cardProvider"><see cref="ICardProvider"/> for managing cards</param>
         /// <param name="themeProvider"><see cref="IThemeProvider"/> for managing level themes</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        public SinglePlayer(IResourceProvider resourceProvider, IInputProvider inputProvider, ICardProvider cardProvider, IThemeProvider themeProvider, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, GameWindow window)
+        /// <param name="stateManager"><see cref="StateManager"/> for switching states</param>
+        public SinglePlayer(IResourceProvider resourceProvider, IInputProvider inputProvider, ICardProvider cardProvider, IThemeProvider themeProvider, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, StateManager stateManager)
         {
             this.graphicsDevice = graphicsDevice;
             this.spriteBatch = spriteBatch;
@@ -87,6 +89,7 @@ namespace HoardeGame.GameStates
             this.cardProvider = cardProvider;
             this.resourceProvider = resourceProvider;
             this.themeProvider = themeProvider;
+            this.stateManager = stateManager;
 
             testCard = cardProvider.GetCard("testCard");
 
@@ -129,6 +132,8 @@ namespace HoardeGame.GameStates
         /// <inheritdoc/>
         public override void Start()
         {
+            Paused = false;
+
             ammoLabel = new Label(this, "ammoLabel")
             {
                 Position = new Vector2(20, graphicsDevice.PresentationParameters.BackBufferHeight - 115),
@@ -253,6 +258,11 @@ namespace HoardeGame.GameStates
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
+            if (Paused)
+            {
+                return;
+            }
+
             DoCheck(gameTime, new Point(inputProvider.MouseState.X, inputProvider.MouseState.Y), inputProvider.LeftClicked);
 
             dungeon.Update(gameTime);
@@ -294,6 +304,11 @@ namespace HoardeGame.GameStates
             if (Drilling && (inputProvider.KeyPressed(Keys.Escape) || inputProvider.ButtonPressed(Buttons.B)))
             {
                 Drilling = false;
+            }
+
+            if (!Drilling && inputProvider.Back)
+            {
+                stateManager.Switch(stateManager.GameStates.First(state => state.GetType() == typeof(MainMenu)));
             }
         }
 

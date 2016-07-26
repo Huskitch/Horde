@@ -14,6 +14,8 @@ namespace HoardeGame.GUI
     /// </summary>
     public class Label : GuiBase
     {
+        private SpriteFont font;
+
         /// <summary>
         /// Collision box of the label for clicking
         /// </summary>
@@ -63,8 +65,33 @@ namespace HoardeGame.GUI
 
             set
             {
-                label.Width = (int)Font.MeasureString(value).X;
+                if (font != null)
+                {
+                    label.Width = (int)font.MeasureString(value).X;
+                }
+                else
+                {
+                    label.Width = (int)Font.MeasureString(value).X;
+                }
+
                 text = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the custom font for this label
+        /// </summary>
+        public SpriteFont CustomFont
+        {
+            get
+            {
+                return font;
+            }
+
+            set
+            {
+                label.Width = (int)value.MeasureString(text).X;
+                font = value;
             }
         }
 
@@ -123,7 +150,7 @@ namespace HoardeGame.GUI
                 return;
             }
 
-            spriteBatch.DrawString(Font, text, Position, Visibility == HiddenState.Disabled ? DisabledColor : Color);
+            spriteBatch.DrawString(font ?? Font, text, Position, Visibility == HiddenState.Disabled ? DisabledColor : Color);
         }
     }
 }

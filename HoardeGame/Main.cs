@@ -2,6 +2,8 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
+using System.Linq;
 using FarseerPhysics;
 using HoardeGame.Gameplay;
 using HoardeGame.GameStates;
@@ -77,7 +79,22 @@ namespace HoardeGame
 
             (themeProvider as ThemeManager).LoadXmlFile("Content/THEMES.xml", resourceProvider);
 
-            stateManager.Push(new SinglePlayer(resourceProvider, inputProvider, cardProvider, themeProvider, spriteBatch, GraphicsDevice, Window));
+            string[] arguments = Environment.GetCommandLineArgs();
+
+            stateManager.Push(new SinglePlayer(resourceProvider, inputProvider, cardProvider, themeProvider, spriteBatch, GraphicsDevice, stateManager));
+
+            // Step a few times so the menu doesn't look ugly
+            for (int i = 0; i < 10; i++)
+            {
+                stateManager.Update(new GameTime());
+            }
+
+            stateManager.Push(new MainMenu(spriteBatch, GraphicsDevice, inputProvider, resourceProvider, this, stateManager));
+
+            if (arguments.FirstOrDefault(s => s.ToLower() == "-skipmenu") != null)
+            {
+                stateManager.Switch(stateManager.GameStates.First(state => state.GetType() == typeof(SinglePlayer)));
+            }
         }
 
         /// <inheritdoc/>

@@ -58,6 +58,11 @@ namespace HoardeGame.Input
         bool Activate { get; }
 
         /// <summary>
+        /// Gets a value indicating whether the use press any back button this frame
+        /// </summary>
+        bool Back { get; }
+
+        /// <summary>
         /// Update internal state
         /// </summary>
         /// <param name="gameTime"><see cref="GameTime"/></param>

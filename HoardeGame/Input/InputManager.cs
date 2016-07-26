@@ -40,6 +40,9 @@ namespace HoardeGame.Input
         public bool Activate => KeyPressed(Keys.E) || ButtonPressed(Buttons.A);
 
         /// <inheritdoc/>
+        public bool Back => KeyPressed(Keys.Escape) || ButtonPressed(Buttons.Back);
+
+        /// <inheritdoc/>
         public void Update(GameTime gameTime)
         {
             LastKeyboardState = KeyboardState;

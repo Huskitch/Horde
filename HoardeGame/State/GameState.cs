@@ -39,6 +39,11 @@ namespace HoardeGame.State
         public event GuiDrawEventHandler OnDraw;
 
         /// <summary>
+        /// Gets or sets a value indicating whether this gamestate is paused
+        /// </summary>
+        public bool Paused { get; set; }
+
+        /// <summary>
         /// Start this GameState
         /// </summary>
         public virtual void Start()
@@ -57,6 +62,7 @@ namespace HoardeGame.State
         /// </summary>
         public virtual void Pause()
         {
+            Paused = true;
         }
 
         /// <summary>
@@ -64,6 +70,7 @@ namespace HoardeGame.State
         /// </summary>
         public virtual void Resume()
         {
+            Paused = false;
         }
 
         /// <summary>

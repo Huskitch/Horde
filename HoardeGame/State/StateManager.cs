@@ -49,13 +49,10 @@ namespace HoardeGame.State
         {
             if (gameState == null)
             {
-                throw new ArgumentNullException("gameState");
+                throw new ArgumentNullException(nameof(gameState));
             }
 
-            if (ActiveGameState != null)
-            {
-                ActiveGameState.Pause();
-            }
+            ActiveGameState?.Pause();
 
             GameStates.Add(gameState);
             ActiveGameState = gameState;
@@ -99,13 +96,10 @@ namespace HoardeGame.State
         {
             if (gameState == null)
             {
-                throw new ArgumentNullException("gameState");
+                throw new ArgumentNullException(nameof(gameState));
             }
 
-            if (ActiveGameState != null)
-            {
-                ActiveGameState.Pause();
-            }
+            ActiveGameState?.Pause();
 
             if (!GameStates.Remove(gameState))
             {
