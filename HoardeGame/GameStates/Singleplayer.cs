@@ -44,14 +44,14 @@ namespace HoardeGame.GameStates
         private readonly Card testCard;
 
         private readonly SpriteBatch spriteBatch;
-        private readonly GraphicsDevice graphicsDevice;
+        public readonly GraphicsDevice graphicsDevice;
         private readonly IInputProvider inputProvider;
         private readonly ICardProvider cardProvider;
         private readonly IResourceProvider resourceProvider;
         private readonly IThemeProvider themeProvider;
         private readonly StateManager stateManager;
 
-        private readonly Camera camera;
+        public readonly Camera camera;
         private readonly Minimap minimap;
         private readonly Rectangle minimapRectangle;
         private readonly Rectangle minimapInner;
@@ -119,7 +119,7 @@ namespace HoardeGame.GameStates
             dungeon = new DungeonLevel(resourceProvider, this, inputProvider, themeProvider.GetTheme("temple"));
             dungeon.GenerateLevel(64, 64, 40);
 
-            Player = new EntityPlayer(dungeon, inputProvider, resourceProvider);
+            Player = new EntityPlayer(dungeon, inputProvider, resourceProvider, this);
             dungeon.AddEntity((EntityPlayer)Player);
 
             EntityChest chest = new EntityChest(dungeon, resourceProvider, this, inputProvider, themeProvider.GetTheme("temple").ChestInfo)
