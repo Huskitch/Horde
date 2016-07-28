@@ -88,6 +88,13 @@ namespace HoardeGame.GameStates
         }
 
         /// <inheritdoc/>
+        public override void Resume()
+        {
+            main.IsMouseVisible = true;
+            base.Resume();
+        }
+
+        /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
             if (Paused)
@@ -151,6 +158,8 @@ namespace HoardeGame.GameStates
 
         private void Play()
         {
+            main.IsMouseVisible = false;
+
             if (stateManager.GameStates.Contains(main.SinglePlayer))
             {
                 stateManager.Switch(stateManager.GameStates.First(state => state.GetType() == typeof(SinglePlayer)));

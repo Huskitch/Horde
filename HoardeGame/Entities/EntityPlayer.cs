@@ -3,7 +3,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
@@ -56,8 +55,8 @@ namespace HoardeGame.Entities
         /// <inheritdoc/>
         public EntityWeapon Weapon { get; set; }
 
-        private AnimatedSprite animator;
-        private IInputProvider inputProvider;
+        private readonly IResourceProvider resourceProvider;
+        private readonly SinglePlayer singlePlayer;
 
         private enum Directions
         {
@@ -71,18 +70,18 @@ namespace HoardeGame.Entities
             SOUTHEAST
         }
 
-        private readonly IResourceProvider resourceProvider;
         private Directions direction;
-
         private IWeaponProvider weaponProvider;
+        private AnimatedSprite animator;
+        private IInputProvider inputProvider;
 
-        private readonly SinglePlayer singlePlayer;
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> in which the player will spawn</param>
         /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
+        /// <param name="singlePlayer"><see cref="SinglePlayer"/></param>
         public EntityPlayer(DungeonLevel level, IInputProvider inputProvider, IResourceProvider resourceProvider, SinglePlayer singlePlayer) : base(level)
         {
             this.inputProvider = inputProvider;
@@ -152,7 +151,7 @@ namespace HoardeGame.Entities
 
             if (!inputProvider.GamePadState.IsConnected || shootingDirection == Vector2.Zero)
             {
-                Vector2 target = singlePlayer.camera.GetWolrdPosFromScreenPos(inputProvider.MouseState.Position.ToVector2(), singlePlayer.graphicsDevice) - Position;
+                Vector2 target = singlePlayer.Camera.GetWolrdPosFromScreenPos(inputProvider.MouseState.Position.ToVector2(), singlePlayer.GraphicsDevice) - Position;
                 target.Normalize();
                 shootingDirection = target;
             }

@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Entities;
@@ -328,25 +329,195 @@ namespace HoardeGame.Level
         /// </summary>
         private void LoadTiles()
         {
+            int[,] edgedMap = GenerateEdges();
+
             for (int x = 0; x < mapWidth; x++)
             {
                 for (int y = 0; y < mapHeight; y++)
                 {
-                    if (map[x, y] != 1)
+                    // Empty
+                    if (edgedMap[x, y] == 0)
                     {
-                        Tile tile = new Tile(new Vector2(x * 32, y * 32 + 24), new Vector2(32, 32), resourceProvider.GetTexture(Theme.FloorTextureName), false, this);
+                        Tile tile = new Tile(new Vector2(x * 32, y * 32 + 24), new Vector2(32, 32), resourceProvider.GetTexture(Theme.FloorTextureName), false, this, 0);
                         MapTiles.Add(tile);
                         renderList.Add(tile);
                     }
 
-                    if (map[x, y] == 1)
+                    // Wall
+                    if (edgedMap[x, y] >= 1)
                     {
-                        Tile tile = new Tile(new Vector2(x * 32, y * 32), new Vector2(32, 56), resourceProvider.GetTexture(Theme.WallTextureName), true, this);
+                        Tile tile = new Tile(new Vector2(x * 32, y * 32), new Vector2(32, 56), resourceProvider.GetTexture(Theme.WallTextureName), true, this, edgedMap[x, y] - 1);
                         MapTiles.Add(tile);
                         renderList.Add(tile);
                     }
                 }
             }
+        }
+
+        private int[,] GenerateEdges()
+        {
+            int[,] edgedMap = new int[mapWidth, mapHeight];
+
+            for (int x = 0; x < mapWidth; x++)
+            {
+                for (int y = 0; y < mapHeight; y++)
+                {
+                    if (map[x, y] == 0)
+                    {
+                        continue;
+                    }
+
+                    if (TryGet(x, y - 1) == 1 && TryGet(x, y + 1) == 1 && TryGet(x + 1, y) == 1 && TryGet(x - 1, y) == 1)
+                    {
+                        edgedMap[x, y] = 1;
+                    }
+                    else if (TryGet(x, y - 1) == 0 && TryGet(x, y + 1) == 0 && TryGet(x + 1, y) == 0 && TryGet(x - 1, y) == 0)
+                    {
+                        edgedMap[x, y] = 16;
+                    }
+                    else if (TryGet(x, y - 1) == 1 && TryGet(x - 1, y) == 1 && TryGet(x + 1, y) == 1 && TryGet(x - 1, y - 1) == 1 && TryGet(x + 1, y - 1) == 1)
+                    {
+                        edgedMap[x, y] = 17;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x - 1, y) == 1 && TryGet(x + 1, y) == 1 && TryGet(x - 1, y + 1) == 1 && TryGet(x + 1, y + 1) == 1)
+                    {
+                        edgedMap[x, y] = 18;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x, y - 1) == 1 && TryGet(x + 1, y) == 1 && TryGet(x + 1, y + 1) == 1 && TryGet(x + 1, y - 1) == 1)
+                    {
+                        edgedMap[x, y] = 19;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x, y - 1) == 1 && TryGet(x - 1, y) == 1 && TryGet(x - 1, y + 1) == 1 && TryGet(x - 1, y - 1) == 1)
+                    {
+                        edgedMap[x, y] = 20;
+                    }
+                    else if (TryGet(x, y - 1) == 1 && TryGet(x - 1, y) == 1 && TryGet(x + 1, y) == 1 && TryGet(x + 1, y - 1) == 1)
+                    {
+                        edgedMap[x, y] = 21;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x - 1, y) == 1 && TryGet(x + 1, y) == 1 && TryGet(x + 1, y + 1) == 1)
+                    {
+                        edgedMap[x, y] = 22;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x, y - 1) == 1 && TryGet(x + 1, y) == 1 && TryGet(x + 1, y + 1) == 1)
+                    {
+                        edgedMap[x, y] = 23;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x, y - 1) == 1 && TryGet(x - 1, y) == 1 && TryGet(x - 1, y + 1) == 1)
+                    {
+                        edgedMap[x, y] = 24;
+                    }
+                    else if (TryGet(x, y - 1) == 1 && TryGet(x - 1, y) == 1 && TryGet(x + 1, y) == 1 && TryGet(x - 1, y - 1) == 1)
+                    {
+                        edgedMap[x, y] = 25;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x - 1, y) == 1 && TryGet(x + 1, y) == 1 && TryGet(x - 1, y + 1) == 1)
+                    {
+                        edgedMap[x, y] = 26;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x, y - 1) == 1 && TryGet(x + 1, y) == 1 && TryGet(x + 1, y - 1) == 1)
+                    {
+                        edgedMap[x, y] = 27;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x, y - 1) == 1 && TryGet(x - 1, y) == 1 && TryGet(x - 1, y - 1) == 1)
+                    {
+                        edgedMap[x, y] = 28;
+                    }
+                    else if (TryGet(x, y - 1) == 1 && TryGet(x - 1, y) == 1 && TryGet(x + 1, y) == 1)
+                    {
+                        edgedMap[x, y] = 5;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x - 1, y) == 1 && TryGet(x + 1, y) == 1)
+                    {
+                        edgedMap[x, y] = 6;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x + 1, y) == 1 && TryGet(x, y - 1) == 1)
+                    {
+                        edgedMap[x, y] = 7;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x - 1, y) == 1 && TryGet(x, y - 1) == 1)
+                    {
+                        edgedMap[x, y] = 10;
+                    }
+                    else if (TryGet(x, y - 1) == 1 && TryGet(x, y + 1) == 1)
+                    {
+                        edgedMap[x, y] = 2;
+                    }
+                    else if (TryGet(x + 1, y) == 1 && TryGet(x - 1, y) == 1)
+                    {
+                        edgedMap[x, y] = 3;
+                    }
+                    else if (TryGet(x, y - 1) == 1 && TryGet(x + 1, y) == 1)
+                    {
+                        edgedMap[x, y] = 4;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x - 1, y) == 1)
+                    {
+                        edgedMap[x, y] = 9;
+                    }
+                    else if (TryGet(x, y + 1) == 1 && TryGet(x + 1, y) == 1)
+                    {
+                        edgedMap[x, y] = 8;
+                    }
+                    else if (TryGet(x, y - 1) == 1 && TryGet(x - 1, y) == 1)
+                    {
+                        edgedMap[x, y] = 11;
+                    }
+                    else if (TryGet(x + 1, y) == 1)
+                    {
+                        edgedMap[x, y] = 14;
+                    }
+                    else if (TryGet(x - 1, y) == 1)
+                    {
+                        edgedMap[x, y] = 13;
+                    }
+                    else if (TryGet(x, y + 1) == 1)
+                    {
+                        edgedMap[x, y] = 15;
+                    }
+                    else if (TryGet(x, y - 1) == 1)
+                    {
+                        edgedMap[x, y] = 12;
+                    }
+                }
+            }
+
+            return edgedMap;
+        }
+
+        private bool IsOutOfBounds(int x, int y)
+        {
+            if (x < 0 || y < 0)
+            {
+                return true;
+            }
+
+            return x > mapWidth - 1 || y > mapHeight - 1;
+        }
+
+        private int TryGet(int x, int y)
+        {
+            if (IsOutOfBounds(x, y))
+            {
+                return 0;
+            }
+
+            return map[x, y];
+        }
+
+        private bool[] GetEdges(int x, int y)
+        {
+            bool[] edges = new bool[9];
+
+            for (int xpos = x - 1; xpos < x + 1; xpos++)
+            {
+                for (int ypos = y - 1; ypos < y + 1; ypos++)
+                {
+                    edges[ypos * 3 + xpos] = TryGet(xpos, ypos) == 0;
+                }
+            }
+
+            return edges;
         }
     }
 }

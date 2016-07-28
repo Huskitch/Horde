@@ -25,7 +25,11 @@ namespace HoardeGame.Weapons
         /// Gets or sets the ID of the weapon
         /// </summary>
         [XmlAttribute]
+#pragma warning disable SA1300 // Element must begin with upper-case letter
+
+        // ReSharper disable once InconsistentNaming
         public string id { get; set; }
+#pragma warning restore SA1300 // Element must begin with upper-case letter
 
         /// <summary>
         /// Gets or sets the name of the weapon texture

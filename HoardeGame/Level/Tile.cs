@@ -32,6 +32,7 @@ namespace HoardeGame.Level
         public Vector2 Scale { get; private set; }
 
         private readonly Texture2D texture;
+        private readonly Rectangle source;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Tile"/> class.
@@ -41,7 +42,8 @@ namespace HoardeGame.Level
         /// <param name="texture"><see cref="Texture2D"/> of the tile</param>
         /// <param name="collide">Whether to generate collision boxes</param>
         /// <param name="level"><see cref="DungeonLevel"/> to place this tile in</param>
-        public Tile(Vector2 pos, Vector2 scale, Texture2D texture, bool collide, DungeonLevel level)
+        /// <param name="type">Type of the wall</param>
+        public Tile(Vector2 pos, Vector2 scale, Texture2D texture, bool collide, DungeonLevel level, int type)
         {
             Scale = scale;
             this.texture = texture;
@@ -54,6 +56,7 @@ namespace HoardeGame.Level
                 fixture.CollisionCategories = Category.Cat4;
                 fixture.CollidesWith = Category.All;
                 Depth = Position.Y;
+                source = new Rectangle(type * 32, 0, 32, 56);
             }
         }
 
@@ -72,7 +75,7 @@ namespace HoardeGame.Level
         /// <param name="parameter"><see cref="EffectParameter"/> for flashing effect</param>
         public void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
         {
-            spriteBatch.Draw(texture, new Rectangle((int)ScreenPosition.X, (int)ScreenPosition.Y, (int)Scale.X, (int)Scale.Y), null, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
+            spriteBatch.Draw(texture, new Rectangle((int)ScreenPosition.X, (int)ScreenPosition.Y, (int)Scale.X, (int)Scale.Y), source, Color.White, 0f, Vector2.Zero, SpriteEffects.None, 0f);
         }
     }
 }

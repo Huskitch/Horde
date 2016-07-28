@@ -31,18 +31,6 @@
 /processorParam:TextureFormat=Color
 /build:Art/basicfloor.png
 
-#begin Art/basicwall.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:Art/basicwall.png
-
 #begin Art/button.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -384,4 +372,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Art/testweapon.png
+
+#begin Art/walls.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Art/walls.png
 

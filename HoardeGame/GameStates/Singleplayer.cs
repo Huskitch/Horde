@@ -41,17 +41,25 @@ namespace HoardeGame.GameStates
         /// </summary>
         public EntityDrill Drill { get; private set; }
 
+        /// <summary>
+        /// Gets the current <see cref="GraphicsDevice"/>
+        /// </summary>
+        public GraphicsDevice GraphicsDevice { get; }
+
+        /// <summary>
+        /// Gets the current <see cref="Camera"/>
+        /// </summary>
+        public Camera Camera { get; }
+
         private readonly Card testCard;
 
         private readonly SpriteBatch spriteBatch;
-        public readonly GraphicsDevice graphicsDevice;
         private readonly IInputProvider inputProvider;
         private readonly ICardProvider cardProvider;
         private readonly IResourceProvider resourceProvider;
         private readonly IThemeProvider themeProvider;
         private readonly StateManager stateManager;
 
-        public readonly Camera camera;
         private readonly Minimap minimap;
         private readonly Rectangle minimapRectangle;
         private readonly Rectangle minimapInner;
@@ -84,7 +92,7 @@ namespace HoardeGame.GameStates
         /// <param name="stateManager"><see cref="StateManager"/> for switching states</param>
         public SinglePlayer(IResourceProvider resourceProvider, IInputProvider inputProvider, ICardProvider cardProvider, IThemeProvider themeProvider, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, StateManager stateManager)
         {
-            this.graphicsDevice = graphicsDevice;
+            GraphicsDevice = graphicsDevice;
             this.spriteBatch = spriteBatch;
             this.inputProvider = inputProvider;
             this.cardProvider = cardProvider;
@@ -98,7 +106,7 @@ namespace HoardeGame.GameStates
 
             screenRectangle = new Rectangle(0, 0, graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight);
 
-            camera = new Camera
+            Camera = new Camera
             {
                 Zoom = 3f,
                 Size = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight)
@@ -134,35 +142,35 @@ namespace HoardeGame.GameStates
             Drill = new EntityDrill(dungeon, inputProvider, resourceProvider, this);
             dungeon.AddEntity(Drill);
 
-            minimap.Generate(graphicsDevice, dungeon.GetMap());
+            minimap.Generate(GraphicsDevice, dungeon.GetMap());
 
             ammoLabel = new Label(this, "ammoLabel")
             {
-                Position = new Vector2(20, graphicsDevice.PresentationParameters.BackBufferHeight - 115),
+                Position = new Vector2(20, GraphicsDevice.PresentationParameters.BackBufferHeight - 115),
                 Text = "Ammo: 100"
             };
 
             rubyLabel = new Label(this, "rubyLabel")
             {
-                Position = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth - 48, 19),
+                Position = new Vector2(GraphicsDevice.PresentationParameters.BackBufferWidth - 48, 19),
                 Text = "0"
             };
 
             emeraldLabel = new Label(this, "emeraldLabel")
             {
-                Position = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth - 48, 59),
+                Position = new Vector2(GraphicsDevice.PresentationParameters.BackBufferWidth - 48, 59),
                 Text = "0"
             };
 
             diamondLabel = new Label(this, "diamondLabel")
             {
-                Position = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth - 48, 99),
+                Position = new Vector2(GraphicsDevice.PresentationParameters.BackBufferWidth - 48, 99),
                 Text = "0"
             };
 
             keyLabel = new Label(this, "keyLabel")
             {
-                Position = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth - 48, 142),
+                Position = new Vector2(GraphicsDevice.PresentationParameters.BackBufferWidth - 48, 142),
                 Text = "0"
             };
 
@@ -203,7 +211,7 @@ namespace HoardeGame.GameStates
             playerHealthArmourBar.ApplyChanges();
             drillHealthArmourBar.ApplyChanges();
 
-            AlphaTestEffect alphaTestEffect = new AlphaTestEffect(graphicsDevice)
+            AlphaTestEffect alphaTestEffect = new AlphaTestEffect(GraphicsDevice)
             {
                 DiffuseColor = Color.White.ToVector3(),
                 AlphaFunction = CompareFunction.Greater,
@@ -211,7 +219,7 @@ namespace HoardeGame.GameStates
                 World = Matrix.Identity,
                 View = Matrix.Identity,
                 Projection = Matrix.CreateTranslation(-0.5f, -0.5f, 0) *
-                             Matrix.CreateOrthographicOffCenter(0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height, 0, 0, 1)
+                             Matrix.CreateOrthographicOffCenter(0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0, 0, 1)
             };
 
             DepthStencilState beforeDepthStencilState = new DepthStencilState
@@ -269,7 +277,7 @@ namespace HoardeGame.GameStates
 
             dungeon.Update(gameTime);
 
-            camera.Position = ConvertUnits.ToDisplayUnits(Player.Position);
+            Camera.Position = ConvertUnits.ToDisplayUnits(Player.Position);
 
             playerHealthArmourBar.Health = Player.Health;
             playerHealthArmourBar.Armour = Player.Armour;
@@ -317,27 +325,27 @@ namespace HoardeGame.GameStates
         /// <inheritdoc/>
         public override void Draw(GameTime gameTime, float interp)
         {
-            graphicsDevice.Clear(ClearOptions.Target, Color.Black, 0f, 0);
+            GraphicsDevice.Clear(ClearOptions.Target, Color.Black, 0f, 0);
 
             // GAME SPRITEBATCH
-            dungeon.Draw(spriteBatch, camera, graphicsDevice);
+            dungeon.Draw(spriteBatch, Camera, GraphicsDevice);
 
             // MINIMAP SPRITEBATCH
             using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone))
             {
-                minimap.Draw(spriteBatch, minimapRectangle, minimapInner, camera);
+                minimap.Draw(spriteBatch, minimapRectangle, minimapInner, Camera);
             }
 
             using (spriteBatch.Use(SpriteSortMode.Deferred, null, null, barDepthStencilState))
             {
-                spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), graphicsDevice.Viewport.Bounds, Color.Black);
+                spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), GraphicsDevice.Viewport.Bounds, Color.Black);
             }
 
             if (Vector2.Distance(Player.Position, Drill.Position) < 3)
             {
                 using (spriteBatch.Use(SpriteSortMode.Deferred, null, null, drillDepthStencilState))
                 {
-                    spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), graphicsDevice.Viewport.Bounds, Color.Black);
+                    spriteBatch.Draw(resourceProvider.GetTexture("healthBG"), GraphicsDevice.Viewport.Bounds, Color.Black);
                 }
             }
 
@@ -361,14 +369,14 @@ namespace HoardeGame.GameStates
                     testCard.Draw(new Vector2(1075, 247), 0.75f, gameTime, spriteBatch, interp);
                 }
 
-                spriteBatch.Draw(resourceProvider.GetTexture("GemAnimation"), new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 88, 16, 32, 32), new Rectangle(64, 0, 16, 16), Color.White);
-                spriteBatch.Draw(resourceProvider.GetTexture("EmeraldSheet"), new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 88, 56, 32, 32), new Rectangle(64, 0, 16, 16), Color.White);
-                spriteBatch.Draw(resourceProvider.GetTexture("DiamondSheet"), new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 94, 88, 44, 44), new Rectangle(144, 0, 24, 24), Color.White);
-                spriteBatch.Draw(resourceProvider.GetTexture("EntityKey"), new Rectangle(graphicsDevice.PresentationParameters.BackBufferWidth - 88, 136, 32, 32), Color.White);
+                spriteBatch.Draw(resourceProvider.GetTexture("GemAnimation"), new Rectangle(GraphicsDevice.PresentationParameters.BackBufferWidth - 88, 16, 32, 32), new Rectangle(64, 0, 16, 16), Color.White);
+                spriteBatch.Draw(resourceProvider.GetTexture("EmeraldSheet"), new Rectangle(GraphicsDevice.PresentationParameters.BackBufferWidth - 88, 56, 32, 32), new Rectangle(64, 0, 16, 16), Color.White);
+                spriteBatch.Draw(resourceProvider.GetTexture("DiamondSheet"), new Rectangle(GraphicsDevice.PresentationParameters.BackBufferWidth - 94, 88, 44, 44), new Rectangle(144, 0, 24, 24), Color.White);
+                spriteBatch.Draw(resourceProvider.GetTexture("EntityKey"), new Rectangle(GraphicsDevice.PresentationParameters.BackBufferWidth - 88, 136, 32, 32), Color.White);
 
                 if (Player.Dead)
                 {
-                    Vector2 screenCenter = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth / 2f, graphicsDevice.PresentationParameters.BackBufferHeight / 2f);
+                    Vector2 screenCenter = new Vector2(GraphicsDevice.PresentationParameters.BackBufferWidth / 2f, GraphicsDevice.PresentationParameters.BackBufferHeight / 2f);
                     Vector2 textSize = resourceProvider.GetFont("BasicFont").MeasureString("YOU DIED") * 4;
                     screenCenter = screenCenter - textSize / 2;
 
