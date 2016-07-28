@@ -42,7 +42,7 @@ namespace HoardeGame.Weapons
             foreach (var weapon in weaponList)
             {
                 weapon.Validate(resourceProvider);
-                Weapons.Add(weapon.id, weapon);
+                Weapons.Add(weapon.Id, weapon);
             }
 
             reader.Close();
