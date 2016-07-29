@@ -84,7 +84,7 @@ namespace HoardeGame.Entities
         /// <inheritdoc/>
         public override void Start()
         {
-            Body.OnCollision += OnShot;
+            Body.FixtureList[0].AfterCollision += OnShot;
         }
 
         /// <summary>
@@ -94,8 +94,8 @@ namespace HoardeGame.Entities
         /// <param name="fixtureA">Fisrt <see cref="Fixture"/></param>
         /// <param name="fixtureB">Second <see cref="Fixture"/></param>
         /// <param name="contact"><see cref="Contact"/></param>
-        /// <returns>true</returns>
-        private bool OnShot(Fixture fixtureA, Fixture fixtureB, Contact contact)
+        /// <param name="impulse"><see cref="ContactVelocityConstraint"/></param>
+        private void OnShot(Fixture fixtureA, Fixture fixtureB, Contact contact, ContactVelocityConstraint impulse)
         {
             if (fixtureB.CollisionCategories == Category.Cat2 && ((BulletInfo)fixtureB.Body.UserData).Faction == Faction.Player)
             {
@@ -237,8 +237,6 @@ namespace HoardeGame.Entities
                     resourceProvider.GetSoundEffect("PlayerDeath").Play();
                 }
             }
-
-            return true;
         }
     }
 }
