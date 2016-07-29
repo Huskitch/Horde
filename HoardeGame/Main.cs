@@ -6,12 +6,13 @@ using System;
 using System.Linq;
 using FarseerPhysics;
 using HoardeGame.Gameplay;
+using HoardeGame.Gameplay.Cards;
+using HoardeGame.Gameplay.Themes;
+using HoardeGame.Gameplay.Weapons;
 using HoardeGame.GameStates;
 using HoardeGame.Input;
 using HoardeGame.Resources;
 using HoardeGame.State;
-using HoardeGame.Themes;
-using HoardeGame.Weapons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 

@@ -5,14 +5,18 @@
 using System;
 using FarseerPhysics;
 using HoardeGame.Entities;
+using HoardeGame.Entities.Base;
+using HoardeGame.Entities.Enemies;
+using HoardeGame.Entities.Player;
 using HoardeGame.Extensions;
 using HoardeGame.Gameplay;
-using HoardeGame.Graphics.Rendering;
+using HoardeGame.Gameplay.Level;
+using HoardeGame.Gameplay.Player;
+using HoardeGame.Gameplay.Themes;
+using HoardeGame.Graphics;
 using HoardeGame.Input;
-using HoardeGame.Level;
 using HoardeGame.Resources;
 using HoardeGame.State;
-using HoardeGame.Themes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
