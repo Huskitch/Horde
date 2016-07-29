@@ -85,6 +85,11 @@ namespace HoardeGame.Entities
         public float Depth => Position.Y;
 
         /// <summary>
+        /// Gets or sets the shooting direction
+        /// </summary>
+        public Vector2 ShootingDirection { get; set; }
+
+        /// <summary>
         /// Gets the value of the current blink frame
         /// </summary>
         public Color CurrentBlinkFrame

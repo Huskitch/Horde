@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using FarseerPhysics;
 using HoardeGame.Level;
@@ -28,6 +29,16 @@ namespace HoardeGame.Entities
         /// Gets or sets the damage of the weapon
         /// </summary>
         public int Damage { get; set; } = 1;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this weapon has a laser pointer
+        /// </summary>
+        public bool HasLaserPointer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the length of the laser pointer
+        /// </summary>
+        public int LaserPointerLength { get; set; }
 
         private readonly DungeonLevel level;
         private readonly IResourceProvider resourceProvider;
@@ -91,6 +102,11 @@ namespace HoardeGame.Entities
             foreach (EntityBullet bullet in bullets)
             {
                 bullet.Draw(spriteBatch, parameter);
+            }
+
+            if (HasLaserPointer)
+            {
+                spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), new Rectangle((int)owner.ScreenPosition.X + 16, (int)owner.ScreenPosition.Y + 16, LaserPointerLength, 1), null, Color.Red, (float)Math.Atan2(owner.ShootingDirection.Y, owner.ShootingDirection.X), Vector2.Zero, SpriteEffects.None, 0f);
             }
 
             base.Draw(spriteBatch, parameter);

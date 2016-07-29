@@ -108,7 +108,11 @@ namespace HoardeGame.Entities
             animator.AddAnimation("Idle", 32, 8, 5, 100);
             animator.SetDefaultAnimation("Idle");
 
-            Weapon = new EntityWeapon(level, resourceProvider, this);
+            Weapon = new EntityWeapon(level, resourceProvider, this)
+            {
+                HasLaserPointer = true,
+                LaserPointerLength = 20
+            };
         }
 
         /// <inheritdoc/>
@@ -141,27 +145,27 @@ namespace HoardeGame.Entities
                 velocity.X = -1;
             }
 
-            Vector2 shootingDirection = new Vector2(inputProvider.GamePadState.ThumbSticks.Right.X, -inputProvider.GamePadState.ThumbSticks.Right.Y);
+            ShootingDirection = new Vector2(inputProvider.GamePadState.ThumbSticks.Right.X, -inputProvider.GamePadState.ThumbSticks.Right.Y);
 
-            if (!inputProvider.GamePadState.IsConnected || shootingDirection == Vector2.Zero)
+            if (!inputProvider.GamePadState.IsConnected || ShootingDirection == Vector2.Zero)
             {
                 Vector2 target = singlePlayer.Camera.GetWolrdPosFromScreenPos(inputProvider.MouseState.Position.ToVector2(), singlePlayer.GraphicsDevice) - Position;
                 target.Normalize();
-                shootingDirection = target;
+                ShootingDirection = target;
             }
             else
             {
-                direction = GetDirection(shootingDirection);
+                direction = GetDirection(ShootingDirection);
             }
 
-            shootingDirection.Normalize();
+            ShootingDirection.Normalize();
 
             if (velocity != Vector2.Zero)
             {
-                direction = GetDirection(shootingDirection);
+                direction = GetDirection(ShootingDirection);
             }
 
-            if ((inputProvider.MouseState.LeftButton == ButtonState.Pressed || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Ammo > 0 && Weapon.Shoot(shootingDirection))
+            if ((inputProvider.MouseState.LeftButton == ButtonState.Pressed || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Ammo > 0 && Weapon.Shoot(ShootingDirection))
             {
                 Ammo--;
             }

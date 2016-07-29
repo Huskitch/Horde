@@ -26,6 +26,8 @@
                                     </xsd:sequence>
                                 </xsd:complexType>
                             </xsd:element>
+                          <xsd:element name="HasLaserPointer" type="xsd:boolean" />
+                          <xsd:element name="LaserPointerLength" type="xsd:int" />
                         </xsd:sequence>
                         <xsd:attribute name="id" type="xsd:string" use="required" />
                     </xsd:complexType>

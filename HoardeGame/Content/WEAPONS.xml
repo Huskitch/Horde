@@ -12,5 +12,7 @@
                 <Count>1</Count>
             </Bullet>
         </Bullets>
-    </Weapon>
+      <HasLaserPointer>true</HasLaserPointer>
+      <LaserPointerLength>20</LaserPointerLength>
+      </Weapon>
 </Weapons>
