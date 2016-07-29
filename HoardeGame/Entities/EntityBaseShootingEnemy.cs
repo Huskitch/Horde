@@ -34,6 +34,11 @@ namespace HoardeGame.Entities
         /// <inheritdoc/>
         public override void UpdateAI(GameTime gameTime)
         {
+            if (PlayerProvider.Player.Dead)
+            {
+                return;
+            }
+
             ShootingDirection = PlayerProvider.Player.Position - Position;
             ShootingDirection = Vector2.Normalize(ShootingDirection);
 

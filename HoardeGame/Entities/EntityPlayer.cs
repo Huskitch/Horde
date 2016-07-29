@@ -123,6 +123,7 @@ namespace HoardeGame.Entities
         {
             if (Dead)
             {
+                Health = 0;
                 return;
             }
 
