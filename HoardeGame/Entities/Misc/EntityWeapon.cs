@@ -34,6 +34,8 @@ namespace HoardeGame.Entities.Misc
         /// </summary>
         public int Damage { get; set; } = 1;
 
+        public BulletInfo CurrentAmmo { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether this weapon has a laser pointer
         /// </summary>
@@ -59,6 +61,8 @@ namespace HoardeGame.Entities.Misc
             this.level = level;
             this.resourceProvider = resourceProvider;
             this.owner = owner;
+
+            CurrentAmmo = new BulletInfo();
         }
 
         /// <summary>
@@ -73,9 +77,9 @@ namespace HoardeGame.Entities.Misc
             {
                 resourceProvider.GetSoundEffect("Fire").Play();
 
-                BulletInfo info = new BulletInfo(friendly ? Faction.Player : Faction.Enemies, this);
+                BulletOwnershipInfo info = new BulletOwnershipInfo(friendly ? Faction.Player : Faction.Enemies, this);
 
-                bullets.Add(new EntityBullet(level, resourceProvider, ConvertUnits.ToDisplayUnits(owner.Position), direction, info));
+                bullets.Add(new EntityBullet(level, resourceProvider, ConvertUnits.ToDisplayUnits(owner.Position), direction, CurrentAmmo.Speed, info));
                 fireTimer = 0;
 
                 return true;

@@ -101,7 +101,7 @@ namespace HoardeGame.Entities.Base
         /// <param name="impulse"><see cref="ContactVelocityConstraint"/></param>
         private void OnShot(Fixture fixtureA, Fixture fixtureB, Contact contact, ContactVelocityConstraint impulse)
         {
-            if (fixtureB.CollisionCategories == Category.Cat2 && ((BulletInfo)fixtureB.Body.UserData).Faction == Faction.Player)
+            if (fixtureB.CollisionCategories == Category.Cat2 && ((BulletOwnershipInfo)fixtureB.Body.UserData).Faction == Faction.Player)
             {
                 EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, resourceProvider)
                 {

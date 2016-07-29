@@ -49,7 +49,7 @@ namespace HoardeGame.Gameplay.Level
         {
             MapWidth = 64;
             MapHeight = 64;
-            PercentAreWalls = 45;
+            PercentAreWalls = 48;
 
             SearchMap = new int[MapWidth, MapHeight];
             RandomFillMap();

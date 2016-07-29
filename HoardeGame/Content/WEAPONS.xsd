@@ -15,7 +15,8 @@
                                             <xsd:complexType>
                                                 <xsd:sequence>
                                                     <xsd:element name="Texture" type="xsd:string" />
-                                                    <xsd:element name="Delay" type="xsd:decimal" />
+                                                    <xsd:element name="Damage" type="xsd:int" />
+                                                    <xsd:element name="Delay" type="xsd:int" />
                                                     <xsd:element name="Speed" type="xsd:decimal" />
                                                     <xsd:element name="Offset" type="xsd:int" />
                                                     <xsd:element name="Count" type="xsd:int" />

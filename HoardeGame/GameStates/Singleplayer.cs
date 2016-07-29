@@ -13,6 +13,7 @@ using HoardeGame.Gameplay.Cards;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Player;
 using HoardeGame.Gameplay.Themes;
+using HoardeGame.Gameplay.Weapons;
 using HoardeGame.Graphics;
 using HoardeGame.GUI;
 using HoardeGame.Input;
@@ -61,6 +62,7 @@ namespace HoardeGame.GameStates
         private readonly ICardProvider cardProvider;
         private readonly IResourceProvider resourceProvider;
         private readonly IThemeProvider themeProvider;
+        private readonly IWeaponProvider weaponProvider;
         private readonly StateManager stateManager;
 
         private readonly Minimap minimap;
@@ -94,7 +96,7 @@ namespace HoardeGame.GameStates
         /// <param name="themeProvider"><see cref="IThemeProvider"/> for managing level themes</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="stateManager"><see cref="StateManager"/> for switching states</param>
-        public SinglePlayer(IResourceProvider resourceProvider, IInputProvider inputProvider, ICardProvider cardProvider, IThemeProvider themeProvider, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, StateManager stateManager)
+        public SinglePlayer(IResourceProvider resourceProvider, IInputProvider inputProvider, ICardProvider cardProvider, IThemeProvider themeProvider, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, StateManager stateManager, IWeaponProvider weaponProvider)
         {
             GraphicsDevice = graphicsDevice;
             this.spriteBatch = spriteBatch;
@@ -103,6 +105,7 @@ namespace HoardeGame.GameStates
             this.resourceProvider = resourceProvider;
             this.themeProvider = themeProvider;
             this.stateManager = stateManager;
+            this.weaponProvider = weaponProvider;
 
             testCard = cardProvider.GetCard("testCard");
 
@@ -131,7 +134,7 @@ namespace HoardeGame.GameStates
             dungeon = new DungeonLevel(resourceProvider, this, inputProvider, themeProvider.GetTheme("temple"));
             dungeon.GenerateLevel(64, 64, 40);
 
-            Player = new EntityPlayer(dungeon, inputProvider, resourceProvider, this);
+            Player = new EntityPlayer(dungeon, inputProvider, resourceProvider, this, weaponProvider);
             dungeon.AddEntity((EntityPlayer)Player);
 
             Drill = new EntityDrill(dungeon, inputProvider, resourceProvider, this);

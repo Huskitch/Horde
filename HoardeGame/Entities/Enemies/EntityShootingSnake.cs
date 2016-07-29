@@ -60,7 +60,8 @@ namespace HoardeGame.Entities.Enemies
 
             Weapon = new EntityWeapon(Level, resourceProvider, this)
             {
-                Damage = 2
+                Damage = 2,
+                CurrentAmmo = CurrentAmmo
             };
 
             animator = new AnimatedSprite(resourceProvider.GetTexture("SnakeSheet"));

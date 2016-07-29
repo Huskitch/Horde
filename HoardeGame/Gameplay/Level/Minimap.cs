@@ -15,7 +15,7 @@ namespace HoardeGame.Gameplay.Level
     /// </summary>
     public class Minimap
     {
-        private static readonly Color FloorColor = new Color(113, 88, 71);
+        private static readonly Color FloorColor = new Color(0, 0, 0, 50);
         private static readonly Color WallColor = new Color(194, 137, 64);
         private static readonly Color CustomColor = new Color(255, 0, 255);
 
@@ -77,7 +77,7 @@ namespace HoardeGame.Gameplay.Level
         public void Draw(SpriteBatch spriteBatch, Rectangle outer, Rectangle inner, Camera camera)
         {
             Texture2D white = resourceProvider.GetTexture("OneByOneEmpty");
-            spriteBatch.Draw(white, outer, Color.Gray);
+   //         spriteBatch.Draw(white, outer, Color.Gray);
 
             float relativeWidth = camera.Size.X / Image.Width;
             float relativeHeight = camera.Size.Y / Image.Height;

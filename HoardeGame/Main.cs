@@ -74,6 +74,7 @@ namespace HoardeGame
 
             Window.Title = "HORDE PROTOTYPE";
             IsMouseVisible = false;
+            
 
             // 32 pixels = 1 meter
             ConvertUnits.SetDisplayUnitToSimUnitRatio(32f);
@@ -95,7 +96,7 @@ namespace HoardeGame
 
             string[] arguments = Environment.GetCommandLineArgs();
 
-            SinglePlayer = new SinglePlayer(resourceProvider, inputProvider, cardProvider, themeProvider, spriteBatch, GraphicsDevice, stateManager);
+            SinglePlayer = new SinglePlayer(resourceProvider, inputProvider, cardProvider, themeProvider, spriteBatch, GraphicsDevice, stateManager, weaponProvider);
             MainMenu = new MainMenu(spriteBatch, GraphicsDevice, inputProvider, resourceProvider, this, stateManager);
             MenuDemo = new MenuDemo(spriteBatch, resourceProvider, GraphicsDevice, inputProvider, themeProvider);
 

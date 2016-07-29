@@ -1,51 +1,34 @@
-﻿// <copyright file="BulletInfo.cs" company="Kuub Studios">
-// Copyright (c) Kuub Studios. All rights reserved.
-// </copyright>
-
-using HoardeGame.Entities.Misc;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using HoardeGame.Resources;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.Gameplay.Weapons
 {
-    /// <summary>
-    /// List of all factions
-    /// </summary>
-    public enum Faction
-    {
-        /// <summary>
-        /// Player and friendly entities
-        /// </summary>
-        Player,
-
-        /// <summary>
-        /// Enemy entities
-        /// </summary>
-        Enemies
-    }
-
-    /// <summary>
-    /// Info about a bullet
-    /// </summary>
     public class BulletInfo
     {
-        /// <summary>
-        /// Gets the faction that fired this bullet
-        /// </summary>
-        public Faction Faction { get; }
+        public string Texture { get; set; }
 
-        /// <summary>
-        /// Gets the weapon that shot this bullet
-        /// </summary>
-        public EntityWeapon Weapon { get; }
+        public int Damage { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BulletInfo"/> class.
-        /// </summary>
-        /// <param name="faction"><see cref="Faction"/> that fired this bullet</param>
-        /// <param name="weapon"><see cref="EntityWeapon"/> that fired this bullet</param>
-        public BulletInfo(Faction faction, EntityWeapon weapon)
+        public int Delay { get; set; }
+
+        public float Speed { get; set; }
+
+        public float Offset { get; set; }
+
+        public int Count { get; set; }
+
+        public void Validate(IResourceProvider resourceProvider)
         {
-            Faction = faction;
-            Weapon = weapon;
+            if (resourceProvider.GetTexture(Texture) == null)
+            {
+                throw new FileNotFoundException($"Texture {Texture} does not exist!");
+            }
         }
     }
 }

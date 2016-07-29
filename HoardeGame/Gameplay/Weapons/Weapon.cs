@@ -34,8 +34,7 @@ namespace HoardeGame.Gameplay.Weapons
         /// <summary>
         /// Gets or sets the list bullets?
         /// </summary>
-        [XmlIgnore]
-        public List<EntityBullet> Bullets { get; set; }
+        public List<BulletInfo> Bullets { get; set; }
 
         /// <summary>
         /// Validates the weapon

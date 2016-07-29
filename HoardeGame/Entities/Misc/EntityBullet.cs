@@ -24,7 +24,8 @@ namespace HoardeGame.Entities.Misc
         private readonly IResourceProvider resourceProvider;
         private readonly float rotation;
         private readonly Vector2 direction;
-        private readonly BulletInfo info;
+        private readonly float speed;
+        private readonly BulletOwnershipInfo info;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBullet"/> class.
@@ -33,12 +34,13 @@ namespace HoardeGame.Entities.Misc
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="startPos">Starting position</param>
         /// <param name="direction">Direction</param>
-        /// <param name="info"><see cref="BulletInfo"/></param>
-        public EntityBullet(DungeonLevel level, IResourceProvider resourceProvider, Vector2 startPos, Vector2 direction, BulletInfo info) : base(level)
+        /// <param name="info"><see cref="BulletOwnershipInfo"/></param>
+        public EntityBullet(DungeonLevel level, IResourceProvider resourceProvider, Vector2 startPos, Vector2 direction, float speed, BulletOwnershipInfo info) : base(level)
         {
             this.resourceProvider = resourceProvider;
             this.direction = direction;
             this.info = info;
+            this.speed = speed;
 
             FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(5), ConvertUnits.ToSimUnits(5), 1f, Vector2.Zero, Body);
             Body.Position = ConvertUnits.ToSimUnits(startPos);
@@ -46,7 +48,7 @@ namespace HoardeGame.Entities.Misc
             Body.CollidesWith = Category.Cat3 | Category.Cat4;
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 0f;
-            Body.ApplyForce(direction * 20);
+            Body.ApplyForce(direction * speed);
             Body.OnCollision += OnShoot;
             Body.UserData = info;
 

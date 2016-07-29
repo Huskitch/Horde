@@ -80,11 +80,12 @@ namespace HoardeGame.Entities.Player
         /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="singlePlayer"><see cref="SinglePlayer"/></param>
-        public EntityPlayer(DungeonLevel level, IInputProvider inputProvider, IResourceProvider resourceProvider, SinglePlayer singlePlayer) : base(level)
+        public EntityPlayer(DungeonLevel level, IInputProvider inputProvider, IResourceProvider resourceProvider, SinglePlayer singlePlayer, IWeaponProvider weaponProvider) : base(level)
         {
             this.inputProvider = inputProvider;
             this.resourceProvider = resourceProvider;
             this.singlePlayer = singlePlayer;
+            this.weaponProvider = weaponProvider;
 
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10), 1f, Body);
             Body.Position = Level.GetSpawnPosition();
@@ -114,10 +115,15 @@ namespace HoardeGame.Entities.Player
             animator.AddAnimation("Idle", 32, 8, 5, 100);
             animator.SetDefaultAnimation("Idle");
 
+            Weapon currentWeapon = weaponProvider.GetWeapon("testWeapon");
+
             Weapon = new EntityWeapon(level, resourceProvider, this)
             {
                 HasLaserPointer = true,
-                LaserPointerLength = 100
+                LaserPointerLength = 100,
+                FireRate = currentWeapon.Bullets[0].Delay,
+                Damage = currentWeapon.Bullets[0].Damage,
+                CurrentAmmo = currentWeapon.Bullets[0]
             };
         }
 
@@ -277,12 +283,12 @@ namespace HoardeGame.Entities.Player
         {
             Random rng = new Random();
 
-            if (fixtureB.CollisionCategories == Category.Cat2 && !IsHit() && ((BulletInfo)fixtureB.Body.UserData).Faction == Faction.Enemies)
+            if (fixtureB.CollisionCategories == Category.Cat2 && !IsHit() && ((BulletOwnershipInfo)fixtureB.Body.UserData).Faction == Faction.Enemies)
             {
                 EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, resourceProvider)
                 {
                     Color = Color.Red,
-                    Damage = ((BulletInfo)fixtureB.Body.UserData).Weapon.Damage,
+                    Damage = ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.Damage,
                     LifeTime = 60,
                     Body =
                     {
@@ -297,8 +303,8 @@ namespace HoardeGame.Entities.Player
 
                 if (Armour > 0)
                 {
-                    int remainingDamage = ((BulletInfo)fixtureB.Body.UserData).Weapon.Damage - Armour;
-                    Armour -= ((BulletInfo)fixtureB.Body.UserData).Weapon.Damage;
+                    int remainingDamage = ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.Damage - Armour;
+                    Armour -= ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.Damage;
 
                     if (remainingDamage > 0)
                     {
@@ -312,7 +318,7 @@ namespace HoardeGame.Entities.Player
                 }
                 else
                 {
-                    Health -= ((BulletInfo)fixtureB.Body.UserData).Weapon.Damage;
+                    Health -= ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.Damage;
                 }
 
                 if (Armour < 0)

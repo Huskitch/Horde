@@ -90,6 +90,7 @@
     <Compile Include="Entities\Enemies\EntityShootingSnake.cs" />
     <Compile Include="Entities\Enemies\EntitySnake.cs" />
     <Compile Include="Gameplay\Weapons\BulletInfo.cs" />
+    <Compile Include="Gameplay\Weapons\BulletOwnershipInfo.cs" />
     <Compile Include="Gameplay\Gems\GemDropInfo.cs" />
     <Compile Include="Gameplay\Gems\GemInfo.cs" />
     <Compile Include="Gameplay\Player\IPlayerProvider.cs" />
