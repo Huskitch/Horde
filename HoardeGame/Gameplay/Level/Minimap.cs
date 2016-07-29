@@ -77,8 +77,8 @@ namespace HoardeGame.Gameplay.Level
         public void Draw(SpriteBatch spriteBatch, Rectangle outer, Rectangle inner, Camera camera)
         {
             Texture2D white = resourceProvider.GetTexture("OneByOneEmpty");
-   //         spriteBatch.Draw(white, outer, Color.Gray);
 
+            // spriteBatch.Draw(white, outer, Color.Gray);
             float relativeWidth = camera.Size.X / Image.Width;
             float relativeHeight = camera.Size.Y / Image.Height;
             float relativeX = camera.Position.X / (Image.Width / 2);

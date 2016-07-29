@@ -1,4 +1,4 @@
-﻿// <copyright file="BulletInfo.cs" company="Kuub Studios">
+﻿// <copyright file="BulletOwnershipInfo.cs" company="Kuub Studios">
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 

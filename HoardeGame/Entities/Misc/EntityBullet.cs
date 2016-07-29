@@ -34,6 +34,7 @@ namespace HoardeGame.Entities.Misc
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="startPos">Starting position</param>
         /// <param name="direction">Direction</param>
+        /// <param name="speed">Speed of the bullet</param>
         /// <param name="info"><see cref="BulletOwnershipInfo"/></param>
         public EntityBullet(DungeonLevel level, IResourceProvider resourceProvider, Vector2 startPos, Vector2 direction, float speed, BulletOwnershipInfo info) : base(level)
         {

@@ -22,6 +22,9 @@ namespace HoardeGame.Entities.Base
         /// </summary>
         public EntityWeapon Weapon { get; set; }
 
+        /// <summary>
+        /// Gets or sets the current ammo type
+        /// </summary>
         public BulletInfo CurrentAmmo { get; set; }
 
         /// <summary>
@@ -32,9 +35,11 @@ namespace HoardeGame.Entities.Base
         /// <param name="playerProvider"><see cref="IPlayerProvider"/> for accessing the player entity</param>
         protected EntityBaseShootingEnemy(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level, resourceProvider, playerProvider)
         {
-            CurrentAmmo = new BulletInfo();
-            CurrentAmmo.Delay = 100;
-            CurrentAmmo.Speed = 10;
+            CurrentAmmo = new BulletInfo
+            {
+                Delay = 100,
+                Speed = 10
+            };
         }
 
         /// <inheritdoc/>
