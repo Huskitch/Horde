@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using FarseerPhysics;
 using HoardeGame.Extensions;
 using Microsoft.Xna.Framework;
@@ -89,6 +90,13 @@ namespace HoardeGame.Gameplay.Level
             List<Point> emptySpaces = FindEmptySpaces(ref map).Shuffle() as List<Point>;
             Random rnd = new Random();
 
+            if (emptySpaces.Count == 0)
+            {
+                File.WriteAllText("mapDumpOrig.csv", Stringify(Map));
+                File.WriteAllText("mapDumpSpawn.csv", Stringify(map));
+                throw new IndexOutOfRangeException("It seems that there isn't a single space. Something is fishy here 🐟 🐟 🐟 ");
+            }
+
             Vector2 position = emptySpaces[0].ToVector2();
             int i = 1;
 
@@ -99,6 +107,8 @@ namespace HoardeGame.Gameplay.Level
 
                 if (i == emptySpaces.Count)
                 {
+                    File.WriteAllText("mapDumpOrig.csv", Stringify(Map));
+                    File.WriteAllText("mapDumpSpawn.csv", Stringify(map));
                     throw new IndexOutOfRangeException("Ran out of free spaces. No more loot for you.");
                 }
             }
@@ -324,11 +334,13 @@ namespace HoardeGame.Gameplay.Level
                 return;
             }
 
+            map[wallPosition.Value.X, wallPosition.Value.Y] = 2;
+
             for (int x = wallPosition.Value.X - sizeHalf; x < wallPosition.Value.X + sizeHalf; x++)
             {
                 for (int y = wallPosition.Value.Y - sizeHalf; y < wallPosition.Value.Y + sizeHalf; y++)
                 {
-                    if (IsOutOfBounds(x, y))
+                    if (IsOutOfBounds(x, y) || map[x, y] == 1)
                     {
                         continue;
                     }
@@ -359,6 +371,23 @@ namespace HoardeGame.Gameplay.Level
             }
 
             return spaceList;
+        }
+
+        private string Stringify(int[,] map)
+        {
+            string output = string.Empty;
+
+            for (int j = 0; j < map.GetLength(0); j++)
+            {
+                for (int k = 0; k < map.GetLength(1); k++)
+                {
+                    output += map[j, k] + ",";
+                }
+
+                output += "\n";
+            }
+
+            return output;
         }
 
         /// <summary>

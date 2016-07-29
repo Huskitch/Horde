@@ -10,7 +10,7 @@ namespace HoardeGame.Gameplay.Weapons
     /// <summary>
     /// Information about a bullet type
     /// </summary>
-     public class BulletInfo
+    public class BulletInfo
     {
         /// <summary>
         /// Gets or sets the texture of the bullet
