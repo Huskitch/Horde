@@ -2,7 +2,6 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using System;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;

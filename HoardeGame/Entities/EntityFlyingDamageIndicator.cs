@@ -2,8 +2,6 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using System;
-using System.Security.Policy;
 using FarseerPhysics;
 using HoardeGame.Level;
 using HoardeGame.Resources;

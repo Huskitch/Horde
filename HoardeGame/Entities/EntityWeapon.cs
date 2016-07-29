@@ -5,8 +5,8 @@
 using System;
 using System.Collections.Generic;
 using FarseerPhysics;
-using FarseerPhysics.Collision;
 using FarseerPhysics.Dynamics;
+using HoardeGame.Gameplay;
 using HoardeGame.Level;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
@@ -64,13 +64,17 @@ namespace HoardeGame.Entities
         /// Shoots
         /// </summary>
         /// <param name="direction">Direction of fired shot</param>
+        /// <param name="friendly">Whether the bullet is fired by a friendly entity</param>
         /// <returns>Whether the gun shot</returns>
-        public bool Shoot(Vector2 direction)
+        public bool Shoot(Vector2 direction, bool friendly = true)
         {
             if (fireTimer > FireRate)
             {
                 resourceProvider.GetSoundEffect("Fire").Play();
-                bullets.Add(new EntityBullet(level, resourceProvider, ConvertUnits.ToDisplayUnits(owner.Position), direction));
+
+                BulletInfo info = new BulletInfo(friendly ? Faction.Player : Faction.Enemies, this);
+
+                bullets.Add(new EntityBullet(level, resourceProvider, ConvertUnits.ToDisplayUnits(owner.Position), direction, info));
                 fireTimer = 0;
 
                 return true;

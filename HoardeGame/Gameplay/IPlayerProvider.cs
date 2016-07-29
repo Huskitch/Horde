@@ -2,8 +2,6 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using HoardeGame.Entities;
-
 namespace HoardeGame.Gameplay
 {
     /// <summary>

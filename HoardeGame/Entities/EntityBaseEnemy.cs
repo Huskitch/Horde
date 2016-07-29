@@ -29,8 +29,12 @@ namespace HoardeGame.Entities
         /// </summary>
         protected Vector2 Direction { get; set; }
 
+        /// <summary>
+        /// Gets the <see cref="IPlayerProvider"/>
+        /// </summary>
+        protected IPlayerProvider PlayerProvider { get; }
+
         private readonly IResourceProvider resourceProvider;
-        private readonly IPlayerProvider playerProvider;
         private readonly Random rng = new Random(Guid.NewGuid().GetHashCode());
 
         private float walkTimer;
@@ -46,21 +50,21 @@ namespace HoardeGame.Entities
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> to load resources with</param>
         /// <param name="playerProvider"><see cref="IPlayerProvider"/> for accessing the player entity</param>
-        public EntityBaseEnemy(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level)
+        protected EntityBaseEnemy(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level)
         {
             this.resourceProvider = resourceProvider;
-            this.playerProvider = playerProvider;
+            PlayerProvider = playerProvider;
         }
 
         /// <summary>
         /// Updates the AI state
         /// </summary>
         /// <param name="gameTime"><see cref="GameTime"/></param>
-        public void UpdateAI(GameTime gameTime)
+        public virtual void UpdateAI(GameTime gameTime)
         {
             walkTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
-            if (Vector2.Distance(playerProvider.Player.Position, Position) > 5 || playerProvider.Player.Dead)
+            if (Vector2.Distance(PlayerProvider.Player.Position, Position) > 5 || PlayerProvider.Player.Dead)
             {
                 if (walkTimer > rng.Next(100, 3000))
                 {
@@ -70,7 +74,7 @@ namespace HoardeGame.Entities
             }
             else
             {
-                Direction = playerProvider.Player.Position - Position;
+                Direction = PlayerProvider.Player.Position - Position;
                 Direction = Vector2.Normalize(Direction);
             }
 
@@ -93,12 +97,12 @@ namespace HoardeGame.Entities
         /// <returns>true</returns>
         private bool OnShot(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
-            if (fixtureB.CollisionCategories == Category.Cat2)
+            if (fixtureB.CollisionCategories == Category.Cat2 && ((BulletInfo)fixtureB.Body.UserData).Faction == Faction.Player)
             {
                 EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, resourceProvider)
                 {
                     Color = Color.White,
-                    Damage = playerProvider.Player.Weapon.Damage,
+                    Damage = PlayerProvider.Player.Weapon.Damage,
                     LifeTime = 60,
                     Body =
                     {
@@ -109,7 +113,7 @@ namespace HoardeGame.Entities
 
                 Level.AddEntity(flyingDamageIndicator);
 
-                Health -= playerProvider.Player.Weapon.Damage;
+                Health -= PlayerProvider.Player.Weapon.Damage;
 
                 if (!IsHit())
                 {
@@ -130,7 +134,7 @@ namespace HoardeGame.Entities
 
                     for (int i = 0; i < gemCount1; i++)
                     {
-                        EntityGem gem = new EntityGem(Level, resourceProvider, playerProvider)
+                        EntityGem gem = new EntityGem(Level, resourceProvider, PlayerProvider)
                         {
                             Body =
                             {
@@ -143,7 +147,7 @@ namespace HoardeGame.Entities
 
                     for (int i = 0; i < gemCount2; i++)
                     {
-                        EntityGem2 gem2 = new EntityGem2(Level, resourceProvider, playerProvider)
+                        EntityGem2 gem2 = new EntityGem2(Level, resourceProvider, PlayerProvider)
                         {
                             Body =
                             {
@@ -156,7 +160,7 @@ namespace HoardeGame.Entities
 
                     for (int i = 0; i < gemCount3; i++)
                     {
-                        EntityGem3 gem3 = new EntityGem3(Level, resourceProvider, playerProvider)
+                        EntityGem3 gem3 = new EntityGem3(Level, resourceProvider, PlayerProvider)
                         {
                             Body =
                             {
@@ -169,7 +173,7 @@ namespace HoardeGame.Entities
 
                     for (int i = 0; i < keyCount; i++)
                     {
-                        EntityKey key = new EntityKey(Level, resourceProvider, playerProvider)
+                        EntityKey key = new EntityKey(Level, resourceProvider, PlayerProvider)
                         {
                             Body =
                             {
@@ -181,7 +185,7 @@ namespace HoardeGame.Entities
                     }
                 }
             }
-            else if (fixtureB.CollisionCategories == Category.Cat1 && !playerProvider.Player.IsHit())
+            else if (fixtureB.CollisionCategories == Category.Cat1 && !PlayerProvider.Player.IsHit() && Damage > 0)
             {
                 EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, resourceProvider)
                 {
@@ -190,46 +194,46 @@ namespace HoardeGame.Entities
                     LifeTime = 60,
                     Body =
                     {
-                        Position = playerProvider.Player.Position + new Vector2((float)rng.NextDouble(), (float)rng.NextDouble())
+                        Position = PlayerProvider.Player.Position + new Vector2((float)rng.NextDouble(), (float)rng.NextDouble())
                     },
                     Velocity = -new Vector2(-0.01f, 0.01f)
                 };
 
                 Level.AddEntity(flyingDamageIndicator);
 
-                playerProvider.Player.Hit();
+                PlayerProvider.Player.Hit();
                 resourceProvider.GetSoundEffect("Hurt").Play();
 
-                if (playerProvider.Player.Armour > 0)
+                if (PlayerProvider.Player.Armour > 0)
                 {
-                    int remainingDamage = Damage - playerProvider.Player.Armour;
-                    playerProvider.Player.Armour -= Damage;
+                    int remainingDamage = Damage - PlayerProvider.Player.Armour;
+                    PlayerProvider.Player.Armour -= Damage;
 
                     if (remainingDamage > 0)
                     {
-                        playerProvider.Player.Health -= remainingDamage;
+                        PlayerProvider.Player.Health -= remainingDamage;
                     }
 
-                    if (playerProvider.Player.Armour == 0)
+                    if (PlayerProvider.Player.Armour == 0)
                     {
                         resourceProvider.GetSoundEffect("ArmourGone").Play();
                     }
                 }
                 else
                 {
-                    playerProvider.Player.Health -= Damage;
+                    PlayerProvider.Player.Health -= Damage;
                 }
 
-                if (playerProvider.Player.Armour < 0)
+                if (PlayerProvider.Player.Armour < 0)
                 {
-                    playerProvider.Player.Armour = 0;
+                    PlayerProvider.Player.Armour = 0;
                 }
 
-                if (playerProvider.Player.Health <= 0)
+                if (PlayerProvider.Player.Health <= 0)
                 {
                     Health = 0;
-                    playerProvider.Player.Dead = true;
-                    playerProvider.Player.Body.CollidesWith = Category.None;
+                    PlayerProvider.Player.Dead = true;
+                    PlayerProvider.Player.Body.CollidesWith = Category.None;
                     resourceProvider.GetSoundEffect("PlayerDeath").Play();
                 }
             }

@@ -2,7 +2,6 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using System;
 using System.Linq;
 using FarseerPhysics;
 using HoardeGame.Entities;
@@ -131,17 +130,17 @@ namespace HoardeGame.GameStates
             Player = new EntityPlayer(dungeon, inputProvider, resourceProvider, this);
             dungeon.AddEntity((EntityPlayer)Player);
 
-            EntityChest chest = new EntityChest(dungeon, resourceProvider, this, inputProvider, themeProvider.GetTheme("temple").ChestInfo)
+            Drill = new EntityDrill(dungeon, inputProvider, resourceProvider, this);
+            dungeon.AddEntity(Drill);
+
+            EntityShootingSnake snake = new EntityShootingSnake(dungeon, resourceProvider, this)
             {
                 Body =
                 {
                     Position = Player.Position + new Vector2(1, 1)
                 }
             };
-            dungeon.AddEntity(chest);
-
-            Drill = new EntityDrill(dungeon, inputProvider, resourceProvider, this);
-            dungeon.AddEntity(Drill);
+            dungeon.AddEntity(snake);
 
             minimap.Generate(GraphicsDevice, dungeon.GetMap());
 

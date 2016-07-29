@@ -7,6 +7,7 @@ using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Factories;
+using HoardeGame.Gameplay;
 using HoardeGame.Level;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
@@ -22,6 +23,7 @@ namespace HoardeGame.Entities
         private readonly IResourceProvider resourceProvider;
         private readonly float rotation;
         private readonly Vector2 direction;
+        private readonly BulletInfo info;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBullet"/> class.
@@ -30,10 +32,12 @@ namespace HoardeGame.Entities
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="startPos">Starting position</param>
         /// <param name="direction">Direction</param>
-        public EntityBullet(DungeonLevel level, IResourceProvider resourceProvider, Vector2 startPos, Vector2 direction) : base(level)
+        /// <param name="info"><see cref="BulletInfo"/></param>
+        public EntityBullet(DungeonLevel level, IResourceProvider resourceProvider, Vector2 startPos, Vector2 direction, BulletInfo info) : base(level)
         {
             this.resourceProvider = resourceProvider;
             this.direction = direction;
+            this.info = info;
 
             FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(5), ConvertUnits.ToSimUnits(5), 1f, Vector2.Zero, Body);
             Body.Position = ConvertUnits.ToSimUnits(startPos);
@@ -43,6 +47,12 @@ namespace HoardeGame.Entities
             Body.LinearDamping = 0f;
             Body.ApplyForce(direction * 20);
             Body.OnCollision += OnShoot;
+            Body.UserData = info;
+
+            if (info.Faction == Faction.Enemies)
+            {
+                Body.CollidesWith = Category.Cat1 | Category.Cat4;
+            }
 
             rotation = (float)Math.Atan2(direction.Y, direction.X);
         }
@@ -70,12 +80,20 @@ namespace HoardeGame.Entities
         /// <returns>true</returns>
         private bool OnShoot(Fixture fixtureA, Fixture fixtureB, Contact contact)
         {
-            if (fixtureB.CollisionCategories == Category.Cat4 || fixtureB.CollisionCategories == Category.Cat3)
+            if (info.Faction == Faction.Player && (fixtureB.CollisionCategories == Category.Cat4 || fixtureB.CollisionCategories == Category.Cat3))
+            {
+                Removed = true;
+            }
+            else if (info.Faction == Faction.Enemies && (fixtureB.CollisionCategories == Category.Cat4 || fixtureB.CollisionCategories == Category.Cat1))
             {
                 Removed = true;
             }
 
-            if (fixtureB.CollisionCategories == Category.Cat3)
+            if (info.Faction == Faction.Player && fixtureB.CollisionCategories == Category.Cat3)
+            {
+                fixtureB.Body.ApplyForce(direction * 250);
+            }
+            else if (info.Faction == Faction.Enemies && fixtureB.CollisionCategories == Category.Cat1)
             {
                 fixtureB.Body.ApplyForce(direction * 250);
             }

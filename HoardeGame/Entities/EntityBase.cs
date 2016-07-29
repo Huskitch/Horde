@@ -2,7 +2,6 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using System;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using HoardeGame.Level;
@@ -125,7 +124,7 @@ namespace HoardeGame.Entities
         /// Initializes a new instance of the <see cref="EntityBase"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
-        public EntityBase(DungeonLevel level)
+        protected EntityBase(DungeonLevel level)
         {
             Level = level;
             Body = new Body(level.World);

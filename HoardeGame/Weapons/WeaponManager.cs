@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using HoardeGame.Resources;
-using HoardeGame.Themes;
 
 namespace HoardeGame.Weapons
 {

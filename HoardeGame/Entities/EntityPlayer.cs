@@ -5,6 +5,7 @@
 using System;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
+using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Factories;
 using HoardeGame.Gameplay;
 using HoardeGame.GameStates;
@@ -85,12 +86,13 @@ namespace HoardeGame.Entities
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10), 1f, Body);
             Body.Position = Level.GetSpawnPosition();
             Body.CollisionCategories = Category.Cat1;
-            Body.CollidesWith = Category.Cat3 | Category.Cat4;
+            Body.CollidesWith = Category.Cat3 | Category.Cat4 | Category.Cat2;
 
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
             Body.FixtureList[0].UserData = "player";
+            Body.OnCollision += OnShot;
 
             Health = MaxHealth;
             Armour = MaxArmour;
@@ -257,6 +259,78 @@ namespace HoardeGame.Entities
             }
 
             return Vector2.Zero;
+        }
+
+        /// <summary>
+        /// Gets automatically called when the entity collides with another entity
+        /// Filters out bullets and does damage
+        /// </summary>
+        /// <param name="fixtureA">Fisrt <see cref="Fixture"/></param>
+        /// <param name="fixtureB">Second <see cref="Fixture"/></param>
+        /// <param name="contact"><see cref="Contact"/></param>
+        /// <returns>true</returns>
+        private bool OnShot(Fixture fixtureA, Fixture fixtureB, Contact contact)
+        {
+            Random rng = new Random();
+
+            if (fixtureB.CollisionCategories == Category.Cat2 && !IsHit() && ((BulletInfo)fixtureB.Body.UserData).Faction == Faction.Enemies)
+            {
+                EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, resourceProvider)
+                {
+                    Color = Color.Red,
+                    Damage = ((BulletInfo)fixtureB.Body.UserData).Weapon.Damage,
+                    LifeTime = 60,
+                    Body =
+                    {
+                        Position = Position + new Vector2((float)rng.NextDouble(), (float)rng.NextDouble())
+                    },
+                    Velocity = -new Vector2(-0.01f, 0.01f)
+                };
+
+                Level.AddEntity(flyingDamageIndicator);
+
+                resourceProvider.GetSoundEffect("Hurt").Play();
+
+                if (Armour > 0)
+                {
+                    int remainingDamage = ((BulletInfo)fixtureB.Body.UserData).Weapon.Damage - Armour;
+                    Armour -= ((BulletInfo)fixtureB.Body.UserData).Weapon.Damage;
+
+                    if (remainingDamage > 0)
+                    {
+                        Health -= remainingDamage;
+                    }
+
+                    if (Armour == 0)
+                    {
+                        resourceProvider.GetSoundEffect("ArmourGone").Play();
+                    }
+                }
+                else
+                {
+                    Health -= ((BulletInfo)fixtureB.Body.UserData).Weapon.Damage;
+                }
+
+                if (Armour < 0)
+                {
+                    Armour = 0;
+                }
+
+                if (Health <= 0)
+                {
+                    Health = 0;
+                    Dead = true;
+                    Body.CollidesWith = Category.None;
+                    resourceProvider.GetSoundEffect("PlayerDeath").Play();
+                }
+
+                if (!IsHit())
+                {
+                    Hit();
+                }
+            }
+
+            return true;
         }
     }
 }
