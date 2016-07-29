@@ -87,6 +87,8 @@
     <Compile Include="Entities\EntityKey.cs" />
     <Compile Include="Entities\EntityPlayer.cs" />
     <Compile Include="Entities\EntitySnake.cs" />
+    <Compile Include="Gameplay\GemDropInfo.cs" />
+    <Compile Include="Gameplay\GemInfo.cs" />
     <Compile Include="Gameplay\IPlayerProvider.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />

@@ -20,14 +20,9 @@ namespace HoardeGame.Entities
     public class EntityBaseEnemy : EntityBase
     {
         /// <summary>
-        /// Gets or sets the minimal amount of gems that will drop from this entity when killed
+        /// Gets or sets the amount of gems that will drop from this entity when killed
         /// </summary>
-        public int[] MinGemDrop { get; protected set; } = new int[4];
-
-        /// <summary>
-        /// Gets or sets the maximum amount of gems that will drop from this entity when killed
-        /// </summary>
-        public int[] MaxGemDrop { get; protected set; } = new int[4];
+        public GemDropInfo GemDrop { get; protected set; } = new GemDropInfo();
 
         /// <summary>
         /// Gets or sets the current direction of this entity
@@ -36,9 +31,9 @@ namespace HoardeGame.Entities
 
         private readonly IResourceProvider resourceProvider;
         private readonly IPlayerProvider playerProvider;
+        private readonly Random rng = new Random(Guid.NewGuid().GetHashCode());
 
         private float walkTimer;
-        private Random rng = new Random(Guid.NewGuid().GetHashCode());
 
         /// <summary>
         /// Gets or sets the damage dealt by this entity
@@ -128,10 +123,10 @@ namespace HoardeGame.Entities
                     resourceProvider.GetSoundEffect("Death").Play();
                     Random random = new Random();
 
-                    int gemCount1 = random.Next(MinGemDrop[0], MaxGemDrop[0] + 1);
-                    int gemCount2 = random.Next(MinGemDrop[1], MaxGemDrop[1] + 1);
-                    int gemCount3 = random.Next(MinGemDrop[2], MaxGemDrop[2] + 1);
-                    int keyCount = random.Next(MinGemDrop[3], MaxGemDrop[3] + 1);
+                    int gemCount1 = GemDrop.GetRandomRedGems();
+                    int gemCount2 = GemDrop.GetRandomGreenGems();
+                    int gemCount3 = GemDrop.GetRandomBlueGems();
+                    int keyCount = GemDrop.GetRandomKeys();
 
                     for (int i = 0; i < gemCount1; i++)
                     {

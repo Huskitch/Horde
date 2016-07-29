@@ -16,7 +16,6 @@ using HoardeGame.Resources;
 using HoardeGame.Themes;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace HoardeGame.Entities
 {
@@ -65,17 +64,17 @@ namespace HoardeGame.Entities
 
             Health = 3;
 
-            if (info.MaxGems[0] > 0)
+            if (info.Gems.MaxDrop.RedGems > 0)
             {
                 contentsList.Add("Red gems");
             }
 
-            if (info.MaxGems[1] > 0)
+            if (info.Gems.MaxDrop.GreenGems > 0)
             {
                 contentsList.Add("Green gems");
             }
 
-            if (info.MaxGems[2] > 0)
+            if (info.Gems.MaxDrop.BlueGems > 0)
             {
                 contentsList.Add("Blue gems");
             }
@@ -110,9 +109,9 @@ namespace HoardeGame.Entities
 
             Random random = new Random();
 
-            if (info.MaxGems[0] > 0)
+            if (info.Gems.MaxDrop.RedGems > 0)
             {
-                int rubyDrop = random.Next(info.MinGems[0], info.MaxGems[0] + 1);
+                int rubyDrop = info.Gems.GetRandomRedGems();
 
                 for (int i = 0; i < rubyDrop; i++)
                 {
@@ -128,9 +127,9 @@ namespace HoardeGame.Entities
                 }
             }
 
-            if (info.MaxGems[1] > 0)
+            if (info.Gems.MaxDrop.GreenGems > 0)
             {
-                int emeraldDrop = random.Next(info.MinGems[1], info.MaxGems[1] + 1);
+                int emeraldDrop = info.Gems.GetRandomGreenGems();
 
                 for (int i = 0; i < emeraldDrop; i++)
                 {
@@ -146,9 +145,9 @@ namespace HoardeGame.Entities
                 }
             }
 
-            if (info.MaxGems[2] > 0)
+            if (info.Gems.MaxDrop.BlueGems > 0)
             {
-                int diamondDrop = random.Next(info.MinGems[2], info.MaxGems[2] + 1);
+                int diamondDrop = info.Gems.GetRandomBlueGems();
 
                 for (int i = 0; i < diamondDrop; i++)
                 {
@@ -226,14 +225,14 @@ namespace HoardeGame.Entities
         {
             if (contentsList.Count > 0 && Vector2.Distance(playerProvider.Player.Position, Position) < 3 && inputProvider.KeybindPressed("Activate"))
             {
-                if (playerProvider.Player.ChestKeys > 0)
+                if (playerProvider.Player.Gems.Keys > 0)
                 {
-                    playerProvider.Player.ChestKeys--;
+                    playerProvider.Player.Gems.Keys--;
                     Open();
                 }
                 else
                 {
-                    playerProvider.Player.ChestKeys = -1;
+                    playerProvider.Player.Gems.Keys = -1;
                 }
             }
 

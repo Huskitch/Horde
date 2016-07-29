@@ -26,16 +26,18 @@
       <MaxHealth>5</MaxHealth>
       <MinArmour>0</MinArmour>
       <MaxArmour>2</MaxArmour>
-      <MinGems>
-        <int>3</int>
-        <int>2</int>
-        <int>1</int>
-      </MinGems>
-      <MaxGems>
-        <int>9</int>
-        <int>6</int>
-        <int>3</int>
-      </MaxGems>
+      <Gems>
+        <MinDrop>
+          <RedGems>3</RedGems>
+          <GreenGems>2</GreenGems>
+          <BlueGems>1</BlueGems>
+        </MinDrop>
+        <MaxDrop>
+          <RedGems>9</RedGems>
+          <GreenGems>6</GreenGems>
+          <BlueGems>3</BlueGems>
+        </MaxDrop>
+      </Gems>
       <WeaponType></WeaponType>
       <WeaponDropChance>100</WeaponDropChance>
       <WeaponDropType>Random</WeaponDropType>

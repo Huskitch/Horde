@@ -36,18 +36,13 @@ namespace HoardeGame.Gameplay
         /// <summary>
         /// Gets the amount of gems the player has
         /// </summary>
-        int[] Gems { get; }
+        GemInfo Gems { get; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the player is dead
         /// Can't just remove the entity because that would break everything
         /// </summary>
         bool Dead { get; set; }
-
-        /// <summary>
-        /// Gets or sets the amount of chest keys the player has
-        /// </summary>
-        int ChestKeys { get; set; }
 
         /// <summary>
         /// Gets or sets the weapon of the player

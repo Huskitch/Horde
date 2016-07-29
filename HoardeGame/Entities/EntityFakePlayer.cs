@@ -27,13 +27,10 @@ namespace HoardeGame.Entities
         public int Ammo { get; set; }
 
         /// <inheritdoc/>
-        public int[] Gems { get; }
+        public GemInfo Gems { get; } = new GemInfo();
 
         /// <inheritdoc/>
         public bool Dead { get; set; }
-
-        /// <inheritdoc/>
-        public int ChestKeys { get; set; }
 
         /// <inheritdoc/>
         public EntityWeapon Weapon { get; set; }

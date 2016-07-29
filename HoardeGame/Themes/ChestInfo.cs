@@ -2,6 +2,8 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using HoardeGame.Gameplay;
+
 namespace HoardeGame.Themes
 {
     /// <summary>
@@ -61,14 +63,9 @@ namespace HoardeGame.Themes
         public int MaxArmour { get; set; }
 
         /// <summary>
-        /// Gets or sets the minimal amount of gems the chest will contain
+        /// Gets or sets the amount of gems the chest will contain
         /// </summary>
-        public int[] MinGems { get; set; }
-
-        /// <summary>
-        /// Gets or sets the maximum amount of gems the chest will contain
-        /// </summary>
-        public int[] MaxGems { get; set; }
+        public GemDropInfo Gems { get; set; }
 
         /// <summary>
         /// Gets or sets the specific weapon type the weapon will contain in case the <see cref="WeaponDropType"/> is set to <see cref="WeaponChance.Specific"/>

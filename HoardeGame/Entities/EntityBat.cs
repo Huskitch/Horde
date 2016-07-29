@@ -43,8 +43,24 @@ namespace HoardeGame.Entities
 
             Damage = 1;
             Health = 5;
-            MinGemDrop = new[] { 3, 2, 1, 0 };
-            MaxGemDrop = new[] { 6, 4, 2, 0 };
+
+            GemDrop = new GemDropInfo
+            {
+                MinDrop =
+                {
+                    RedGems = 3,
+                    GreenGems = 2,
+                    BlueGems = 1,
+                    Keys = 0
+                },
+                MaxDrop =
+                {
+                    RedGems = 6,
+                    GreenGems = 4,
+                    BlueGems = 2,
+                    Keys = 0
+                }
+            };
 
             animator = new AnimatedSprite(resourceProvider.GetTexture("BatSheet"));
             animator.AddAnimation("Flap", 32, 0, 2, 100);

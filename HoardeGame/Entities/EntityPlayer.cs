@@ -34,14 +34,8 @@ namespace HoardeGame.Entities
         /// </summary>
         public const int MaxArmour = 10;
 
-        /// <summary>
-        /// Gets or sets the amount of chest keys the player has
-        /// Set to -1 for flashing effect (will display 0)
-        /// </summary>
-        public int ChestKeys { get; set; }
-
         /// <inheritdoc/>
-        public int[] Gems { get; } = new int[3];
+        public GemInfo Gems { get; } = new GemInfo();
 
         /// <inheritdoc/>
         public bool Dead { get; set; }

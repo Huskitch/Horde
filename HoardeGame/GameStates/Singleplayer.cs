@@ -288,9 +288,9 @@ namespace HoardeGame.GameStates
 
             ammoLabel.Text = $"Ammo: {Player.Ammo}";
 
-            rubyLabel.Text = Player.Gems[0].ToString();
-            emeraldLabel.Text = Player.Gems[1].ToString();
-            diamondLabel.Text = Player.Gems[2].ToString();
+            rubyLabel.Text = Player.Gems.RedGems.ToString();
+            emeraldLabel.Text = Player.Gems.GreenGems.ToString();
+            diamondLabel.Text = Player.Gems.BlueGems.ToString();
 
             if (keyBlinkDuration > 0)
             {
@@ -302,14 +302,14 @@ namespace HoardeGame.GameStates
                 }
             }
 
-            if (Player.ChestKeys == -1)
+            if (Player.Gems.Keys == -1)
             {
                 keyBlinkDuration = 15;
                 keyLabel.Color = Color.Red;
-                Player.ChestKeys = 0;
+                Player.Gems.Keys = 0;
             }
 
-            keyLabel.Text = Player.ChestKeys.ToString();
+            keyLabel.Text = Player.Gems.Keys.ToString();
 
             if (!Drilling && inputProvider.KeybindPressed("PauseGame"))
             {
