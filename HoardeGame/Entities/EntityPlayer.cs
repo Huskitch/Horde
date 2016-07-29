@@ -90,6 +90,7 @@ namespace HoardeGame.Entities
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
+            Body.FixtureList[0].UserData = "player";
 
             Health = MaxHealth;
             Armour = MaxArmour;
@@ -111,7 +112,7 @@ namespace HoardeGame.Entities
             Weapon = new EntityWeapon(level, resourceProvider, this)
             {
                 HasLaserPointer = true,
-                LaserPointerLength = 20
+                LaserPointerLength = 100
             };
         }
 

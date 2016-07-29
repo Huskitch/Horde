@@ -5,6 +5,8 @@
 using System;
 using System.Collections.Generic;
 using FarseerPhysics;
+using FarseerPhysics.Collision;
+using FarseerPhysics.Dynamics;
 using HoardeGame.Level;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
@@ -19,6 +21,7 @@ namespace HoardeGame.Entities
     {
         private readonly List<EntityBullet> bullets = new List<EntityBullet>();
         private float fireTimer;
+        private Vector2 pointerEnd;
 
         /// <summary>
         /// Gets or sets the fire rate of the weapon
@@ -106,10 +109,28 @@ namespace HoardeGame.Entities
 
             if (HasLaserPointer)
             {
-                spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), new Rectangle((int)owner.ScreenPosition.X + 16, (int)owner.ScreenPosition.Y + 16, LaserPointerLength, 1), null, Color.Red, (float)Math.Atan2(owner.ShootingDirection.Y, owner.ShootingDirection.X), Vector2.Zero, SpriteEffects.None, 0f);
+                Level.World.RayCast(DetermineRayCast, owner.Position , owner.Position + ConvertUnits.ToSimUnits(new Vector2(16)) + 100 * owner.ShootingDirection);
+                spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), new Rectangle((int)owner.ScreenPosition.X + 16, (int)owner.ScreenPosition.Y + 16, GetPointerDistance(), 1), null, Color.Red, (float)Math.Atan2(owner.ShootingDirection.Y, owner.ShootingDirection.X), Vector2.Zero, SpriteEffects.None, 0f);
             }
 
             base.Draw(spriteBatch, parameter);
+        }
+
+        private float DetermineRayCast(Fixture fixture, Vector2 point, Vector2 normal, float fraction)
+        {
+            if (fixture.UserData != null && fixture.UserData.ToString() == "player")
+            {
+                return -1;
+            }
+
+            pointerEnd = point;
+            return fraction;
+        }
+
+        private int GetPointerDistance()
+        {
+            float rayDistance = Vector2.Distance(owner.Position, pointerEnd);
+            return (int)Math.Min(LaserPointerLength, ConvertUnits.ToDisplayUnits(rayDistance));
         }
     }
 }

@@ -75,6 +75,7 @@ namespace HoardeGame.GameStates
         private Label emeraldLabel;
         private Label diamondLabel;
         private Label keyLabel;
+        private Label fpsLabel;
         private int keyBlinkDuration;
 
         private DepthStencilState barDepthStencilState;
@@ -172,6 +173,12 @@ namespace HoardeGame.GameStates
             {
                 Position = new Vector2(GraphicsDevice.PresentationParameters.BackBufferWidth - 48, 142),
                 Text = "0"
+            };
+
+            fpsLabel = new Label(this, "fpsLabel")
+            {
+                Position = new Vector2(GraphicsDevice.PresentationParameters.BackBufferWidth - 160, 185),
+                Text = "16,66 ms"
             };
 
             playerHealthArmourBar = new HealthArmourBar(this, resourceProvider, "playerHealthArmourBar")
@@ -291,6 +298,8 @@ namespace HoardeGame.GameStates
             rubyLabel.Text = Player.Gems.RedGems.ToString();
             emeraldLabel.Text = Player.Gems.GreenGems.ToString();
             diamondLabel.Text = Player.Gems.BlueGems.ToString();
+
+            fpsLabel.Text = $"{gameTime.ElapsedGameTime.Ticks / 10000f} ms";
 
             if (keyBlinkDuration > 0)
             {
