@@ -109,7 +109,7 @@ namespace HoardeGame.Entities
 
             if (HasLaserPointer)
             {
-                Level.World.RayCast(DetermineRayCast, owner.Position , owner.Position + ConvertUnits.ToSimUnits(new Vector2(16)) + 100 * owner.ShootingDirection);
+                Level.World.RayCast(DetermineRayCast, owner.Position, owner.Position + ConvertUnits.ToSimUnits(new Vector2(16)) + 100 * owner.ShootingDirection);
                 spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), new Rectangle((int)owner.ScreenPosition.X + 16, (int)owner.ScreenPosition.Y + 16, GetPointerDistance(), 1), null, Color.Red, (float)Math.Atan2(owner.ShootingDirection.Y, owner.ShootingDirection.X), Vector2.Zero, SpriteEffects.None, 0f);
             }
 
