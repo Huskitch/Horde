@@ -50,7 +50,7 @@ namespace HoardeGame.Gameplay.Weapons
         /// <summary>
         /// Gets or sets the spread of this bullet in deg
         /// </summary>
-        public float Spread { get; set; }
+        public int Spread { get; set; }
 
         /// <summary>
         /// Validates the bukket

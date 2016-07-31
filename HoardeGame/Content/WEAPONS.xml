@@ -9,9 +9,9 @@
                 <Damage>1</Damage>
                 <Delay>100</Delay>
                 <Speed>20.0</Speed>
-                <Offset>45</Offset>
+                <Offset>-90</Offset>
                 <Lifetime>1000</Lifetime>
-                <Spread>0</Spread>
+                <Spread>90</Spread>
                 <Count>1</Count>
             </BulletInfo>
         </Bullets>

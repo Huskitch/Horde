@@ -74,6 +74,7 @@ namespace HoardeGame.Entities.Player
         private IInputProvider inputProvider;
 
         private Weapon currentWeapon;
+        private Random rng;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
@@ -106,6 +107,8 @@ namespace HoardeGame.Entities.Player
             Ammo = 100;
             BlinkMultiplier = 1;
 
+            rng = new Random();
+
             animator = new AnimatedSprite(resourceProvider.GetTexture("PlayerSheet"));
             animator.AddAnimation("South", 32, 0, 5, 100);
             animator.AddAnimation("West", 32, 2, 5, 100);
@@ -118,7 +121,7 @@ namespace HoardeGame.Entities.Player
             animator.AddAnimation("Idle", 32, 8, 5, 100);
             animator.SetDefaultAnimation("Idle");
 
-             currentWeapon = weaponProvider.GetWeapon("testWeapon");
+            currentWeapon = weaponProvider.GetWeapon("testWeapon");
 
             Weapon = new EntityWeapon(level, resourceProvider, this)
             {
@@ -184,7 +187,9 @@ namespace HoardeGame.Entities.Player
 
             if ((inputProvider.MouseState.LeftButton == ButtonState.Pressed || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Ammo > 0)
             {
-                float offset = MathHelper.ToRadians(currentWeapon.Bullets[0].Offset);
+                float offset = MathHelper.ToRadians(currentWeapon.Bullets[0].Offset) +
+                               MathHelper.ToRadians(rng.Next(0, currentWeapon.Bullets[0].Spread));
+
                 float targetRad = (float)Math.Atan2(ShootingDirection.Y, ShootingDirection.X) + offset;
 
                 Vector2 realShootingDirection = new Vector2((float)Math.Cos(targetRad), (float)Math.Sin(targetRad));
