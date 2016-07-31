@@ -8,9 +8,9 @@
                 <Texture>basicbullet</Texture>
                 <Damage>1</Damage>
                 <Delay>100</Delay>
-                <Speed>10.0</Speed>
+                <Speed>20.0</Speed>
                 <Offset>0</Offset>
-                <Lifetime>1000</Lifetime>
+                <Lifetime>100</Lifetime>
                 <Count>1</Count>
             </BulletInfo>
         </Bullets>
