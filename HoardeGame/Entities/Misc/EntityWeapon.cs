@@ -79,7 +79,7 @@ namespace HoardeGame.Entities.Misc
 
                 BulletOwnershipInfo info = new BulletOwnershipInfo(friendly ? Faction.Player : Faction.Enemies, this);
 
-                bullets.Add(new EntityBullet(level, resourceProvider, ConvertUnits.ToDisplayUnits(owner.Position), direction, CurrentAmmo.Speed, info));
+                bullets.Add(new EntityBullet(level, resourceProvider, ConvertUnits.ToDisplayUnits(owner.Position), direction, CurrentAmmo.Speed, CurrentAmmo.Lifetime, info));
                 fireTimer = 0;
 
                 return true;

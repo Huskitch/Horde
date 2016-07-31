@@ -26,6 +26,8 @@ namespace HoardeGame.Entities.Misc
         private readonly Vector2 direction;
         private readonly float speed;
         private readonly BulletOwnershipInfo info;
+        private readonly float lifetime;
+        private float lifeTimer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBullet"/> class.
@@ -35,12 +37,13 @@ namespace HoardeGame.Entities.Misc
         /// <param name="startPos">Starting position</param>
         /// <param name="direction">Direction</param>
         /// <param name="info"><see cref="BulletOwnershipInfo"/></param>
-        public EntityBullet(DungeonLevel level, IResourceProvider resourceProvider, Vector2 startPos, Vector2 direction, float speed, BulletOwnershipInfo info) : base(level)
+        public EntityBullet(DungeonLevel level, IResourceProvider resourceProvider, Vector2 startPos, Vector2 direction, float speed, float lifetime, BulletOwnershipInfo info) : base(level)
         {
             this.resourceProvider = resourceProvider;
             this.direction = direction;
             this.info = info;
             this.speed = speed;
+            this.lifetime = lifetime;
 
             FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(5), ConvertUnits.ToSimUnits(5), 1f, Vector2.Zero, Body);
             Body.Position = ConvertUnits.ToSimUnits(startPos);
@@ -63,6 +66,13 @@ namespace HoardeGame.Entities.Misc
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
+            lifeTimer += (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            if (lifeTimer > lifetime)
+            {
+                lifeTimer = 0;
+                Removed = true;
+            }
         }
 
         /// <inheritdoc/>

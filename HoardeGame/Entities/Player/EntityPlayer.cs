@@ -124,6 +124,7 @@ namespace HoardeGame.Entities.Player
                 FireRate = currentWeapon.Bullets[0].Delay,
                 Damage = currentWeapon.Bullets[0].Damage,
                 CurrentAmmo = currentWeapon.Bullets[0]
+                
             };
         }
 

@@ -23,6 +23,8 @@ namespace HoardeGame.Gameplay.Weapons
 
         public int Count { get; set; }
 
+        public int Lifetime { get; set; }
+
         public void Validate(IResourceProvider resourceProvider)
         {
             if (resourceProvider.GetTexture(Texture) == null)
