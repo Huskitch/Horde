@@ -37,6 +37,7 @@ namespace HoardeGame.Entities.Misc
         /// <param name="startPos">Starting position</param>
         /// <param name="direction">Direction</param>
         /// <param name="speed">Speed of the bullet</param>
+        /// <param name="lifetime">Life of the bullet in ms</param>
         /// <param name="info"><see cref="BulletOwnershipInfo"/></param>
         public EntityBullet(DungeonLevel level, IResourceProvider resourceProvider, Vector2 startPos, Vector2 direction, float speed, float lifetime, BulletOwnershipInfo info) : base(level)
         {
@@ -67,7 +68,7 @@ namespace HoardeGame.Entities.Misc
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
-            lifeTimer += (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+            lifeTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             if (lifeTimer > lifetime)
             {

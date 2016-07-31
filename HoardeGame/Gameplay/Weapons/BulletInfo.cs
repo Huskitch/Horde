@@ -42,10 +42,20 @@ namespace HoardeGame.Gameplay.Weapons
         /// </summary>
         public int Count { get; set; }
 
+        /// <summary>
+        /// Gets or sets the life time of this bullet in ms
+        /// </summary>
         public int Lifetime { get; set; }
 
+        /// <summary>
+        /// Gets or sets the spread of this bullet in deg
+        /// </summary>
         public float Spread { get; set; }
 
+        /// <summary>
+        /// Validates the bukket
+        /// </summary>
+        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for validating the texture</param>
         public void Validate(IResourceProvider resourceProvider)
         {
             if (resourceProvider.GetTexture(Texture) == null)

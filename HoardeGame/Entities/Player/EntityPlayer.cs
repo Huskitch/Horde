@@ -127,7 +127,6 @@ namespace HoardeGame.Entities.Player
                 FireRate = currentWeapon.Bullets[0].Delay,
                 Damage = currentWeapon.Bullets[0].Damage,
                 CurrentAmmo = currentWeapon.Bullets[0]
-                
             };
         }
 
@@ -166,13 +165,10 @@ namespace HoardeGame.Entities.Player
 
             if (!inputProvider.GamePadState.IsConnected || ShootingDirection == Vector2.Zero)
             {
-                Vector2 offset = new Vector2((float)Math.Cos(currentWeapon.Bullets[0].Offset), (float)Math.Sin(currentWeapon.Bullets[0].Offset));
-                offset.Normalize();
-
                 Vector2 target = singlePlayer.Camera.GetWolrdPosFromScreenPos(inputProvider.MouseState.Position.ToVector2(), singlePlayer.GraphicsDevice) - Position;
                 target.Normalize();
 
-                ShootingDirection = target + offset;
+                ShootingDirection = target;
             }
             else
             {
@@ -186,9 +182,17 @@ namespace HoardeGame.Entities.Player
                 direction = GetDirection(ShootingDirection);
             }
 
-            if ((inputProvider.MouseState.LeftButton == ButtonState.Pressed || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Ammo > 0 && Weapon.Shoot(ShootingDirection))
+            if ((inputProvider.MouseState.LeftButton == ButtonState.Pressed || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Ammo > 0)
             {
-                Ammo--;
+                float offset = MathHelper.ToRadians(currentWeapon.Bullets[0].Offset);
+                float targetRad = (float)Math.Atan2(ShootingDirection.Y, ShootingDirection.X) + offset;
+
+                Vector2 realShootingDirection = new Vector2((float)Math.Cos(targetRad), (float)Math.Sin(targetRad));
+
+                if (Weapon.Shoot(realShootingDirection))
+                {
+                    Ammo--;
+                }
             }
 
             Body.ApplyForce(velocity * 50);
