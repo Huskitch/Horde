@@ -38,7 +38,8 @@ namespace HoardeGame.Entities.Base
             CurrentAmmo = new BulletInfo
             {
                 Delay = 100,
-                Speed = 10
+                Speed = 10,
+                Lifetime = 1000
             };
         }
 

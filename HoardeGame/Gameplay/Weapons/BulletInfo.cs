@@ -44,6 +44,8 @@ namespace HoardeGame.Gameplay.Weapons
 
         public int Lifetime { get; set; }
 
+        public float Spread { get; set; }
+
         public void Validate(IResourceProvider resourceProvider)
         {
             if (resourceProvider.GetTexture(Texture) == null)

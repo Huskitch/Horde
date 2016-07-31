@@ -73,6 +73,8 @@ namespace HoardeGame.Entities.Player
         private AnimatedSprite animator;
         private IInputProvider inputProvider;
 
+        private Weapon currentWeapon;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
         /// </summary>
@@ -116,7 +118,7 @@ namespace HoardeGame.Entities.Player
             animator.AddAnimation("Idle", 32, 8, 5, 100);
             animator.SetDefaultAnimation("Idle");
 
-            Weapon currentWeapon = weaponProvider.GetWeapon("testWeapon");
+             currentWeapon = weaponProvider.GetWeapon("testWeapon");
 
             Weapon = new EntityWeapon(level, resourceProvider, this)
             {
@@ -164,9 +166,13 @@ namespace HoardeGame.Entities.Player
 
             if (!inputProvider.GamePadState.IsConnected || ShootingDirection == Vector2.Zero)
             {
+                Vector2 offset = new Vector2((float)Math.Cos(currentWeapon.Bullets[0].Offset), (float)Math.Sin(currentWeapon.Bullets[0].Offset));
+                offset.Normalize();
+
                 Vector2 target = singlePlayer.Camera.GetWolrdPosFromScreenPos(inputProvider.MouseState.Position.ToVector2(), singlePlayer.GraphicsDevice) - Position;
                 target.Normalize();
-                ShootingDirection = target;
+
+                ShootingDirection = target + offset;
             }
             else
             {
