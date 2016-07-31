@@ -1,26 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// <copyright file="BulletInfo.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using HoardeGame.Resources;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.Gameplay.Weapons
 {
-    public class BulletInfo
+    /// <summary>
+    /// Information about a bullet type
+    /// </summary>
+     public class BulletInfo
     {
+        /// <summary>
+        /// Gets or sets the texture of the bullet
+        /// </summary>
         public string Texture { get; set; }
 
+        /// <summary>
+        /// Gets or sets the damage of the bullet
+        /// </summary>
         public int Damage { get; set; }
 
+        /// <summary>
+        /// Gets or sets the firing delay
+        /// </summary>
         public int Delay { get; set; }
 
+        /// <summary>
+        /// Gets or sets the speed of the bullet
+        /// </summary>
         public float Speed { get; set; }
 
+        /// <summary>
+        /// Gets or sets the offset of the bullet
+        /// </summary>
         public float Offset { get; set; }
 
+        /// <summary>
+        /// Gets or sets the amount of bullets that spawn per shot
+        /// </summary>
         public int Count { get; set; }
 
         public int Lifetime { get; set; }

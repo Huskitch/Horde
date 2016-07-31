@@ -34,6 +34,9 @@ namespace HoardeGame.Entities.Misc
         /// </summary>
         public int Damage { get; set; } = 1;
 
+        /// <summary>
+        /// Gets or sets the current ammo type
+        /// </summary>
         public BulletInfo CurrentAmmo { get; set; }
 
         /// <summary>

@@ -80,6 +80,7 @@ namespace HoardeGame.Entities.Player
         /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="singlePlayer"><see cref="SinglePlayer"/></param>
+        /// <param name="weaponProvider"><see cref="IWeaponProvider"/> for loading weapons</param>
         public EntityPlayer(DungeonLevel level, IInputProvider inputProvider, IResourceProvider resourceProvider, SinglePlayer singlePlayer, IWeaponProvider weaponProvider) : base(level)
         {
             this.inputProvider = inputProvider;

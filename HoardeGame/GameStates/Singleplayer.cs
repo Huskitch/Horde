@@ -96,6 +96,7 @@ namespace HoardeGame.GameStates
         /// <param name="themeProvider"><see cref="IThemeProvider"/> for managing level themes</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="stateManager"><see cref="StateManager"/> for switching states</param>
+        /// <param name="weaponProvider"><see cref="IWeaponProvider"/> for loading weapons</param>
         public SinglePlayer(IResourceProvider resourceProvider, IInputProvider inputProvider, ICardProvider cardProvider, IThemeProvider themeProvider, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, StateManager stateManager, IWeaponProvider weaponProvider)
         {
             GraphicsDevice = graphicsDevice;
