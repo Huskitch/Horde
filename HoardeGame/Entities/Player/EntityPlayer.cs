@@ -126,7 +126,7 @@ namespace HoardeGame.Entities.Player
             Weapon = new EntityWeapon(level, resourceProvider, this)
             {
                 HasLaserPointer = true,
-                LaserPointerLength = 100,
+                LaserPointerLength = 200,
                 FireRate = currentWeapon.Bullets[0].Delay,
                 Damage = currentWeapon.Bullets[0].Damage,
                 CurrentAmmo = currentWeapon.Bullets[0]
@@ -140,6 +140,15 @@ namespace HoardeGame.Entities.Player
             {
                 Health = 0;
                 return;
+            }
+
+            if (inputProvider.MouseState.RightButton == ButtonState.Pressed)
+            {
+                singlePlayer.Camera.Zoom = MathHelper.Lerp(3.5f, 3f, 0.001f);
+            }
+            else
+            {
+                singlePlayer.Camera.Zoom = MathHelper.Lerp(3f, 3.5f, 0.001f);
             }
 
             Vector2 velocity = new Vector2(inputProvider.GamePadState.ThumbSticks.Left.X, -inputProvider.GamePadState.ThumbSticks.Left.Y);

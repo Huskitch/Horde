@@ -47,6 +47,7 @@ namespace HoardeGame.Gameplay.Level
             this.texture = texture;
             Position = pos / 32f;
             Depth = 0;
+            source = new Rectangle(0, 0, 32, 32);
 
             if (collide)
             {

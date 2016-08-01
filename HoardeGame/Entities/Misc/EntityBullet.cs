@@ -27,7 +27,8 @@ namespace HoardeGame.Entities.Misc
         private readonly float speed;
         private readonly BulletOwnershipInfo info;
         private readonly float lifetime;
-        private float lifeTimer;
+        private Vector2 startPos;
+        private float totalDistance;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBullet"/> class.
@@ -57,6 +58,8 @@ namespace HoardeGame.Entities.Misc
             Body.OnCollision += OnShoot;
             Body.UserData = info;
 
+            this.startPos = ConvertUnits.ToSimUnits(startPos);
+
             if (info.Faction == Faction.Enemies)
             {
                 Body.CollidesWith = Category.Cat1 | Category.Cat4;
@@ -68,13 +71,14 @@ namespace HoardeGame.Entities.Misc
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
-            lifeTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            totalDistance += Vector2.Distance(startPos, Position);
 
-            if (lifeTimer > lifetime)
+            if (totalDistance > lifetime)
             {
-                lifeTimer = 0;
                 Removed = true;
             }
+
+            startPos = Position;
         }
 
         /// <inheritdoc/>

@@ -45,7 +45,7 @@ namespace HoardeGame.Gameplay.Weapons
         /// <summary>
         /// Gets or sets the life time of this bullet in ms
         /// </summary>
-        public int Lifetime { get; set; }
+        public float Lifetime { get; set; }
 
         /// <summary>
         /// Gets or sets the spread of this bullet in deg

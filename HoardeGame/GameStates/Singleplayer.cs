@@ -148,7 +148,7 @@ namespace HoardeGame.GameStates
                     Position = Player.Position + new Vector2(1, 1)
                 }
             };
-            dungeon.AddEntity(snake);
+         //   dungeon.AddEntity(snake);
 
             minimap.Generate(GraphicsDevice, dungeon.GetMap());
 

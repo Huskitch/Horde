@@ -110,6 +110,8 @@ namespace HoardeGame.Resources
             textures.Add("Armour", content.Load<Texture2D>("Art/Shield"));
             textures.Add("Ammo", content.Load<Texture2D>("Art/Bullets"));
 
+            textures.Add("Cursor", content.Load<Texture2D>("Art/cursor"));
+
             textures.Add("BasicButton", content.Load<Texture2D>("Art/button"));
             textures.Add("BasicButtonHover", content.Load<Texture2D>("Art/buttonHover"));
 

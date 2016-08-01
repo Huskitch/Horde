@@ -9,9 +9,11 @@ using FarseerPhysics.Dynamics;
 using HoardeGame.Entities.Base;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Weapons;
+using HoardeGame.Input;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace HoardeGame.Entities.Misc
 {
@@ -52,6 +54,8 @@ namespace HoardeGame.Entities.Misc
         private readonly DungeonLevel level;
         private readonly IResourceProvider resourceProvider;
         private readonly EntityBase owner;
+
+        private MouseState mState;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityWeapon"/> class.
@@ -94,6 +98,8 @@ namespace HoardeGame.Entities.Misc
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
+            mState = Mouse.GetState();
+
             fireTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             for (int i = 0; i < bullets.Count; i++)
@@ -121,8 +127,16 @@ namespace HoardeGame.Entities.Misc
 
             if (HasLaserPointer)
             {
-                Level.World.RayCast(DetermineRayCast, owner.Position, owner.Position + ConvertUnits.ToSimUnits(new Vector2(16)) + 100 * owner.ShootingDirection);
-                spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), new Rectangle((int)owner.ScreenPosition.X + 16, (int)owner.ScreenPosition.Y + 16, GetPointerDistance(), 1), null, Color.White, (float)Math.Atan2(owner.ShootingDirection.Y, owner.ShootingDirection.X), Vector2.Zero, SpriteEffects.None, 0f);
+                if (mState.RightButton == ButtonState.Pressed)
+                {
+                    Level.World.RayCast(DetermineRayCast, owner.Position,
+                        owner.Position + ConvertUnits.ToSimUnits(new Vector2(16)) + 100*owner.ShootingDirection);
+                        spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"),
+                        new Rectangle((int) owner.ScreenPosition.X + 16, (int) owner.ScreenPosition.Y + 16,
+                            GetPointerDistance(), 1), null, Color.White,
+                        (float) Math.Atan2(owner.ShootingDirection.Y, owner.ShootingDirection.X), Vector2.Zero,
+                        SpriteEffects.None, 0f);
+                }
             }
 
             base.Draw(spriteBatch, parameter);
@@ -142,7 +156,7 @@ namespace HoardeGame.Entities.Misc
         private int GetPointerDistance()
         {
             float rayDistance = Vector2.Distance(owner.Position, pointerEnd);
-            return (int)Math.Min(LaserPointerLength, ConvertUnits.ToDisplayUnits(rayDistance));
+            return (int)Math.Min(ConvertUnits.ToDisplayUnits(CurrentAmmo.Lifetime), ConvertUnits.ToDisplayUnits(rayDistance));
         }
     }
 }

@@ -6,6 +6,7 @@ using HoardeGame.Entities.Misc;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Player;
 using HoardeGame.Gameplay.Weapons;
+using HoardeGame.Input;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -26,6 +27,8 @@ namespace HoardeGame.Entities.Base
         /// Gets or sets the current ammo type
         /// </summary>
         public BulletInfo CurrentAmmo { get; set; }
+
+        private readonly IInputProvider inputProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBaseShootingEnemy"/> class.

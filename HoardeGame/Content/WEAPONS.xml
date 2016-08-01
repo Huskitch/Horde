@@ -8,14 +8,14 @@
                 <Texture>basicbullet</Texture>
                 <Damage>1</Damage>
                 <Delay>100</Delay>
-                <Speed>20.0</Speed>
-                <Offset>-90</Offset>
-                <Lifetime>1000</Lifetime>
-                <Spread>90</Spread>
+                <Speed>30.0</Speed>
+                <Offset>0</Offset>
+                <Lifetime>2.5</Lifetime>
+                <Spread>0</Spread>
                 <Count>1</Count>
             </BulletInfo>
         </Bullets>
       <HasLaserPointer>true</HasLaserPointer>
-      <LaserPointerLength>20</LaserPointerLength>
+      <LaserPointerLength>40</LaserPointerLength>
       </Weapon>
 </Weapons>

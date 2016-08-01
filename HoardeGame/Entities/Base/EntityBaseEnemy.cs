@@ -13,6 +13,7 @@ using HoardeGame.Gameplay.Gems;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Player;
 using HoardeGame.Gameplay.Weapons;
+using HoardeGame.Input;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 
@@ -38,6 +39,8 @@ namespace HoardeGame.Entities.Base
         /// </summary>
         protected IPlayerProvider PlayerProvider { get; }
 
+        public readonly IInputProvider inputProvider;
+
         private readonly IResourceProvider resourceProvider;
         private readonly Random rng = new Random(Guid.NewGuid().GetHashCode());
 
@@ -57,6 +60,7 @@ namespace HoardeGame.Entities.Base
         protected EntityBaseEnemy(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level)
         {
             this.resourceProvider = resourceProvider;
+            this.inputProvider = inputProvider;
             PlayerProvider = playerProvider;
         }
 
