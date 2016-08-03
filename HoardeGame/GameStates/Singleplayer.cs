@@ -303,7 +303,7 @@ namespace HoardeGame.GameStates
             drillHealthArmourBar.Health = Drill.Health;
             drillHealthArmourBar.Armour = Drill.Shield;
 
-            ammoLabel.Text = $"Ammo: {Player.Ammo}";
+            ammoLabel.Text = $"Ammo: {Player.Weapon.Ammo}";
 
             rubyLabel.Text = Player.Gems.RedGems.ToString();
             emeraldLabel.Text = Player.Gems.GreenGems.ToString();

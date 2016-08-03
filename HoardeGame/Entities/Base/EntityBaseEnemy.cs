@@ -108,7 +108,7 @@ namespace HoardeGame.Entities.Base
                 EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, serviceContainer)
                 {
                     Color = Color.White,
-                    Damage = PlayerProvider.Player.Weapon.CurrentAmmo.Damage,
+                    Damage = PlayerProvider.Player.Weapon.CurrentAmmoType.Damage,
                     LifeTime = 60,
                     Body =
                     {
@@ -119,7 +119,7 @@ namespace HoardeGame.Entities.Base
 
                 Level.AddEntity(flyingDamageIndicator);
 
-                Health -= PlayerProvider.Player.Weapon.CurrentAmmo.Damage;
+                Health -= PlayerProvider.Player.Weapon.CurrentAmmoType.Damage;
 
                 if (!IsHit())
                 {

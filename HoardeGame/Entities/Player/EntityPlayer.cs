@@ -45,9 +45,6 @@ namespace HoardeGame.Entities.Player
         public bool Dead { get; set; }
 
         /// <inheritdoc/>
-        public int Ammo { get; set; }
-
-        /// <inheritdoc/>
         public int Armour { get; set; }
 
         /// <inheritdoc/>
@@ -106,7 +103,6 @@ namespace HoardeGame.Entities.Player
 
             Health = MaxHealth;
             Armour = MaxArmour;
-            Ammo = 100;
             BlinkMultiplier = 1;
 
             animator = new AnimatedSprite(resourceProvider.GetTexture("PlayerSheet"), serviceContainer);
@@ -122,7 +118,10 @@ namespace HoardeGame.Entities.Player
             animator.SetDefaultAnimation("Idle");
 
             currentWeapon = weaponProvider.GetWeapon("testWeapon");
-            Weapon = new EntityWeapon(level, serviceContainer, this, currentWeapon);
+            Weapon = new EntityWeapon(level, serviceContainer, this, currentWeapon)
+            {
+                Ammo = 100
+            };
         }
 
         /// <inheritdoc/>
@@ -186,7 +185,7 @@ namespace HoardeGame.Entities.Player
                 direction = GetDirection(ShootingDirection);
             }
 
-            if ((inputProvider.MouseState.LeftButton == ButtonState.Pressed || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Ammo > 0)
+            if ((inputProvider.MouseState.LeftButton == ButtonState.Pressed || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Weapon.Ammo > 0)
             {
                 float offset = MathHelper.ToRadians(currentWeapon.Bullets[0].Offset) +
                                MathHelper.ToRadians(rng.Next(0, currentWeapon.Bullets[0].Spread));
@@ -197,7 +196,7 @@ namespace HoardeGame.Entities.Player
 
                 if (Weapon.Shoot(realShootingDirection))
                 {
-                    Ammo--;
+                    Weapon.Ammo--;
                 }
             }
 
@@ -306,7 +305,7 @@ namespace HoardeGame.Entities.Player
                 EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, serviceContainer)
                 {
                     Color = Color.Red,
-                    Damage = ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmo.Damage,
+                    Damage = ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmoType.Damage,
                     LifeTime = 60,
                     Body =
                     {
@@ -321,8 +320,8 @@ namespace HoardeGame.Entities.Player
 
                 if (Armour > 0)
                 {
-                    int remainingDamage = ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmo.Damage - Armour;
-                    Armour -= ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmo.Damage;
+                    int remainingDamage = ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmoType.Damage - Armour;
+                    Armour -= ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmoType.Damage;
 
                     if (remainingDamage > 0)
                     {
@@ -336,7 +335,7 @@ namespace HoardeGame.Entities.Player
                 }
                 else
                 {
-                    Health -= ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmo.Damage;
+                    Health -= ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmoType.Damage;
                 }
 
                 if (Armour < 0)

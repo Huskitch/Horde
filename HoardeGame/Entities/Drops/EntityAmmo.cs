@@ -71,7 +71,7 @@ namespace HoardeGame.Entities.Drops
             if (fixtureB.Body == playerProvider.Player.Body)
             {
                 resourceProvider.GetSoundEffect("Gem").Play();
-                playerProvider.Player.Ammo += 10;
+                playerProvider.Player.Weapon.Ammo += 10;
                 Removed = true;
 
                 return false;

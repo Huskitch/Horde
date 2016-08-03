@@ -28,9 +28,6 @@ namespace HoardeGame.Entities.Player
         public int Armour { get; set; }
 
         /// <inheritdoc/>
-        public int Ammo { get; set; }
-
-        /// <inheritdoc/>
         public GemInfo Gems { get; } = new GemInfo();
 
         /// <inheritdoc/>

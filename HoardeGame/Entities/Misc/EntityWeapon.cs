@@ -29,7 +29,12 @@ namespace HoardeGame.Entities.Misc
         /// <summary>
         /// Gets or sets the current ammo type
         /// </summary>
-        public BulletInfo CurrentAmmo { get; set; }
+        public BulletInfo CurrentAmmoType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the amount of bullets this weapon has left to fire
+        /// </summary>
+        public int Ammo { get; set; }
 
         /// <summary>
         /// Gets or sets the current weapon info
@@ -60,7 +65,7 @@ namespace HoardeGame.Entities.Misc
             resourceProvider = serviceContainer.GetService<IResourceProvider>();
 
             WeaponInfo = weapon;
-            CurrentAmmo = bullet ?? WeaponInfo.Bullets[0];
+            CurrentAmmoType = bullet ?? WeaponInfo.Bullets[0];
         }
 
         /// <summary>
@@ -71,13 +76,13 @@ namespace HoardeGame.Entities.Misc
         /// <returns>Whether the gun shot</returns>
         public bool Shoot(Vector2 direction, bool friendly = true)
         {
-            if (fireTimer > CurrentAmmo.Delay)
+            if (fireTimer > CurrentAmmoType.Delay)
             {
                 resourceProvider.GetSoundEffect("Fire").Play();
 
                 BulletOwnershipInfo info = new BulletOwnershipInfo(friendly ? Faction.Player : Faction.Enemies, this);
 
-                bullets.Add(new EntityBullet(level, serviceContainer, ConvertUnits.ToDisplayUnits(owner.Position), direction, CurrentAmmo.Speed, CurrentAmmo.Lifetime, info));
+                bullets.Add(new EntityBullet(level, serviceContainer, ConvertUnits.ToDisplayUnits(owner.Position), direction, CurrentAmmoType.Speed, CurrentAmmoType.Lifetime, info));
                 fireTimer = 0;
 
                 return true;
@@ -152,7 +157,7 @@ namespace HoardeGame.Entities.Misc
         private int GetPointerDistance()
         {
             float rayDistance = Vector2.Distance(owner.Position, pointerEnd);
-            return (int)Math.Min(ConvertUnits.ToDisplayUnits(CurrentAmmo.Lifetime), ConvertUnits.ToDisplayUnits(rayDistance));
+            return (int)Math.Min(ConvertUnits.ToDisplayUnits(CurrentAmmoType.Lifetime), ConvertUnits.ToDisplayUnits(rayDistance));
         }
     }
 }

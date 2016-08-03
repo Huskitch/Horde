@@ -30,11 +30,6 @@ namespace HoardeGame.Gameplay.Player
         int Health { get; set; }
 
         /// <summary>
-        /// Gets or sets the amount of ammo the player has
-        /// </summary>
-        int Ammo { get; set; }
-
-        /// <summary>
         /// Gets the amount of gems the player has
         /// </summary>
         GemInfo Gems { get; }
