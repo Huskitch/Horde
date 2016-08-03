@@ -131,6 +131,8 @@ namespace HoardeGame.GameStates
         public override void Start()
         {
             Paused = false;
+            serviceContainer.RemoveService(typeof(IPlayerProvider));
+            serviceContainer.AddService<IPlayerProvider>(this);
 
             dungeon = new DungeonLevel(serviceContainer, themeProvider.GetTheme("temple"));
             dungeon.GenerateLevel(64, 64, 40);

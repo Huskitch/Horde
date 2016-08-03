@@ -73,7 +73,7 @@ namespace HoardeGame
             graphics.ApplyChanges();
 
             Window.Title = "HORDE PROTOTYPE";
-            IsMouseVisible = false;
+            IsMouseVisible = true;
 
             resourceProvider = new ResourceManager();
             inputProvider = new InputManager();
@@ -118,6 +118,7 @@ namespace HoardeGame
             {
                 StateManager.Push(MainMenu);
                 StateManager.Push(SinglePlayer);
+                IsMouseVisible = false;
             }
             else
             {
