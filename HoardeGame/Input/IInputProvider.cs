@@ -53,6 +53,16 @@ namespace HoardeGame.Input
         bool RightClicked { get; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the cursor should be locked to the center of the screen
+        /// </summary>
+        bool LockCursor { get; set; }
+
+        /// <summary>
+        /// Gets the movement of the cursor in the last frame
+        /// </summary>
+        Vector2 CursorDelta { get; }
+
+        /// <summary>
         /// Update internal state
         /// </summary>
         /// <param name="gameTime"><see cref="GameTime"/></param>

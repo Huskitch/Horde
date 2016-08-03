@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace HoardeGame.Input
@@ -38,12 +39,31 @@ namespace HoardeGame.Input
         /// <inheritdoc/>
         public bool RightClicked => LastMouseState.RightButton == ButtonState.Released && MouseState.RightButton == ButtonState.Pressed;
 
+        /// <inheritdoc/>
+        public bool LockCursor { get; set; }
+
+        /// <inheritdoc/>
+        public Vector2 CursorDelta
+        {
+            get
+            {
+                if (LockCursor)
+                {
+                    return (MouseState.Position - screenCenter).ToVector2();
+                }
+
+                return (MouseState.Position - LastMouseState.Position).ToVector2();
+            }
+        }
+
         private readonly Dictionary<string, Func<bool>> keybinds = new Dictionary<string, Func<bool>>();
+        private Point screenCenter;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InputManager"/> class.
+        /// Initializes this instance of the <see cref="InputManager"/> class.
         /// </summary>
-        public InputManager()
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public void Init(GameServiceContainer serviceContainer)
         {
             keybinds.Add("Activate", () => KeyPressed(Keys.E) || ButtonPressed(Buttons.A));
             keybinds.Add("Back", () => KeyPressed(Keys.Escape) || ButtonPressed(Buttons.B));
@@ -51,6 +71,13 @@ namespace HoardeGame.Input
             keybinds.Add("PauseGame", () => KeyPressed(Keys.Escape) || ButtonPressed(Buttons.Start));
             keybinds.Add("ExitPausedGame", () => ButtonPressed(Buttons.B));
             keybinds.Add("ExitGame", () => ButtonPressed(Buttons.B) || KeyPressed(Keys.Escape));
+            keybinds.Add("Weapon1", () => ButtonPressed(Buttons.DPadUp) || KeyPressed(Keys.D1));
+            keybinds.Add("Weapon2", () => ButtonPressed(Buttons.DPadRight) || KeyPressed(Keys.D2));
+            keybinds.Add("Weapon3", () => ButtonPressed(Buttons.DPadDown) || KeyPressed(Keys.D3));
+            keybinds.Add("Weapon4", () => ButtonPressed(Buttons.DPadLeft) || KeyPressed(Keys.D4));
+
+            Rectangle viewport = serviceContainer.GetService<IGraphicsDeviceService>().GraphicsDevice.Viewport.Bounds;
+            screenCenter = new Point(viewport.Width / 2, viewport.Height / 2);
         }
 
         /// <inheritdoc/>
@@ -64,6 +91,11 @@ namespace HoardeGame.Input
 
             LastGamePadState = GamePadState;
             GamePadState = GamePad.GetState(PlayerIndex.One);
+
+            if (LockCursor)
+            {
+                Mouse.SetPosition(screenCenter.X, screenCenter.Y);
+            }
         }
 
         /// <inheritdoc/>

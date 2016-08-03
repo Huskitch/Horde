@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Collections.Generic;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
@@ -49,6 +50,9 @@ namespace HoardeGame.Entities.Player
 
         /// <inheritdoc/>
         public EntityWeapon Weapon { get; set; }
+
+        /// <inheritdoc/>
+        public List<EntityWeapon> InventoryWeapons { get; set; }
 
         private readonly IResourceProvider resourceProvider;
         private readonly SinglePlayer singlePlayer;
@@ -116,6 +120,8 @@ namespace HoardeGame.Entities.Player
             animator.AddAnimation("NorthEast", 32, 5, 5, 100);
             animator.AddAnimation("Idle", 32, 8, 5, 100);
             animator.SetDefaultAnimation("Idle");
+
+            InventoryWeapons = new List<EntityWeapon>(4);
 
             currentWeapon = weaponProvider.GetWeapon("testWeapon");
             Weapon = new EntityWeapon(level, serviceContainer, this, currentWeapon)

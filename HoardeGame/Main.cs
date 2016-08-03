@@ -67,6 +67,14 @@ namespace HoardeGame
 
             Content.RootDirectory = "Content";
 
+            graphics.PreferredBackBufferWidth = 1600;
+            graphics.PreferredBackBufferHeight = 900;
+            graphics.SynchronizeWithVerticalRetrace = false;
+            graphics.ApplyChanges();
+
+            Window.Title = "HORDE PROTOTYPE";
+            IsMouseVisible = false;
+
             resourceProvider = new ResourceManager();
             inputProvider = new InputManager();
             cardProvider = new CardManager(Services);
@@ -82,13 +90,7 @@ namespace HoardeGame
             Services.AddService<ISpriteBatchService>(this);
             Services.AddService<IStateManagerService>(this);
 
-            graphics.PreferredBackBufferWidth = 1600;
-            graphics.PreferredBackBufferHeight = 900;
-            graphics.SynchronizeWithVerticalRetrace = false;
-            graphics.ApplyChanges();
-
-            Window.Title = "HORDE PROTOTYPE";
-            IsMouseVisible = false;
+            inputProvider.LockCursor = false;
 
             // 32 pixels = 1 meter
             ConvertUnits.SetDisplayUnitToSimUnitRatio(32f);
@@ -104,6 +106,7 @@ namespace HoardeGame
             ((CardManager)cardProvider).LoadXmlFile("Content/CARDS.xml");
             ((ThemeManager)themeProvider).LoadXmlFile("Content/THEMES.xml", Services);
             ((WeaponManager)weaponProvider).LoadXmlFile("Content/WEAPONS.xml", Services);
+            ((InputManager)inputProvider).Init(Services);
 
             string[] arguments = Environment.GetCommandLineArgs();
 
