@@ -133,7 +133,7 @@
     <Compile Include="Gameplay\Themes\Theme.cs" />
     <Compile Include="Gameplay\Themes\ThemeManager.cs" />
     <Compile Include="Gameplay\Weapons\IWeaponProvider.cs" />
-    <Compile Include="Gameplay\Weapons\Weapon.cs" />
+    <Compile Include="Gameplay\Weapons\WeaponInfo.cs" />
     <Compile Include="Gameplay\Weapons\WeaponManager.cs" />
   </ItemGroup>
   <ItemGroup>

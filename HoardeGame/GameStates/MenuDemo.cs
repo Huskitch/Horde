@@ -4,15 +4,14 @@
 
 using System;
 using FarseerPhysics;
-using HoardeGame.Entities;
 using HoardeGame.Entities.Base;
 using HoardeGame.Entities.Enemies;
 using HoardeGame.Entities.Player;
 using HoardeGame.Extensions;
-using HoardeGame.Gameplay;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Player;
 using HoardeGame.Gameplay.Themes;
+using HoardeGame.Gameplay.Weapons;
 using HoardeGame.Graphics;
 using HoardeGame.Input;
 using HoardeGame.Resources;
@@ -48,7 +47,8 @@ namespace HoardeGame.GameStates
         /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
         /// <param name="themeProvider"><see cref="IThemeProvider"/> for managing level themes</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        public MenuDemo(SpriteBatch spriteBatch, IResourceProvider resourceProvider, GraphicsDevice graphicsDevice, IInputProvider inputProvider, IThemeProvider themeProvider)
+        /// <param name="weaponProvider"><see cref="IWeaponProvider"/> for loading weapons</param>
+        public MenuDemo(SpriteBatch spriteBatch, IResourceProvider resourceProvider, GraphicsDevice graphicsDevice, IInputProvider inputProvider, IThemeProvider themeProvider, IWeaponProvider weaponProvider)
         {
             this.spriteBatch = spriteBatch;
             this.resourceProvider = resourceProvider;
@@ -80,7 +80,7 @@ namespace HoardeGame.GameStates
 
             Random random = new Random();
 
-            Player = new EntityFakePlayer(dungeon, resourceProvider)
+            Player = new EntityFakePlayer(dungeon, resourceProvider, weaponProvider)
             {
                 Body =
                 {

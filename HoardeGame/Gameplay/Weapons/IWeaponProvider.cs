@@ -7,20 +7,20 @@ using System.Collections.Generic;
 namespace HoardeGame.Gameplay.Weapons
 {
     /// <summary>
-    /// Definition of a <see cref="Weapon"/> provider
+    /// Definition of a <see cref="WeaponInfo"/> provider
     /// </summary>
     public interface IWeaponProvider
     {
         /// <summary>
-        /// Gets the list of <see cref="Weapon"/>s
+        /// Gets the list of <see cref="WeaponInfo"/>s
         /// </summary>
-        Dictionary<string, Weapon> Weapons { get; }
+        Dictionary<string, WeaponInfo> Weapons { get; }
 
         /// <summary>
-        /// Gets a <see cref="Weapon"/> with a specified name
+        /// Gets a <see cref="WeaponInfo"/> with a specified name
         /// </summary>
         /// <param name="name">Name of the weapon</param>
-        /// <returns><see cref="Weapon"/> or null</returns>
-        Weapon GetWeapon(string name);
+        /// <returns><see cref="WeaponInfo"/> or null</returns>
+        WeaponInfo GetWeapon(string name);
     }
 }

@@ -73,7 +73,7 @@ namespace HoardeGame.Entities.Player
         private AnimatedSprite animator;
         private IInputProvider inputProvider;
 
-        private Weapon currentWeapon;
+        private WeaponInfo currentWeapon;
         private Random rng;
 
         /// <summary>
@@ -123,14 +123,7 @@ namespace HoardeGame.Entities.Player
 
             currentWeapon = weaponProvider.GetWeapon("testWeapon");
 
-            Weapon = new EntityWeapon(level, resourceProvider, this)
-            {
-                HasLaserPointer = true,
-                LaserPointerLength = 200,
-                FireRate = currentWeapon.Bullets[0].Delay,
-                Damage = currentWeapon.Bullets[0].Damage,
-                CurrentAmmo = currentWeapon.Bullets[0]
-            };
+            Weapon = new EntityWeapon(level, resourceProvider, this.inputProvider, this, currentWeapon);
         }
 
         /// <inheritdoc/>
@@ -314,7 +307,7 @@ namespace HoardeGame.Entities.Player
                 EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, resourceProvider)
                 {
                     Color = Color.Red,
-                    Damage = ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.Damage,
+                    Damage = ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmo.Damage,
                     LifeTime = 60,
                     Body =
                     {
@@ -329,8 +322,8 @@ namespace HoardeGame.Entities.Player
 
                 if (Armour > 0)
                 {
-                    int remainingDamage = ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.Damage - Armour;
-                    Armour -= ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.Damage;
+                    int remainingDamage = ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmo.Damage - Armour;
+                    Armour -= ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmo.Damage;
 
                     if (remainingDamage > 0)
                     {
@@ -344,7 +337,7 @@ namespace HoardeGame.Entities.Player
                 }
                 else
                 {
-                    Health -= ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.Damage;
+                    Health -= ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmo.Damage;
                 }
 
                 if (Armour < 0)

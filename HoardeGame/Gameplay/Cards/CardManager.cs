@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
@@ -41,6 +42,7 @@ namespace HoardeGame.Gameplay.Cards
         /// <param name="filename">XML file to load from</param>
         public void LoadXmlFile(string filename)
         {
+            Debug.WriteLine("Loading cards...");
             cards.Clear();
 
             XmlSerializer ser = new XmlSerializer(typeof(List<Card>), new XmlRootAttribute("Cards"));
@@ -58,9 +60,12 @@ namespace HoardeGame.Gameplay.Cards
                 card.Texture = resourceProvider.GetTexture(card.TextureName);
                 card.Validate(resourceProvider);
                 cards.Add(card.ID, card);
+
+                Debug.WriteLine($"Loaded card: {card.Name} ({card.ID})");
             }
 
             reader.Close();
+            Debug.WriteLine("Done loading cards...");
         }
 
         /// <summary>

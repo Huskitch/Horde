@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
@@ -24,6 +25,7 @@ namespace HoardeGame.Gameplay.Themes
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for asset validation</param>
         public void LoadXmlFile(string filename, IResourceProvider resourceProvider)
         {
+            Debug.WriteLine("Loading themes...");
             themes.Clear();
 
             XmlSerializer ser = new XmlSerializer(typeof(List<Theme>), new XmlRootAttribute("Themes"));
@@ -39,9 +41,12 @@ namespace HoardeGame.Gameplay.Themes
             {
                 theme.Validate(resourceProvider);
                 themes.Add(theme.ID, theme);
+
+                Debug.WriteLine($"Loaded theme: {theme.Name} ({theme.ID})");
             }
 
             reader.Close();
+            Debug.WriteLine("Done loading themes...");
         }
 
         /// <summary>

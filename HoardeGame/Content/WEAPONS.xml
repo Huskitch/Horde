@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Weapons xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-    <Weapon id="testWeapon">
+  <WeaponInfo id="testWeapon">
         <Name>Test Weapon</Name>
         <Texture>testweapon</Texture>
         <Bullets>
             <BulletInfo type="basic">
-                <Texture>basicbullet</Texture>
+                <Texture>Bullet</Texture>
                 <Damage>1</Damage>
                 <Delay>100</Delay>
                 <Speed>30.0</Speed>
@@ -17,5 +17,41 @@
         </Bullets>
       <HasLaserPointer>true</HasLaserPointer>
       <LaserPointerLength>40</LaserPointerLength>
-      </Weapon>
+    </WeaponInfo>
+  <WeaponInfo id="fakeWeapon">
+      <Name>Fake Weapon</Name>
+      <Texture>testweapon</Texture>
+      <Bullets>
+        <BulletInfo type="basic">
+          <Texture>Bullet</Texture>
+          <Damage>0</Damage>
+          <Delay>100</Delay>
+          <Speed>30.0</Speed>
+          <Offset>0</Offset>
+          <Lifetime>2.5</Lifetime>
+          <Spread>0</Spread>
+          <Count>1</Count>
+        </BulletInfo>
+      </Bullets>
+      <HasLaserPointer>false</HasLaserPointer>
+      <LaserPointerLength>40</LaserPointerLength>
+    </WeaponInfo>
+  <WeaponInfo id="snakeWeapon">
+      <Name>Snake Weapon</Name>
+      <Texture>testweapon</Texture>
+      <Bullets>
+        <BulletInfo type="basic">
+          <Texture>Bullet</Texture>
+          <Damage>2</Damage>
+          <Delay>100</Delay>
+          <Speed>30.0</Speed>
+          <Offset>0</Offset>
+          <Lifetime>2.5</Lifetime>
+          <Spread>0</Spread>
+          <Count>1</Count>
+        </BulletInfo>
+      </Bullets>
+      <HasLaserPointer>false</HasLaserPointer>
+      <LaserPointerLength>40</LaserPointerLength>
+    </WeaponInfo>
 </Weapons>

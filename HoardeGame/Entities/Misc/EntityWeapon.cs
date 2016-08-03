@@ -27,49 +27,38 @@ namespace HoardeGame.Entities.Misc
         private Vector2 pointerEnd;
 
         /// <summary>
-        /// Gets or sets the fire rate of the weapon
-        /// </summary>
-        public int FireRate { get; set; } = 100;
-
-        /// <summary>
-        /// Gets or sets the damage of the weapon
-        /// </summary>
-        public int Damage { get; set; } = 1;
-
-        /// <summary>
         /// Gets or sets the current ammo type
         /// </summary>
         public BulletInfo CurrentAmmo { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this weapon has a laser pointer
+        /// Gets or sets the current weapon info
         /// </summary>
-        public bool HasLaserPointer { get; set; }
-
-        /// <summary>
-        /// Gets or sets the length of the laser pointer
-        /// </summary>
-        public int LaserPointerLength { get; set; }
+        public WeaponInfo WeaponInfo { get; set; }
 
         private readonly DungeonLevel level;
         private readonly IResourceProvider resourceProvider;
+        private readonly IInputProvider inputProvider;
         private readonly EntityBase owner;
-
-        private MouseState mState;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityWeapon"/> class.
         /// </summary>
         /// <param name="level"> <see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> to use for loading resources</param>
+        /// <param name="inputProvider"><see cref="IInputProvider"/> for user input</param>
         /// <param name="owner"><see cref="EntityBase"/> owner of the weapon</param>
-        public EntityWeapon(DungeonLevel level, IResourceProvider resourceProvider, EntityBase owner) : base(level)
+        /// <param name="weapon"><see cref="WeaponInfo"/> to use</param>
+        /// <param name="bullet"><see cref="BulletInfo"/> to use, 1st ammo type if null</param>
+        public EntityWeapon(DungeonLevel level, IResourceProvider resourceProvider, IInputProvider inputProvider, EntityBase owner, WeaponInfo weapon, BulletInfo bullet = null) : base(level)
         {
             this.level = level;
             this.resourceProvider = resourceProvider;
+            this.inputProvider = inputProvider;
             this.owner = owner;
 
-            CurrentAmmo = new BulletInfo();
+            WeaponInfo = weapon;
+            CurrentAmmo = bullet ?? WeaponInfo.Bullets[0];
         }
 
         /// <summary>
@@ -80,7 +69,7 @@ namespace HoardeGame.Entities.Misc
         /// <returns>Whether the gun shot</returns>
         public bool Shoot(Vector2 direction, bool friendly = true)
         {
-            if (fireTimer > FireRate)
+            if (fireTimer > CurrentAmmo.Delay)
             {
                 resourceProvider.GetSoundEffect("Fire").Play();
 
@@ -98,8 +87,6 @@ namespace HoardeGame.Entities.Misc
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
-            mState = Mouse.GetState();
-
             fireTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             for (int i = 0; i < bullets.Count; i++)
@@ -125,17 +112,24 @@ namespace HoardeGame.Entities.Misc
                 bullet.Draw(spriteBatch, parameter);
             }
 
-            if (HasLaserPointer)
+            if (WeaponInfo.HasLaserPointer)
             {
-                if (mState.RightButton == ButtonState.Pressed)
+                if (inputProvider.MouseState.RightButton == ButtonState.Pressed)
                 {
-                    Level.World.RayCast(DetermineRayCast, owner.Position,
-                        owner.Position + ConvertUnits.ToSimUnits(new Vector2(16)) + 100*owner.ShootingDirection);
-                        spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"),
-                        new Rectangle((int) owner.ScreenPosition.X + 16, (int) owner.ScreenPosition.Y + 16,
-                            GetPointerDistance(), 1), null, Color.White,
-                        (float) Math.Atan2(owner.ShootingDirection.Y, owner.ShootingDirection.X), Vector2.Zero,
-                        SpriteEffects.None, 0f);
+                    Level.World.RayCast(
+                        DetermineRayCast,
+                        owner.Position,
+                        owner.Position + ConvertUnits.ToSimUnits(new Vector2(16)) + 100 * owner.ShootingDirection);
+
+                    spriteBatch.Draw(
+                        resourceProvider.GetTexture("OneByOneEmpty"),
+                        new Rectangle((int)owner.ScreenPosition.X + 16, (int)owner.ScreenPosition.Y + 16, GetPointerDistance(), 1),
+                        null,
+                        Color.White,
+                        (float)Math.Atan2(owner.ShootingDirection.Y, owner.ShootingDirection.X),
+                        Vector2.Zero,
+                        SpriteEffects.None,
+                        0f);
                 }
             }
 

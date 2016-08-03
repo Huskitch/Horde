@@ -4,11 +4,8 @@
 
 using System.Linq;
 using FarseerPhysics;
-using HoardeGame.Entities;
-using HoardeGame.Entities.Enemies;
 using HoardeGame.Entities.Player;
 using HoardeGame.Extensions;
-using HoardeGame.Gameplay;
 using HoardeGame.Gameplay.Cards;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Player;
@@ -141,14 +138,17 @@ namespace HoardeGame.GameStates
             Drill = new EntityDrill(dungeon, inputProvider, resourceProvider, this);
             dungeon.AddEntity(Drill);
 
-            EntityShootingSnake snake = new EntityShootingSnake(dungeon, resourceProvider, this)
+            /*
+            EntityShootingSnake snake = new EntityShootingSnake(dungeon, resourceProvider, this, weaponProvider)
             {
                 Body =
                 {
                     Position = Player.Position + new Vector2(1, 1)
                 }
             };
-         //   dungeon.AddEntity(snake);
+
+            dungeon.AddEntity(snake);
+            */
 
             minimap.Generate(GraphicsDevice, dungeon.GetMap());
 

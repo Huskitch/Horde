@@ -56,11 +56,12 @@ namespace HoardeGame.Gameplay.Weapons
         /// Validates the bukket
         /// </summary>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for validating the texture</param>
-        public void Validate(IResourceProvider resourceProvider)
+        /// <param name="weaponId">ID of weapon to which this bullet belongs</param>
+        public void Validate(IResourceProvider resourceProvider, string weaponId)
         {
             if (resourceProvider.GetTexture(Texture) == null)
             {
-                throw new FileNotFoundException($"Texture {Texture} does not exist!");
+                throw new FileNotFoundException($"Texture {Texture} of bullet of weapon {weaponId} does not exist!");
             }
         }
     }

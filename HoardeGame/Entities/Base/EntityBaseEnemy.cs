@@ -13,7 +13,6 @@ using HoardeGame.Gameplay.Gems;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Player;
 using HoardeGame.Gameplay.Weapons;
-using HoardeGame.Input;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 
@@ -39,8 +38,6 @@ namespace HoardeGame.Entities.Base
         /// </summary>
         protected IPlayerProvider PlayerProvider { get; }
 
-        public readonly IInputProvider inputProvider;
-
         private readonly IResourceProvider resourceProvider;
         private readonly Random rng = new Random(Guid.NewGuid().GetHashCode());
 
@@ -60,7 +57,6 @@ namespace HoardeGame.Entities.Base
         protected EntityBaseEnemy(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level)
         {
             this.resourceProvider = resourceProvider;
-            this.inputProvider = inputProvider;
             PlayerProvider = playerProvider;
         }
 
@@ -110,7 +106,7 @@ namespace HoardeGame.Entities.Base
                 EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, resourceProvider)
                 {
                     Color = Color.White,
-                    Damage = PlayerProvider.Player.Weapon.Damage,
+                    Damage = PlayerProvider.Player.Weapon.CurrentAmmo.Damage,
                     LifeTime = 60,
                     Body =
                     {
@@ -121,7 +117,7 @@ namespace HoardeGame.Entities.Base
 
                 Level.AddEntity(flyingDamageIndicator);
 
-                Health -= PlayerProvider.Player.Weapon.Damage;
+                Health -= PlayerProvider.Player.Weapon.CurrentAmmo.Damage;
 
                 if (!IsHit())
                 {

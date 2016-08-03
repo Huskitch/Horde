@@ -10,6 +10,7 @@ using HoardeGame.Entities.Misc;
 using HoardeGame.Gameplay.Gems;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Player;
+using HoardeGame.Gameplay.Weapons;
 using HoardeGame.Graphics;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
@@ -30,7 +31,8 @@ namespace HoardeGame.Entities.Enemies
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> to load resources with</param>
         /// <param name="playerProvider"><see cref="IPlayerProvider"/> for acessing the player entity</param>
-        public EntityShootingSnake(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level, resourceProvider, playerProvider)
+        /// <param name="weaponProvider"><see cref="IWeaponProvider"/> for loading weapons</param>
+        public EntityShootingSnake(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider, IWeaponProvider weaponProvider) : base(level, resourceProvider, playerProvider)
         {
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(14f), 1f, Body);
             Body.CollisionCategories = Category.Cat3;
@@ -58,11 +60,7 @@ namespace HoardeGame.Entities.Enemies
                 }
             };
 
-            Weapon = new EntityWeapon(Level, resourceProvider, this)
-            {
-                Damage = 2,
-                CurrentAmmo = CurrentAmmo
-            };
+            Weapon = new EntityWeapon(Level, resourceProvider, null, this, weaponProvider.GetWeapon("snakeWeapon"));
 
             animator = new AnimatedSprite(resourceProvider.GetTexture("SnakeSheet"));
             animator.AddAnimation("North", 48, 1, 3, 100);

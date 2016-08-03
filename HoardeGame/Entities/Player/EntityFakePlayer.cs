@@ -11,6 +11,7 @@ using HoardeGame.Entities.Misc;
 using HoardeGame.Gameplay.Gems;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Player;
+using HoardeGame.Gameplay.Weapons;
 using HoardeGame.Graphics;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
@@ -58,7 +59,8 @@ namespace HoardeGame.Entities.Player
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        public EntityFakePlayer(DungeonLevel level, IResourceProvider resourceProvider) : base(level)
+        /// <param name="weaponProvider"><see cref="IWeaponProvider"/> for loading weapons</param>
+        public EntityFakePlayer(DungeonLevel level, IResourceProvider resourceProvider, IWeaponProvider weaponProvider) : base(level)
         {
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10), 1f, Body);
             Body.Position = Level.GetSpawnPosition();
@@ -81,7 +83,7 @@ namespace HoardeGame.Entities.Player
             animator.AddAnimation("Idle", 32, 8, 5, 100);
             animator.SetDefaultAnimation("Idle");
 
-            Weapon = new EntityWeapon(level, resourceProvider, this);
+            Weapon = new EntityWeapon(level, resourceProvider, null, this, weaponProvider.GetWeapon("fakeWeapon"));
         }
 
         /// <inheritdoc/>

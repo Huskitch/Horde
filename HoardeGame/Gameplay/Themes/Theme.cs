@@ -64,19 +64,19 @@ namespace HoardeGame.Gameplay.Themes
         {
             if (resourceProvider.GetTexture(FloorTextureName) == null)
             {
-                throw new FileNotFoundException($"Texture {FloorTextureName} does not exist!");
+                throw new FileNotFoundException($"Texture {FloorTextureName} of theme {ID} does not exist!");
             }
 
             if (resourceProvider.GetTexture(WallTextureName) == null)
             {
-                throw new FileNotFoundException($"Texture {FloorTextureName} does not exist!");
+                throw new FileNotFoundException($"Texture {FloorTextureName} of theme {ID} does not exist!");
             }
 
             foreach (var song in Songs)
             {
                 if (resourceProvider.GetSong(song) == null)
                 {
-                    throw new FileNotFoundException($"Song {song} does not exist!");
+                    throw new FileNotFoundException($"Song {song} in theme {ID} does not exist!");
                 }
             }
 
@@ -84,13 +84,13 @@ namespace HoardeGame.Gameplay.Themes
             {
                 if (Type.GetType(spawn.EntityType) == null)
                 {
-                    throw new ArgumentException($"Entity {spawn.EntityType} is not valid!", nameof(spawn.EntityType));
+                    throw new ArgumentException($"Entity {spawn.EntityType} in theme {ID} is not valid!", nameof(spawn.EntityType));
                 }
             }
 
             if (ChestInfo.WeaponDropType == ChestInfo.WeaponChance.Specific && Type.GetType(ChestInfo.WeaponType) == null)
             {
-                throw new ArgumentException($"Entity {ChestInfo.WeaponType} is not valid!", nameof(ChestInfo.WeaponType));
+                throw new ArgumentException($"Entity {ChestInfo.WeaponType} in theme {ID} is not valid!", nameof(ChestInfo.WeaponType));
             }
         }
     }

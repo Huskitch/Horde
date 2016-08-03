@@ -1,11 +1,11 @@
-﻿// <copyright file="Weapon.cs" company="Kuub Studios">
+﻿// <copyright file="WeaponInfo.cs" company="Kuub Studios">
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
-using HoardeGame.Entities.Misc;
 using HoardeGame.Resources;
 
 namespace HoardeGame.Gameplay.Weapons
@@ -13,7 +13,7 @@ namespace HoardeGame.Gameplay.Weapons
     /// <summary>
     /// Definition of a weapon
     /// </summary>
-    public class Weapon
+    public class WeaponInfo
     {
         /// <summary>
         /// Gets or sets the readable name of the weapon
@@ -32,7 +32,12 @@ namespace HoardeGame.Gameplay.Weapons
         public string Texture { get; set; }
 
         /// <summary>
-        /// Gets or sets the list bullets?
+        /// Gets or sets a value indicating whether this weapon has a laser pointer
+        /// </summary>
+        public bool HasLaserPointer { get; set; }
+
+        /// <summary>
+        /// Gets or sets the list of fireable bullets
         /// </summary>
         public List<BulletInfo> Bullets { get; set; }
 
@@ -44,7 +49,17 @@ namespace HoardeGame.Gameplay.Weapons
         {
             if (resourceProvider.GetTexture(Texture) == null)
             {
-                throw new FileNotFoundException($"Texture {Texture} does not exist!");
+                throw new FileNotFoundException($"Texture {Texture} of weapon {Id} does not exist!");
+            }
+
+            if (Bullets == null)
+            {
+                throw new NullReferenceException($"Bullets for weapon {Id} cannot be null!");
+            }
+
+            foreach (var bullet in Bullets)
+            {
+                bullet.Validate(resourceProvider, Id);
             }
         }
 

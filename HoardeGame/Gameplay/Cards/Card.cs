@@ -165,7 +165,7 @@ namespace HoardeGame.Gameplay.Cards
         {
             if (resourceProvider.GetTexture(TextureName) == null)
             {
-                throw new FileNotFoundException($"Texture {TextureName} does not exist!");
+                throw new FileNotFoundException($"Texture {TextureName} of card {ID} does not exist!");
             }
         }
     }

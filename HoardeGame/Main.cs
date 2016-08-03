@@ -5,7 +5,6 @@
 using System;
 using System.Linq;
 using FarseerPhysics;
-using HoardeGame.Gameplay;
 using HoardeGame.Gameplay.Cards;
 using HoardeGame.Gameplay.Themes;
 using HoardeGame.Gameplay.Weapons;
@@ -97,7 +96,7 @@ namespace HoardeGame
 
             SinglePlayer = new SinglePlayer(resourceProvider, inputProvider, cardProvider, themeProvider, spriteBatch, GraphicsDevice, stateManager, weaponProvider);
             MainMenu = new MainMenu(spriteBatch, GraphicsDevice, inputProvider, resourceProvider, this, stateManager);
-            MenuDemo = new MenuDemo(spriteBatch, resourceProvider, GraphicsDevice, inputProvider, themeProvider);
+            MenuDemo = new MenuDemo(spriteBatch, resourceProvider, GraphicsDevice, inputProvider, themeProvider, weaponProvider);
 
             if (arguments.FirstOrDefault(s => s.ToLower() == "-skipmenu") != null)
             {
