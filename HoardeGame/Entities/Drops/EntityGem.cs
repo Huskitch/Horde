@@ -29,12 +29,11 @@ namespace HoardeGame.Entities.Drops
         /// Initializes a new instance of the <see cref="EntityGem"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        /// <param name="playerProvider"><see cref="IPlayerProvider"/> for accessing the player entity</param>
-        public EntityGem(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public EntityGem(DungeonLevel level, GameServiceContainer serviceContainer) : base(level, serviceContainer)
         {
-            this.playerProvider = playerProvider;
-            this.resourceProvider = resourceProvider;
+            playerProvider = serviceContainer.GetService<IPlayerProvider>();
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
 
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10f), 1f, Body, ConvertUnits.ToSimUnits(-new Vector2(8, 8)));
             Body.BodyType = BodyType.Dynamic;
@@ -45,7 +44,7 @@ namespace HoardeGame.Entities.Drops
 
             Body.OnCollision += Collect;
 
-            animator = new AnimatedSprite(resourceProvider.GetTexture("GemAnimation"));
+            animator = new AnimatedSprite(resourceProvider.GetTexture("GemAnimation"), serviceContainer);
             animator.AddAnimation("Bounce", 16, 0, 6, 150);
         }
 
@@ -66,10 +65,10 @@ namespace HoardeGame.Entities.Drops
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
+        public override void Draw(EffectParameter parameter)
         {
-            animator.DrawAnimation("Bounce", ScreenPosition, spriteBatch, Color.White);
-            base.Draw(spriteBatch, parameter);
+            animator.DrawAnimation("Bounce", ScreenPosition, Color.White);
+            base.Draw(parameter);
         }
 
         private bool Collect(Fixture fixtureA, Fixture fixtureB, Contact contact)

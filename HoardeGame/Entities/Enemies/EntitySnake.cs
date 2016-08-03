@@ -28,9 +28,8 @@ namespace HoardeGame.Entities.Enemies
         /// Initializes a new instance of the <see cref="EntitySnake"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> to load resources with</param>
-        /// <param name="playerProvider"><see cref="IPlayerProvider"/> for acessing the player entity</param>
-        public EntitySnake(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level, resourceProvider, playerProvider)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public EntitySnake(DungeonLevel level, GameServiceContainer serviceContainer) : base(level, serviceContainer)
         {
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(14f), 1f, Body);
             Body.CollisionCategories = Category.Cat3;
@@ -39,7 +38,7 @@ namespace HoardeGame.Entities.Enemies
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
 
-            this.playerProvider = playerProvider;
+            playerProvider = serviceContainer.GetService<IPlayerProvider>();
 
             Damage = 2;
             Health = 5;
@@ -62,7 +61,7 @@ namespace HoardeGame.Entities.Enemies
                 }
             };
 
-            animator = new AnimatedSprite(resourceProvider.GetTexture("SnakeSheet"));
+            animator = new AnimatedSprite(serviceContainer.GetService<IResourceProvider>().GetTexture("SnakeSheet"), serviceContainer);
             animator.AddAnimation("North", 48, 1, 3, 100);
             animator.AddAnimation("East", 48, 2, 3, 100);
             animator.AddAnimation("South", 48, 3, 3, 100);
@@ -77,29 +76,29 @@ namespace HoardeGame.Entities.Enemies
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
+        public override void Draw(EffectParameter parameter)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
 
             if (Direction == new Vector2(0, -1))
             {
-                animator.DrawAnimation("North", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                animator.DrawAnimation("North", screenPos, Color.White, parameter, CurrentBlinkFrame);
             }
             else if (Direction == new Vector2(1, 0))
             {
-                animator.DrawAnimation("East", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                animator.DrawAnimation("East", screenPos, Color.White, parameter, CurrentBlinkFrame);
             }
             else if (Direction == new Vector2(0, 1))
             {
-                animator.DrawAnimation("South", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                animator.DrawAnimation("South", screenPos, Color.White, parameter, CurrentBlinkFrame);
             }
             else if (Direction == new Vector2(-1, 0))
             {
-                animator.DrawAnimation("West", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                animator.DrawAnimation("West", screenPos, Color.White, parameter, CurrentBlinkFrame);
             }
             else
             {
-                animator.DrawAnimation("South", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                animator.DrawAnimation("South", screenPos, Color.White, parameter, CurrentBlinkFrame);
             }
         }
     }

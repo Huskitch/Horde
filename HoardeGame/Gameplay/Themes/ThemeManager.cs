@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using HoardeGame.Resources;
+using Microsoft.Xna.Framework;
 
 namespace HoardeGame.Gameplay.Themes
 {
@@ -22,8 +23,8 @@ namespace HoardeGame.Gameplay.Themes
         /// Load cards from a file
         /// </summary>
         /// <param name="filename">XML file to load from</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for asset validation</param>
-        public void LoadXmlFile(string filename, IResourceProvider resourceProvider)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public void LoadXmlFile(string filename, GameServiceContainer serviceContainer)
         {
             Debug.WriteLine("Loading themes...");
             themes.Clear();
@@ -36,6 +37,8 @@ namespace HoardeGame.Gameplay.Themes
             {
                 throw new InvalidDataException("Provided theme file is not valid! ({" + filename + "})");
             }
+
+            var resourceProvider = serviceContainer.GetService<IResourceProvider>();
 
             foreach (var theme in themeList)
             {

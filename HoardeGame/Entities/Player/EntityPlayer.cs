@@ -55,6 +55,8 @@ namespace HoardeGame.Entities.Player
 
         private readonly IResourceProvider resourceProvider;
         private readonly SinglePlayer singlePlayer;
+        private readonly GameServiceContainer serviceContainer;
+        private readonly Random rng = new Random();
 
         private enum Directions
         {
@@ -72,24 +74,24 @@ namespace HoardeGame.Entities.Player
         private IWeaponProvider weaponProvider;
         private AnimatedSprite animator;
         private IInputProvider inputProvider;
-
         private WeaponInfo currentWeapon;
-        private Random rng;
+        private GraphicsDevice graphicsDevice;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> in which the player will spawn</param>
-        /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="singlePlayer"><see cref="SinglePlayer"/></param>
-        /// <param name="weaponProvider"><see cref="IWeaponProvider"/> for loading weapons</param>
-        public EntityPlayer(DungeonLevel level, IInputProvider inputProvider, IResourceProvider resourceProvider, SinglePlayer singlePlayer, IWeaponProvider weaponProvider) : base(level)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public EntityPlayer(DungeonLevel level, SinglePlayer singlePlayer, GameServiceContainer serviceContainer) : base(level, serviceContainer)
         {
-            this.inputProvider = inputProvider;
-            this.resourceProvider = resourceProvider;
+            this.serviceContainer = serviceContainer;
             this.singlePlayer = singlePlayer;
-            this.weaponProvider = weaponProvider;
+
+            inputProvider = serviceContainer.GetService<IInputProvider>();
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
+            weaponProvider = serviceContainer.GetService<IWeaponProvider>();
+            graphicsDevice = serviceContainer.GetService<IGraphicsDeviceService>().GraphicsDevice;
 
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10), 1f, Body);
             Body.Position = Level.GetSpawnPosition();
@@ -107,9 +109,7 @@ namespace HoardeGame.Entities.Player
             Ammo = 100;
             BlinkMultiplier = 1;
 
-            rng = new Random();
-
-            animator = new AnimatedSprite(resourceProvider.GetTexture("PlayerSheet"));
+            animator = new AnimatedSprite(resourceProvider.GetTexture("PlayerSheet"), serviceContainer);
             animator.AddAnimation("South", 32, 0, 5, 100);
             animator.AddAnimation("West", 32, 2, 5, 100);
             animator.AddAnimation("East", 32, 6, 5, 100);
@@ -122,8 +122,7 @@ namespace HoardeGame.Entities.Player
             animator.SetDefaultAnimation("Idle");
 
             currentWeapon = weaponProvider.GetWeapon("testWeapon");
-
-            Weapon = new EntityWeapon(level, resourceProvider, this.inputProvider, this, currentWeapon);
+            Weapon = new EntityWeapon(level, serviceContainer, this, currentWeapon);
         }
 
         /// <inheritdoc/>
@@ -170,7 +169,7 @@ namespace HoardeGame.Entities.Player
 
             if (!inputProvider.GamePadState.IsConnected || ShootingDirection == Vector2.Zero)
             {
-                Vector2 target = singlePlayer.Camera.GetWolrdPosFromScreenPos(inputProvider.MouseState.Position.ToVector2(), singlePlayer.GraphicsDevice) - Position;
+                Vector2 target = singlePlayer.Camera.GetWolrdPosFromScreenPos(inputProvider.MouseState.Position.ToVector2(), graphicsDevice) - Position;
                 target.Normalize();
 
                 ShootingDirection = target;
@@ -211,7 +210,7 @@ namespace HoardeGame.Entities.Player
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
+        public override void Draw(EffectParameter parameter)
         {
             if (Dead)
             {
@@ -222,42 +221,42 @@ namespace HoardeGame.Entities.Player
 
             if (Velocity.Length() < 0.1f)
             {
-                animator.DrawAnimation("Idle", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                animator.DrawAnimation("Idle", screenPos, Color.White, parameter, CurrentBlinkFrame);
             }
             else
             {
                 switch (direction)
                 {
                     case Directions.NORTH:
-                        animator.DrawAnimation("North", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("North", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.SOUTH:
-                        animator.DrawAnimation("South", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("South", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.WEST:
-                        animator.DrawAnimation("West", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("West", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.EAST:
-                        animator.DrawAnimation("East", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("East", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.NORTHEAST:
-                        animator.DrawAnimation("NorthEast", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("NorthEast", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.NORTHWEST:
-                        animator.DrawAnimation("NorthWest", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("NorthWest", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.SOUTHEAST:
-                        animator.DrawAnimation("SouthEast", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("SouthEast", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.SOUTHWEST:
-                        animator.DrawAnimation("SouthWest", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("SouthWest", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                 }
             }
 
-            Weapon.Draw(spriteBatch, parameter);
+            Weapon.Draw(parameter);
 
-            base.Draw(spriteBatch, parameter);
+            base.Draw(parameter);
         }
 
         private Directions GetDirection(Vector2 velocity)
@@ -304,7 +303,7 @@ namespace HoardeGame.Entities.Player
 
             if (fixtureB.CollisionCategories == Category.Cat2 && !IsHit() && ((BulletOwnershipInfo)fixtureB.Body.UserData).Faction == Faction.Enemies)
             {
-                EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, resourceProvider)
+                EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, serviceContainer)
                 {
                     Color = Color.Red,
                     Damage = ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmo.Damage,

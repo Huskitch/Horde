@@ -106,10 +106,11 @@ namespace HoardeGame.Gameplay.Cards
         /// <summary>
         /// Initializes a new instance of the <see cref="Card"/> class.
         /// </summary>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        public void Initialize(IResourceProvider resourceProvider)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public void Initialize(GameServiceContainer serviceContainer)
         {
-            this.resourceProvider = resourceProvider;
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
+            Texture = resourceProvider.GetTexture(TextureName);
         }
 
         /// <summary>
@@ -160,10 +161,10 @@ namespace HoardeGame.Gameplay.Cards
         /// <summary>
         /// Validates the card
         /// </summary>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for checking assets</param>
-        public void Validate(IResourceProvider resourceProvider)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public void Validate(GameServiceContainer serviceContainer)
         {
-            if (resourceProvider.GetTexture(TextureName) == null)
+            if (serviceContainer.GetService<IResourceProvider>().GetTexture(TextureName) == null)
             {
                 throw new FileNotFoundException($"Texture {TextureName} of card {ID} does not exist!");
             }

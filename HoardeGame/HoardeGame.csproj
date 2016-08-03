@@ -109,6 +109,7 @@
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Camera.cs" />
     <Compile Include="Graphics\IDrawable.cs" />
+    <Compile Include="Graphics\ISpriteBatchService.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\GuiBase.cs" />
     <Compile Include="GUI\HealthArmourBar.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Resources\IResourceProvider.cs" />
     <Compile Include="Resources\ResourceManager.cs" />
     <Compile Include="State\GameState.cs" />
+    <Compile Include="State\IStateManagerService.cs" />
     <Compile Include="State\StateManager.cs" />
     <Compile Include="Gameplay\Themes\ChestInfo.cs" />
     <Compile Include="Gameplay\Themes\EntitySpawnInfo.cs" />

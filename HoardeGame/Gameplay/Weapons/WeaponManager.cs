@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
-using HoardeGame.Resources;
+using Microsoft.Xna.Framework;
 
 namespace HoardeGame.Gameplay.Weapons
 {
@@ -19,14 +19,14 @@ namespace HoardeGame.Gameplay.Weapons
         /// <summary>
         /// Gets the weapon dictionary
         /// </summary>
-        public Dictionary<string, WeaponInfo> Weapons { get; private set; } = new Dictionary<string, WeaponInfo>();
+        public Dictionary<string, WeaponInfo> Weapons { get; } = new Dictionary<string, WeaponInfo>();
 
         /// <summary>
         /// Load weapons from a file
         /// </summary>
         /// <param name="filename">XML file to load from</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for asset validation</param>
-        public void LoadXmlFile(string filename, IResourceProvider resourceProvider)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public void LoadXmlFile(string filename, GameServiceContainer serviceContainer)
         {
             Debug.WriteLine("Loading weapons...");
             Weapons.Clear();
@@ -42,7 +42,7 @@ namespace HoardeGame.Gameplay.Weapons
 
             foreach (var weapon in weaponList)
             {
-                weapon.Validate(resourceProvider);
+                weapon.Validate(serviceContainer);
                 Weapons.Add(weapon.Id, weapon);
 
                 Debug.WriteLine($"Loaded weapon: {weapon.Name} ({weapon.Id})");

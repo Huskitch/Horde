@@ -9,6 +9,7 @@ using HoardeGame.Gameplay.Cards;
 using HoardeGame.Gameplay.Themes;
 using HoardeGame.Gameplay.Weapons;
 using HoardeGame.GameStates;
+using HoardeGame.Graphics;
 using HoardeGame.Input;
 using HoardeGame.Resources;
 using HoardeGame.State;
@@ -20,7 +21,7 @@ namespace HoardeGame
     /// <summary>
     /// Core game class
     /// </summary>
-    public class Main : Game
+    public class Main : Game, ISpriteBatchService, IStateManagerService
     {
         /// <summary>
         /// Gets the <see cref="MainMenu"/> <see cref="GameState"/>
@@ -37,15 +38,22 @@ namespace HoardeGame
         /// </summary>
         public SinglePlayer SinglePlayer { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the SpriteBatch
+        /// </summary>
+        public SpriteBatch SpriteBatch { get; set; }
+
+        /// <summary>
+        /// Gets the StateManager
+        /// </summary>
+        public StateManager StateManager { get; }
+
         private readonly GraphicsDeviceManager graphics;
-        private readonly StateManager stateManager;
         private readonly IInputProvider inputProvider;
         private readonly ICardProvider cardProvider;
         private readonly IResourceProvider resourceProvider;
         private readonly IThemeProvider themeProvider;
         private readonly IWeaponProvider weaponProvider;
-
-        private SpriteBatch spriteBatch;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Main"/> class.
@@ -61,10 +69,18 @@ namespace HoardeGame
 
             resourceProvider = new ResourceManager();
             inputProvider = new InputManager();
-            cardProvider = new CardManager(resourceProvider);
+            cardProvider = new CardManager(Services);
             themeProvider = new ThemeManager();
             weaponProvider = new WeaponManager();
-            stateManager = new StateManager();
+            StateManager = new StateManager();
+
+            Services.AddService(resourceProvider);
+            Services.AddService(inputProvider);
+            Services.AddService(cardProvider);
+            Services.AddService(themeProvider);
+            Services.AddService(weaponProvider);
+            Services.AddService<ISpriteBatchService>(this);
+            Services.AddService<IStateManagerService>(this);
 
             graphics.PreferredBackBufferWidth = 1600;
             graphics.PreferredBackBufferHeight = 900;
@@ -81,32 +97,29 @@ namespace HoardeGame
         /// <inheritdoc/>
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
 
-            (resourceProvider as ResourceManager).Init(graphics.GraphicsDevice);
-            (resourceProvider as ResourceManager).LoadContent(Content);
-
-            (cardProvider as CardManager).LoadXmlFile("Content/CARDS.xml");
-
-            (themeProvider as ThemeManager).LoadXmlFile("Content/THEMES.xml", resourceProvider);
-
-            (weaponProvider as WeaponManager).LoadXmlFile("Content/WEAPONS.xml", resourceProvider);
+            ((ResourceManager)resourceProvider).Init(graphics.GraphicsDevice);
+            ((ResourceManager)resourceProvider).LoadContent(Content);
+            ((CardManager)cardProvider).LoadXmlFile("Content/CARDS.xml");
+            ((ThemeManager)themeProvider).LoadXmlFile("Content/THEMES.xml", Services);
+            ((WeaponManager)weaponProvider).LoadXmlFile("Content/WEAPONS.xml", Services);
 
             string[] arguments = Environment.GetCommandLineArgs();
 
-            SinglePlayer = new SinglePlayer(resourceProvider, inputProvider, cardProvider, themeProvider, spriteBatch, GraphicsDevice, stateManager, weaponProvider);
-            MainMenu = new MainMenu(spriteBatch, GraphicsDevice, inputProvider, resourceProvider, this, stateManager);
-            MenuDemo = new MenuDemo(spriteBatch, resourceProvider, GraphicsDevice, inputProvider, themeProvider, weaponProvider);
+            SinglePlayer = new SinglePlayer(Services);
+            MainMenu = new MainMenu(Services, this);
+            MenuDemo = new MenuDemo(Services);
 
             if (arguments.FirstOrDefault(s => s.ToLower() == "-skipmenu") != null)
             {
-                stateManager.Push(MainMenu);
-                stateManager.Push(SinglePlayer);
+                StateManager.Push(MainMenu);
+                StateManager.Push(SinglePlayer);
             }
             else
             {
-                stateManager.Push(MenuDemo);
-                stateManager.Push(MainMenu);
+                StateManager.Push(MenuDemo);
+                StateManager.Push(MainMenu);
             }
         }
 
@@ -119,7 +132,7 @@ namespace HoardeGame
         protected override void Update(GameTime gameTime)
         {
             inputProvider.Update(gameTime);
-            stateManager.Update(gameTime);
+            StateManager.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -127,7 +140,7 @@ namespace HoardeGame
         /// <inheritdoc/>
         protected override void Draw(GameTime gameTime)
         {
-            stateManager.Draw(gameTime, 0);
+            StateManager.Draw(gameTime, 0);
 
             base.Draw(gameTime);
         }

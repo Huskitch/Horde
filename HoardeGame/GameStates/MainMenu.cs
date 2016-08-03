@@ -5,6 +5,7 @@
 using System.Linq;
 using System.Reflection;
 using HoardeGame.Extensions;
+using HoardeGame.Graphics;
 using HoardeGame.GUI;
 using HoardeGame.Input;
 using HoardeGame.Resources;
@@ -32,20 +33,17 @@ namespace HoardeGame.GameStates
         /// <summary>
         /// Initializes a new instance of the <see cref="MainMenu"/> class.
         /// </summary>
-        /// <param name="spriteBatch"><see cref="SpriteBatch"/> to draw with</param>
-        /// <param name="graphicsDevice"><see cref="GraphicsDevice"/> to draw with</param>
-        /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
         /// <param name="main"><see cref="Main"/></param>
-        /// <param name="stateManager"><see cref="StateManager"/> for switching states</param>
-        public MainMenu(SpriteBatch spriteBatch, GraphicsDevice graphicsDevice, IInputProvider inputProvider, IResourceProvider resourceProvider, Main main, StateManager stateManager)
+        public MainMenu(GameServiceContainer serviceContainer, Main main)
         {
-            this.spriteBatch = spriteBatch;
-            this.inputProvider = inputProvider;
-            this.resourceProvider = resourceProvider;
-            this.graphicsDevice = graphicsDevice;
             this.main = main;
-            this.stateManager = stateManager;
+
+            spriteBatch = serviceContainer.GetService<ISpriteBatchService>().SpriteBatch;
+            inputProvider = serviceContainer.GetService<IInputProvider>();
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
+            graphicsDevice = serviceContainer.GetService<IGraphicsDeviceService>().GraphicsDevice;
+            stateManager = serviceContainer.GetService<IStateManagerService>().StateManager;
         }
 
         /// <inheritdoc/>

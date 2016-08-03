@@ -25,22 +25,23 @@ namespace HoardeGame.Gameplay.Level
         public Texture2D Image { get; private set; }
 
         private readonly IResourceProvider resourceProvider;
+        private readonly GraphicsDevice graphicsDevice;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Minimap"/> class.
         /// </summary>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        public Minimap(IResourceProvider resourceProvider)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public Minimap(GameServiceContainer serviceContainer)
         {
-            this.resourceProvider = resourceProvider;
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
+            graphicsDevice = serviceContainer.GetService<IGraphicsDeviceService>().GraphicsDevice;
         }
 
         /// <summary>
         /// Generates a new minimap <see cref="Texture2D"/>
         /// </summary>
-        /// <param name="device"><see cref="GraphicsDevice"/> used for creating the <see cref="Texture2D"/></param>
         /// <param name="map">Data to generate the <see cref="Texture2D"/> from</param>
-        public void Generate(GraphicsDevice device, int[,] map)
+        public void Generate(int[,] map)
         {
             int width = map.GetLength(0);
             int height = map.GetLength(1);
@@ -63,7 +64,7 @@ namespace HoardeGame.Gameplay.Level
             }
 
             Image?.Dispose();
-            Image = new Texture2D(device, width, height);
+            Image = new Texture2D(graphicsDevice, width, height);
             Image.SetData(colorData);
         }
 

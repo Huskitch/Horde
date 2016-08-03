@@ -39,6 +39,7 @@ namespace HoardeGame.Entities.Base
         protected IPlayerProvider PlayerProvider { get; }
 
         private readonly IResourceProvider resourceProvider;
+        private readonly GameServiceContainer serviceContainer;
         private readonly Random rng = new Random(Guid.NewGuid().GetHashCode());
 
         private float walkTimer;
@@ -52,12 +53,13 @@ namespace HoardeGame.Entities.Base
         /// Initializes a new instance of the <see cref="EntityBaseEnemy"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> to load resources with</param>
-        /// <param name="playerProvider"><see cref="IPlayerProvider"/> for accessing the player entity</param>
-        protected EntityBaseEnemy(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        protected EntityBaseEnemy(DungeonLevel level, GameServiceContainer serviceContainer) : base(level, serviceContainer)
         {
-            this.resourceProvider = resourceProvider;
-            PlayerProvider = playerProvider;
+            this.serviceContainer = serviceContainer;
+
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
+            PlayerProvider = serviceContainer.GetService<IPlayerProvider>();
         }
 
         /// <summary>
@@ -103,7 +105,7 @@ namespace HoardeGame.Entities.Base
         {
             if (fixtureB.CollisionCategories == Category.Cat2 && ((BulletOwnershipInfo)fixtureB.Body.UserData).Faction == Faction.Player)
             {
-                EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, resourceProvider)
+                EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, serviceContainer)
                 {
                     Color = Color.White,
                     Damage = PlayerProvider.Player.Weapon.CurrentAmmo.Damage,
@@ -138,7 +140,7 @@ namespace HoardeGame.Entities.Base
 
                     for (int i = 0; i < gemCount1; i++)
                     {
-                        EntityGem gem = new EntityGem(Level, resourceProvider, PlayerProvider)
+                        EntityGem gem = new EntityGem(Level, serviceContainer)
                         {
                             Body =
                             {
@@ -151,7 +153,7 @@ namespace HoardeGame.Entities.Base
 
                     for (int i = 0; i < gemCount2; i++)
                     {
-                        EntityGem2 gem2 = new EntityGem2(Level, resourceProvider, PlayerProvider)
+                        EntityGem2 gem2 = new EntityGem2(Level, serviceContainer)
                         {
                             Body =
                             {
@@ -164,7 +166,7 @@ namespace HoardeGame.Entities.Base
 
                     for (int i = 0; i < gemCount3; i++)
                     {
-                        EntityGem3 gem3 = new EntityGem3(Level, resourceProvider, PlayerProvider)
+                        EntityGem3 gem3 = new EntityGem3(Level, serviceContainer)
                         {
                             Body =
                             {
@@ -177,7 +179,7 @@ namespace HoardeGame.Entities.Base
 
                     for (int i = 0; i < keyCount; i++)
                     {
-                        EntityKey key = new EntityKey(Level, resourceProvider, PlayerProvider)
+                        EntityKey key = new EntityKey(Level, serviceContainer)
                         {
                             Body =
                             {
@@ -191,7 +193,7 @@ namespace HoardeGame.Entities.Base
             }
             else if (fixtureB.CollisionCategories == Category.Cat1 && !PlayerProvider.Player.IsHit() && Damage > 0)
             {
-                EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, resourceProvider)
+                EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, serviceContainer)
                 {
                     Color = Color.Red,
                     Damage = Damage,

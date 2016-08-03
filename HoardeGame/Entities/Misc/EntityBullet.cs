@@ -34,15 +34,15 @@ namespace HoardeGame.Entities.Misc
         /// Initializes a new instance of the <see cref="EntityBullet"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
         /// <param name="startPos">Starting position</param>
         /// <param name="direction">Direction</param>
         /// <param name="speed">Speed of the bullet</param>
         /// <param name="lifetime">Life of the bullet in ms</param>
         /// <param name="info"><see cref="BulletOwnershipInfo"/></param>
-        public EntityBullet(DungeonLevel level, IResourceProvider resourceProvider, Vector2 startPos, Vector2 direction, float speed, float lifetime, BulletOwnershipInfo info) : base(level)
+        public EntityBullet(DungeonLevel level, GameServiceContainer serviceContainer, Vector2 startPos, Vector2 direction, float speed, float lifetime, BulletOwnershipInfo info) : base(level, serviceContainer)
         {
-            this.resourceProvider = resourceProvider;
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
             this.direction = direction;
             this.info = info;
             this.speed = speed;
@@ -82,11 +82,11 @@ namespace HoardeGame.Entities.Misc
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
+        public override void Draw(EffectParameter parameter)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
 
-            spriteBatch.Draw(resourceProvider.GetTexture("Bullet"), new Rectangle((int)screenPos.X + 16, (int)screenPos.Y + 16, 32, 32), null, Color.White, rotation, new Vector2(16, 16), SpriteEffects.None, 0f);
+            SpriteBatch.Draw(resourceProvider.GetTexture("Bullet"), new Rectangle((int)screenPos.X + 16, (int)screenPos.Y + 16, 32, 32), null, Color.White, rotation, new Vector2(16, 16), SpriteEffects.None, 0f);
         }
 
         /// <summary>

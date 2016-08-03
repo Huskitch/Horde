@@ -4,9 +4,7 @@
 
 using HoardeGame.Entities.Misc;
 using HoardeGame.Gameplay.Level;
-using HoardeGame.Gameplay.Player;
 using HoardeGame.Gameplay.Weapons;
-using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -31,9 +29,8 @@ namespace HoardeGame.Entities.Base
         /// Initializes a new instance of the <see cref="EntityBaseShootingEnemy"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> to load resources with</param>
-        /// <param name="playerProvider"><see cref="IPlayerProvider"/> for accessing the player entity</param>
-        protected EntityBaseShootingEnemy(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level, resourceProvider, playerProvider)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        protected EntityBaseShootingEnemy(DungeonLevel level, GameServiceContainer serviceContainer) : base(level, serviceContainer)
         {
             CurrentAmmo = new BulletInfo
             {
@@ -59,9 +56,9 @@ namespace HoardeGame.Entities.Base
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
+        public override void Draw(EffectParameter parameter)
         {
-            Weapon.Draw(spriteBatch, parameter);
+            Weapon.Draw(parameter);
         }
     }
 }

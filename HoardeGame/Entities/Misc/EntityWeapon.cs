@@ -39,23 +39,25 @@ namespace HoardeGame.Entities.Misc
         private readonly DungeonLevel level;
         private readonly IResourceProvider resourceProvider;
         private readonly IInputProvider inputProvider;
+        private readonly GameServiceContainer serviceContainer;
         private readonly EntityBase owner;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityWeapon"/> class.
         /// </summary>
         /// <param name="level"> <see cref="DungeonLevel"/> to place this entity in</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> to use for loading resources</param>
-        /// <param name="inputProvider"><see cref="IInputProvider"/> for user input</param>
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
         /// <param name="owner"><see cref="EntityBase"/> owner of the weapon</param>
         /// <param name="weapon"><see cref="WeaponInfo"/> to use</param>
         /// <param name="bullet"><see cref="BulletInfo"/> to use, 1st ammo type if null</param>
-        public EntityWeapon(DungeonLevel level, IResourceProvider resourceProvider, IInputProvider inputProvider, EntityBase owner, WeaponInfo weapon, BulletInfo bullet = null) : base(level)
+        public EntityWeapon(DungeonLevel level, GameServiceContainer serviceContainer, EntityBase owner, WeaponInfo weapon, BulletInfo bullet = null) : base(level, serviceContainer)
         {
             this.level = level;
-            this.resourceProvider = resourceProvider;
-            this.inputProvider = inputProvider;
             this.owner = owner;
+            this.serviceContainer = serviceContainer;
+
+            inputProvider = serviceContainer.GetService<IInputProvider>();
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
 
             WeaponInfo = weapon;
             CurrentAmmo = bullet ?? WeaponInfo.Bullets[0];
@@ -75,7 +77,7 @@ namespace HoardeGame.Entities.Misc
 
                 BulletOwnershipInfo info = new BulletOwnershipInfo(friendly ? Faction.Player : Faction.Enemies, this);
 
-                bullets.Add(new EntityBullet(level, resourceProvider, ConvertUnits.ToDisplayUnits(owner.Position), direction, CurrentAmmo.Speed, CurrentAmmo.Lifetime, info));
+                bullets.Add(new EntityBullet(level, serviceContainer, ConvertUnits.ToDisplayUnits(owner.Position), direction, CurrentAmmo.Speed, CurrentAmmo.Lifetime, info));
                 fireTimer = 0;
 
                 return true;
@@ -105,11 +107,11 @@ namespace HoardeGame.Entities.Misc
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
+        public override void Draw(EffectParameter parameter)
         {
             foreach (EntityBullet bullet in bullets)
             {
-                bullet.Draw(spriteBatch, parameter);
+                bullet.Draw(parameter);
             }
 
             if (WeaponInfo.HasLaserPointer)
@@ -121,7 +123,7 @@ namespace HoardeGame.Entities.Misc
                         owner.Position,
                         owner.Position + ConvertUnits.ToSimUnits(new Vector2(16)) + 100 * owner.ShootingDirection);
 
-                    spriteBatch.Draw(
+                    SpriteBatch.Draw(
                         resourceProvider.GetTexture("OneByOneEmpty"),
                         new Rectangle((int)owner.ScreenPosition.X + 16, (int)owner.ScreenPosition.Y + 16, GetPointerDistance(), 1),
                         null,
@@ -133,7 +135,7 @@ namespace HoardeGame.Entities.Misc
                 }
             }
 
-            base.Draw(spriteBatch, parameter);
+            base.Draw(parameter);
         }
 
         private float DetermineRayCast(Fixture fixture, Vector2 point, Vector2 normal, float fraction)

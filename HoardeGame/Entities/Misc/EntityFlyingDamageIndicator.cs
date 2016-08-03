@@ -53,10 +53,10 @@ namespace HoardeGame.Entities.Misc
         /// Initializes a new instance of the <see cref="EntityFlyingDamageIndicator"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place the entity in</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> to load resourced with</param>
-        public EntityFlyingDamageIndicator(DungeonLevel level, IResourceProvider resourceProvider) : base(level)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public EntityFlyingDamageIndicator(DungeonLevel level, GameServiceContainer serviceContainer) : base(level, serviceContainer)
         {
-            this.resourceProvider = resourceProvider;
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
         }
 
         /// <inheritdoc/>
@@ -95,9 +95,9 @@ namespace HoardeGame.Entities.Misc
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
+        public override void Draw(EffectParameter parameter)
         {
-            spriteBatch.DrawString(resourceProvider.GetFont("SmallFont"), Damage.ToString(), ScreenPosition, Color, 0f, Vector2.Zero, new Vector2(0.5f, 0.5f), SpriteEffects.None, 0f);
+            SpriteBatch.DrawString(resourceProvider.GetFont("SmallFont"), Damage.ToString(), ScreenPosition, Color, 0f, Vector2.Zero, new Vector2(0.5f, 0.5f), SpriteEffects.None, 0f);
         }
     }
 }

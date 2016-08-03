@@ -50,6 +50,7 @@ namespace HoardeGame.Gameplay.Level
         private readonly IResourceProvider resourceProvider;
         private readonly IPlayerProvider playerProvider;
         private readonly IInputProvider inputProvider;
+        private readonly GameServiceContainer serviceContainer;
         private readonly List<IDrawable> renderList = new List<IDrawable>();
 
         private int[,] map;
@@ -60,21 +61,21 @@ namespace HoardeGame.Gameplay.Level
         /// <summary>
         /// Initializes a new instance of the <see cref="DungeonLevel"/> class.
         /// </summary>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        /// <param name="playerProvider"><see cref="IPlayerProvider"/> for accessing the player entity</param>
-        /// <param name="inputProvider"><see cref="IInputProvider"/> for providing input to <see cref="EntityChest"/></param>
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
         /// <param name="theme"><see cref="Theme"/> of this level</param>
         /// <param name="generateEntities">Whether to generate default entites (enemies and chests)</param>
-        public DungeonLevel(IResourceProvider resourceProvider, IPlayerProvider playerProvider, IInputProvider inputProvider, Theme theme, bool generateEntities = true)
+        public DungeonLevel(GameServiceContainer serviceContainer, Theme theme, bool generateEntities = true)
         {
             if (theme == null)
             {
                 throw new ArgumentNullException(nameof(theme));
             }
 
-            this.resourceProvider = resourceProvider;
-            this.playerProvider = playerProvider;
-            this.inputProvider = inputProvider;
+            this.serviceContainer = serviceContainer;
+
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
+            playerProvider = serviceContainer.GetService<IPlayerProvider>();
+            inputProvider = serviceContainer.GetService<IInputProvider>();
             Theme = theme;
 
             Body = BodyFactory.CreateBody(World);
@@ -148,7 +149,7 @@ namespace HoardeGame.Gameplay.Level
         {
             for (int i = 0; i < 5; i++)
             {
-                EntityChest chest = new EntityChest(this, resourceProvider, playerProvider, inputProvider, Theme.ChestInfo);
+                EntityChest chest = new EntityChest(this, serviceContainer, Theme.ChestInfo);
                 AddEntity(chest);
             }
         }
@@ -172,7 +173,7 @@ namespace HoardeGame.Gameplay.Level
                     for (int j = 0; j < clusterSize; j++)
                     {
                         Type enemyType = Type.GetType(spawns.EntityType);
-                        var instance = Activator.CreateInstance(enemyType, this, resourceProvider, playerProvider) as EntityBaseEnemy;
+                        var instance = Activator.CreateInstance(enemyType, this, serviceContainer) as EntityBaseEnemy;
                         Vector2 randomVector2 = random.Vector2(0, 0, 0.25f, 0.25f);
                         instance.Body.Position = spawnPos + randomVector2;
                         World.Step(10);
@@ -324,7 +325,7 @@ namespace HoardeGame.Gameplay.Level
             {
                 renderList.ForEach(drawable =>
                 {
-                    drawable.Draw(spriteBatch, parameter);
+                    drawable.Draw(parameter);
                 });
             }
         }
@@ -343,7 +344,7 @@ namespace HoardeGame.Gameplay.Level
                     // Empty
                     if (edgedMap[x, y] == 0)
                     {
-                        Tile tile = new Tile(new Vector2(x * 32, y * 32 + 24), new Vector2(32, 32), resourceProvider.GetTexture(Theme.FloorTextureName), false, this, 0);
+                        Tile tile = new Tile(serviceContainer, new Vector2(x * 32, y * 32 + 24), new Vector2(32, 32), resourceProvider.GetTexture(Theme.FloorTextureName), false, this, 0);
                         MapTiles.Add(tile);
                         renderList.Add(tile);
                     }
@@ -351,7 +352,7 @@ namespace HoardeGame.Gameplay.Level
                     // Wall
                     if (edgedMap[x, y] >= 1)
                     {
-                        Tile tile = new Tile(new Vector2(x * 32, y * 32), new Vector2(32, 56), resourceProvider.GetTexture(Theme.WallTextureName), true, this, edgedMap[x, y] - 1);
+                        Tile tile = new Tile(serviceContainer, new Vector2(x * 32, y * 32), new Vector2(32, 56), resourceProvider.GetTexture(Theme.WallTextureName), true, this, edgedMap[x, y] - 1);
                         MapTiles.Add(tile);
                         renderList.Add(tile);
                     }

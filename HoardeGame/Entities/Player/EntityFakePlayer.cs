@@ -58,9 +58,8 @@ namespace HoardeGame.Entities.Player
         /// Initializes a new instance of the <see cref="EntityFakePlayer"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        /// <param name="weaponProvider"><see cref="IWeaponProvider"/> for loading weapons</param>
-        public EntityFakePlayer(DungeonLevel level, IResourceProvider resourceProvider, IWeaponProvider weaponProvider) : base(level)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public EntityFakePlayer(DungeonLevel level, GameServiceContainer serviceContainer) : base(level, serviceContainer)
         {
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10), 1f, Body);
             Body.Position = Level.GetSpawnPosition();
@@ -71,7 +70,9 @@ namespace HoardeGame.Entities.Player
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
 
-            animator = new AnimatedSprite(resourceProvider.GetTexture("PlayerSheet"));
+            var resourceProvider = serviceContainer.GetService<IResourceProvider>();
+
+            animator = new AnimatedSprite(resourceProvider.GetTexture("PlayerSheet"), serviceContainer);
             animator.AddAnimation("South", 32, 0, 5, 100);
             animator.AddAnimation("West", 32, 2, 5, 100);
             animator.AddAnimation("East", 32, 6, 5, 100);
@@ -83,7 +84,7 @@ namespace HoardeGame.Entities.Player
             animator.AddAnimation("Idle", 32, 8, 5, 100);
             animator.SetDefaultAnimation("Idle");
 
-            Weapon = new EntityWeapon(level, resourceProvider, null, this, weaponProvider.GetWeapon("fakeWeapon"));
+            Weapon = new EntityWeapon(level, serviceContainer, this, serviceContainer.GetService<IWeaponProvider>().GetWeapon("fakeWeapon"));
         }
 
         /// <inheritdoc/>
@@ -116,7 +117,7 @@ namespace HoardeGame.Entities.Player
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
+        public override void Draw(EffectParameter parameter)
         {
             if (Dead)
             {
@@ -127,42 +128,42 @@ namespace HoardeGame.Entities.Player
 
             if (Velocity.Length() < 0.1f)
             {
-                animator.DrawAnimation("Idle", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                animator.DrawAnimation("Idle", screenPos, Color.White, parameter, CurrentBlinkFrame);
             }
             else
             {
                 switch (direction)
                 {
                     case Directions.NORTH:
-                        animator.DrawAnimation("North", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("North", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.SOUTH:
-                        animator.DrawAnimation("South", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("South", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.WEST:
-                        animator.DrawAnimation("West", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("West", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.EAST:
-                        animator.DrawAnimation("East", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("East", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.NORTHEAST:
-                        animator.DrawAnimation("NorthEast", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("NorthEast", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.NORTHWEST:
-                        animator.DrawAnimation("NorthWest", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("NorthWest", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.SOUTHEAST:
-                        animator.DrawAnimation("SouthEast", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("SouthEast", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                     case Directions.SOUTHWEST:
-                        animator.DrawAnimation("SouthWest", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+                        animator.DrawAnimation("SouthWest", screenPos, Color.White, parameter, CurrentBlinkFrame);
                         break;
                 }
             }
 
-            Weapon.Draw(spriteBatch, parameter);
+            Weapon.Draw(parameter);
 
-            base.Draw(spriteBatch, parameter);
+            base.Draw(parameter);
         }
 
         private Directions GetDirection(Vector2 velocity)

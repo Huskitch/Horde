@@ -31,8 +31,7 @@ namespace HoardeGame.Graphics
         /// <summary>
         /// Draws the object
         /// </summary>
-        /// <param name="spriteBatch"><see cref="SpriteBatch"/> to use for drawing</param>
         /// <param name="parameter"><see cref="EffectParameter"/> for flashing effect</param>
-        void Draw(SpriteBatch spriteBatch, EffectParameter parameter);
+        void Draw(EffectParameter parameter);
     }
 }

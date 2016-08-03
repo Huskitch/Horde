@@ -5,6 +5,7 @@
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using HoardeGame.Gameplay.Level;
+using HoardeGame.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -62,7 +63,7 @@ namespace HoardeGame.Entities.Base
         /// <summary>
         /// Gets the physics body of the entity
         /// </summary>
-        public Body Body { get; private set; }
+        public Body Body { get; }
 
         /// <summary>
         /// Gets the position of the <see cref="Body"/> in meters
@@ -120,13 +121,20 @@ namespace HoardeGame.Entities.Base
         protected int BlinkMultiplier { get; set; } = 1;
 
         /// <summary>
+        /// Gets the spritebatch for this entity
+        /// </summary>
+        protected SpriteBatch SpriteBatch { get; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="EntityBase"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
-        protected EntityBase(DungeonLevel level)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        protected EntityBase(DungeonLevel level, GameServiceContainer serviceContainer)
         {
             Level = level;
             Body = new Body(level.World);
+            SpriteBatch = serviceContainer.GetService<ISpriteBatchService>().SpriteBatch;
         }
 
         /// <summary>
@@ -170,9 +178,8 @@ namespace HoardeGame.Entities.Base
         /// <summary>
         /// Draw the entity
         /// </summary>
-        /// <param name="spriteBatch"><see cref="GameTime"/></param>
         /// <param name="parameter"><see cref="EffectParameter"/> for flashing effect</param>
-        public virtual void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
+        public virtual void Draw(EffectParameter parameter)
         {
         }
     }

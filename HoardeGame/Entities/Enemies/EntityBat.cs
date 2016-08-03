@@ -8,7 +8,6 @@ using FarseerPhysics.Factories;
 using HoardeGame.Entities.Base;
 using HoardeGame.Gameplay.Gems;
 using HoardeGame.Gameplay.Level;
-using HoardeGame.Gameplay.Player;
 using HoardeGame.Graphics;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
@@ -22,15 +21,13 @@ namespace HoardeGame.Entities.Enemies
     public class EntityBat : EntityBaseEnemy
     {
         private readonly AnimatedSprite animator;
-        private IPlayerProvider playerProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityBat"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> to load resources with</param>
-        /// <param name="playerProvider"><see cref="IPlayerProvider"/> for acessing the player entity</param>
-        public EntityBat(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider) : base(level, resourceProvider, playerProvider)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public EntityBat(DungeonLevel level, GameServiceContainer serviceContainer) : base(level, serviceContainer)
         {
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10f), 1f, Body);
             Body.CollisionCategories = Category.Cat3;
@@ -38,8 +35,6 @@ namespace HoardeGame.Entities.Enemies
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
-
-            this.playerProvider = playerProvider;
 
             Damage = 1;
             Health = 5;
@@ -62,7 +57,7 @@ namespace HoardeGame.Entities.Enemies
                 }
             };
 
-            animator = new AnimatedSprite(resourceProvider.GetTexture("BatSheet"));
+            animator = new AnimatedSprite(serviceContainer.GetService<IResourceProvider>().GetTexture("BatSheet"), serviceContainer);
             animator.AddAnimation("Flap", 32, 0, 2, 100);
         }
 
@@ -74,10 +69,10 @@ namespace HoardeGame.Entities.Enemies
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
+        public override void Draw(EffectParameter parameter)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            animator.DrawAnimation("Flap", screenPos, spriteBatch, Color.White, parameter, CurrentBlinkFrame);
+            animator.DrawAnimation("Flap", screenPos, Color.White, parameter, CurrentBlinkFrame);
         }
     }
 }

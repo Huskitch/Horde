@@ -4,6 +4,7 @@
 
 using System.IO;
 using HoardeGame.Resources;
+using Microsoft.Xna.Framework;
 
 namespace HoardeGame.Gameplay.Weapons
 {
@@ -55,11 +56,11 @@ namespace HoardeGame.Gameplay.Weapons
         /// <summary>
         /// Validates the bukket
         /// </summary>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for validating the texture</param>
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
         /// <param name="weaponId">ID of weapon to which this bullet belongs</param>
-        public void Validate(IResourceProvider resourceProvider, string weaponId)
+        public void Validate(GameServiceContainer serviceContainer, string weaponId)
         {
-            if (resourceProvider.GetTexture(Texture) == null)
+            if (serviceContainer.GetService<IResourceProvider>().GetTexture(Texture) == null)
             {
                 throw new FileNotFoundException($"Texture {Texture} of bullet of weapon {weaponId} does not exist!");
             }

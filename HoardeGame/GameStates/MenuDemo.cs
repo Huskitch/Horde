@@ -11,9 +11,7 @@ using HoardeGame.Extensions;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Player;
 using HoardeGame.Gameplay.Themes;
-using HoardeGame.Gameplay.Weapons;
 using HoardeGame.Graphics;
-using HoardeGame.Input;
 using HoardeGame.Resources;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
@@ -35,6 +33,7 @@ namespace HoardeGame.GameStates
         private readonly SpriteBatch spriteBatch;
         private readonly GraphicsDevice graphicsDevice;
         private readonly IResourceProvider resourceProvider;
+        private readonly GameServiceContainer serviceContainer;
 
         private readonly Camera camera;
         private readonly DungeonLevel dungeon;
@@ -42,17 +41,14 @@ namespace HoardeGame.GameStates
         /// <summary>
         /// Initializes a new instance of the <see cref="MenuDemo"/> class.
         /// </summary>
-        /// <param name="spriteBatch"><see cref="SpriteBatch"/> to draw with</param>
-        /// <param name="graphicsDevice"><see cref="GraphicsDevice"/> to draw with</param>
-        /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
-        /// <param name="themeProvider"><see cref="IThemeProvider"/> for managing level themes</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        /// <param name="weaponProvider"><see cref="IWeaponProvider"/> for loading weapons</param>
-        public MenuDemo(SpriteBatch spriteBatch, IResourceProvider resourceProvider, GraphicsDevice graphicsDevice, IInputProvider inputProvider, IThemeProvider themeProvider, IWeaponProvider weaponProvider)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public MenuDemo(GameServiceContainer serviceContainer)
         {
-            this.spriteBatch = spriteBatch;
-            this.resourceProvider = resourceProvider;
-            this.graphicsDevice = graphicsDevice;
+            this.serviceContainer = serviceContainer;
+
+            spriteBatch = serviceContainer.GetService<ISpriteBatchService>().SpriteBatch;
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
+            graphicsDevice = serviceContainer.GetService<IGraphicsDeviceService>().GraphicsDevice;
 
             camera = new Camera
             {
@@ -60,7 +56,7 @@ namespace HoardeGame.GameStates
                 Size = new Vector2(graphicsDevice.PresentationParameters.BackBufferWidth, graphicsDevice.PresentationParameters.BackBufferHeight)
             };
 
-            dungeon = new DungeonLevel(resourceProvider, this, inputProvider, themeProvider.GetTheme("temple"), false);
+            dungeon = new DungeonLevel(serviceContainer, serviceContainer.GetService<IThemeProvider>().GetTheme("temple"), false);
 
             int[,] map = new int[18, 10];
 
@@ -80,7 +76,7 @@ namespace HoardeGame.GameStates
 
             Random random = new Random();
 
-            Player = new EntityFakePlayer(dungeon, resourceProvider, weaponProvider)
+            Player = new EntityFakePlayer(dungeon, serviceContainer)
             {
                 Body =
                 {
@@ -92,7 +88,7 @@ namespace HoardeGame.GameStates
 
             for (int i = 0; i < 3; i++)
             {
-                EntityBat bat = new EntityBat(dungeon, resourceProvider, this)
+                EntityBat bat = new EntityBat(dungeon, serviceContainer)
                 {
                     Body =
                     {
@@ -105,7 +101,7 @@ namespace HoardeGame.GameStates
 
             for (int i = 0; i < 2; i++)
             {
-                EntitySnake snake = new EntitySnake(dungeon, resourceProvider, this)
+                EntitySnake snake = new EntitySnake(dungeon, serviceContainer)
                 {
                     Body =
                     {
@@ -117,6 +113,14 @@ namespace HoardeGame.GameStates
             }
 
             camera.Position = ConvertUnits.ToDisplayUnits(new Vector2(9, 5));
+        }
+
+        /// <inheritdoc/>
+        public override void Resume()
+        {
+            serviceContainer.RemoveService(typeof(IPlayerProvider));
+            serviceContainer.AddService<IPlayerProvider>(this);
+            base.Resume();
         }
 
         /// <inheritdoc/>

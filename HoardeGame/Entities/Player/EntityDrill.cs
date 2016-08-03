@@ -45,13 +45,12 @@ namespace HoardeGame.Entities.Player
         /// Initializes a new instance of the <see cref="EntityDrill"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
-        /// <param name="inputProvider"><see cref="IInputProvider"/> to use for input</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> used for loading resources</param>
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
         /// <param name="sp"><see cref="SinglePlayer"/> gamestate</param>
-        public EntityDrill(DungeonLevel level, IInputProvider inputProvider, IResourceProvider resourceProvider, SinglePlayer sp) : base(level)
+        public EntityDrill(DungeonLevel level, GameServiceContainer serviceContainer, SinglePlayer sp) : base(level, serviceContainer)
         {
-            this.resourceProvider = resourceProvider;
-            this.inputProvider = inputProvider;
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
+            inputProvider = serviceContainer.GetService<IInputProvider>();
             this.sp = sp;
 
             Health = MaxHealth;
@@ -84,10 +83,10 @@ namespace HoardeGame.Entities.Player
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
+        public override void Draw(EffectParameter parameter)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position) - new Vector2(32, 32);
-            spriteBatch.Draw(resourceProvider.GetTexture("Drill"), screenPos, Color.White);
+            SpriteBatch.Draw(resourceProvider.GetTexture("Drill"), screenPos, Color.White);
         }
     }
 }

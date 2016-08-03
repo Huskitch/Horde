@@ -29,6 +29,7 @@ namespace HoardeGame.Entities.World
         private readonly IResourceProvider resourceProvider;
         private readonly IPlayerProvider playerProvider;
         private readonly IInputProvider inputProvider;
+        private readonly GameServiceContainer serviceContainer;
         private readonly ChestInfo info;
         private readonly List<string> contentsList = new List<string>();
         private readonly AnimatedSprite animator;
@@ -37,21 +38,21 @@ namespace HoardeGame.Entities.World
         /// Initializes a new instance of the <see cref="EntityChest"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> to use for loading resources</param>
-        /// <param name="playerProvider"><see cref="IPlayerProvider"/> to use for acessing the player entity</param>
-        /// <param name="inputProvider"><see cref="IInputProvider"/> for chest interactions</param>
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
         /// <param name="info"><see cref="ChestInfo"/> loot info</param>
-        public EntityChest(DungeonLevel level, IResourceProvider resourceProvider, IPlayerProvider playerProvider, IInputProvider inputProvider, ChestInfo info) : base(level)
+        public EntityChest(DungeonLevel level, GameServiceContainer serviceContainer, ChestInfo info) : base(level, serviceContainer)
         {
             if (info == null)
             {
                 throw new ArgumentException("Chest info cannot be null!", nameof(info));
             }
 
-            this.resourceProvider = resourceProvider;
-            this.playerProvider = playerProvider;
-            this.inputProvider = inputProvider;
             this.info = info;
+            this.serviceContainer = serviceContainer;
+
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
+            playerProvider = serviceContainer.GetService<IPlayerProvider>();
+            inputProvider = serviceContainer.GetService<IInputProvider>();
 
             FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(25), ConvertUnits.ToSimUnits(25), 1f, Vector2.Zero, Body);
             Body.Position = level.GetSpawnPosition(2);
@@ -61,7 +62,7 @@ namespace HoardeGame.Entities.World
             Body.LinearDamping = 70f;
             Body.FixedRotation = true;
 
-            animator = new AnimatedSprite(resourceProvider.GetTexture("ChestSheet"));
+            animator = new AnimatedSprite(resourceProvider.GetTexture("ChestSheet"), serviceContainer);
             animator.AddAnimation("Open", 32, 0, 2, 500);
 
             Health = 3;
@@ -117,7 +118,7 @@ namespace HoardeGame.Entities.World
 
                 for (int i = 0; i < rubyDrop; i++)
                 {
-                    EntityGem gem = new EntityGem(Level, resourceProvider, playerProvider)
+                    EntityGem gem = new EntityGem(Level, serviceContainer)
                     {
                         Body =
                             {
@@ -135,7 +136,7 @@ namespace HoardeGame.Entities.World
 
                 for (int i = 0; i < emeraldDrop; i++)
                 {
-                    EntityGem2 gem = new EntityGem2(Level, resourceProvider, playerProvider)
+                    EntityGem2 gem = new EntityGem2(Level, serviceContainer)
                     {
                         Body =
                             {
@@ -153,7 +154,7 @@ namespace HoardeGame.Entities.World
 
                 for (int i = 0; i < diamondDrop; i++)
                 {
-                    EntityGem3 gem = new EntityGem3(Level, resourceProvider, playerProvider)
+                    EntityGem3 gem = new EntityGem3(Level, serviceContainer)
                     {
                         Body =
                             {
@@ -171,7 +172,7 @@ namespace HoardeGame.Entities.World
 
                 for (int i = 0; i < healthDrop; i++)
                 {
-                    EntityHealth health = new EntityHealth(Level, resourceProvider, playerProvider)
+                    EntityHealth health = new EntityHealth(Level, serviceContainer)
                     {
                         Body =
                             {
@@ -189,7 +190,7 @@ namespace HoardeGame.Entities.World
 
                 for (int i = 0; i < armourDrop; i++)
                 {
-                    EntityArmour armour = new EntityArmour(Level, resourceProvider, playerProvider)
+                    EntityArmour armour = new EntityArmour(Level, serviceContainer)
                     {
                         Body =
                             {
@@ -207,7 +208,7 @@ namespace HoardeGame.Entities.World
 
                 for (int i = 0; i < ammoDrop; i++)
                 {
-                    EntityAmmo ammo = new EntityAmmo(Level, resourceProvider, playerProvider)
+                    EntityAmmo ammo = new EntityAmmo(Level, serviceContainer)
                     {
                         Body =
                             {
@@ -243,31 +244,31 @@ namespace HoardeGame.Entities.World
         }
 
         /// <inheritdoc/>
-        public override void Draw(SpriteBatch spriteBatch, EffectParameter parameter)
+        public override void Draw(EffectParameter parameter)
         {
             int positionOnTheYAxisOfTheCoordinateSystem = Math.Max(contentsList.Count, 1) * 10 + 20;
 
             if (Vector2.Distance(playerProvider.Player.Position, Position) < 3)
             {
-                animator.DrawAnimation("Open", ScreenPosition, spriteBatch, Color.White);
-                spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), new Rectangle((int)ScreenPosition.X - 14, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem, 60, positionOnTheYAxisOfTheCoordinateSystem), new Color(0, 0, 5, 0.3f));
-                spriteBatch.DrawString(resourceProvider.GetFont("BigFont"), "Contents", new Vector2((int)ScreenPosition.X - 8, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem + 3), Color.White, 0f, Vector2.Zero, new Vector2(0.35f, 0.35f), SpriteEffects.None, 0f);
+                animator.DrawAnimation("Open", ScreenPosition, Color.White);
+                SpriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), new Rectangle((int)ScreenPosition.X - 14, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem, 60, positionOnTheYAxisOfTheCoordinateSystem), new Color(0, 0, 5, 0.3f));
+                SpriteBatch.DrawString(resourceProvider.GetFont("BigFont"), "Contents", new Vector2((int)ScreenPosition.X - 8, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem + 3), Color.White, 0f, Vector2.Zero, new Vector2(0.35f, 0.35f), SpriteEffects.None, 0f);
 
                 if (contentsList.Count == 0)
                 {
-                    spriteBatch.DrawString(resourceProvider.GetFont("BigFont"), "Empty", new Vector2((int)ScreenPosition.X - 8, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem + 19), Color.White, 0f, Vector2.Zero, new Vector2(0.3f, 0.3f), SpriteEffects.None, 0f);
+                    SpriteBatch.DrawString(resourceProvider.GetFont("BigFont"), "Empty", new Vector2((int)ScreenPosition.X - 8, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem + 19), Color.White, 0f, Vector2.Zero, new Vector2(0.3f, 0.3f), SpriteEffects.None, 0f);
                 }
                 else
                 {
                     for (int i = 0; i < contentsList.Count; i++)
                     {
-                        spriteBatch.DrawString(resourceProvider.GetFont("BigFont"), contentsList[i], new Vector2((int)ScreenPosition.X - 8, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem + 19 + i * 10), Color.White, 0f, Vector2.Zero, new Vector2(0.3f, 0.3f), SpriteEffects.None, 0f);
+                        SpriteBatch.DrawString(resourceProvider.GetFont("BigFont"), contentsList[i], new Vector2((int)ScreenPosition.X - 8, (int)ScreenPosition.Y - positionOnTheYAxisOfTheCoordinateSystem + 19 + i * 10), Color.White, 0f, Vector2.Zero, new Vector2(0.3f, 0.3f), SpriteEffects.None, 0f);
                     }
                 }
             }
             else
             {
-                spriteBatch.Draw(resourceProvider.GetTexture("Chest"), ScreenPosition, Color.White);
+                SpriteBatch.Draw(resourceProvider.GetTexture("Chest"), ScreenPosition, Color.White);
             }
         }
     }

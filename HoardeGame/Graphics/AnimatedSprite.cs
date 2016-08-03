@@ -14,6 +14,7 @@ namespace HoardeGame.Graphics
     public class AnimatedSprite
     {
         private readonly Texture2D sheet;
+        private readonly SpriteBatch spriteBatch;
         private readonly Dictionary<string, Animation> animations;
         private Animation lastUsedAnimation;
         private Animation defaultAnimation;
@@ -22,10 +23,12 @@ namespace HoardeGame.Graphics
         /// Initializes a new instance of the <see cref="AnimatedSprite"/> class.
         /// </summary>
         /// <param name="spriteSheet"><see cref="Texture2D"/> to be used as the animation sheet</param>
-        public AnimatedSprite(Texture2D spriteSheet)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public AnimatedSprite(Texture2D spriteSheet, GameServiceContainer serviceContainer)
         {
             sheet = spriteSheet;
             animations = new Dictionary<string, Animation>();
+            spriteBatch = serviceContainer.GetService<ISpriteBatchService>().SpriteBatch;
         }
 
         /// <summary>
@@ -54,8 +57,7 @@ namespace HoardeGame.Graphics
         /// Draw the last used animation
         /// </summary>
         /// <param name="position">Position where to draw the <see cref="Animation"/></param>
-        /// <param name="spriteBatch"><see cref="SpriteFont"/> to draw the animation with</param>
-        public void DrawLastUsedAnimation(Vector2 position, SpriteBatch spriteBatch)
+        public void DrawLastUsedAnimation(Vector2 position)
         {
             Animation selectedAnim;
 
@@ -76,10 +78,9 @@ namespace HoardeGame.Graphics
         /// </summary>
         /// <param name="animation">Name of the <see cref="Animation"/></param>
         /// <param name="position">Position where to draw the <see cref="Animation"/></param>
-        /// <param name="spriteBatch"><see cref="SpriteFont"/> to draw the animation with</param>
         /// <param name="color"><see cref="Color"/> tint of the sprite</param>
         /// <param name="looping">Whether the animation should loop</param>
-        public void DrawAnimation(string animation, Vector2 position, SpriteBatch spriteBatch, Color color, bool looping = true)
+        public void DrawAnimation(string animation, Vector2 position, Color color, bool looping = true)
         {
             Animation selectedAnim = animations[animation];
             selectedAnim.Looping = looping;
@@ -92,11 +93,10 @@ namespace HoardeGame.Graphics
         /// </summary>
         /// <param name="animation">Name of the <see cref="Animation"/></param>
         /// <param name="position">Position where to draw the <see cref="Animation"/></param>
-        /// <param name="spriteBatch"><see cref="SpriteFont"/> to draw the animation with</param>
         /// <param name="color"><see cref="Color"/> tint of the sprite</param>
         /// <param name="parameter"><see cref="EffectParameter"/> for flashing</param>
         /// <param name="parameterValue"><see cref="Color"/> for flashing</param>
-        public void DrawAnimation(string animation, Vector2 position, SpriteBatch spriteBatch, Color color, EffectParameter parameter, Color parameterValue)
+        public void DrawAnimation(string animation, Vector2 position, Color color, EffectParameter parameter, Color parameterValue)
         {
             Animation selectedAnim = animations[animation];
             lastUsedAnimation = selectedAnim;

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using HoardeGame.Resources;
+using Microsoft.Xna.Framework;
 
 namespace HoardeGame.Gameplay.Weapons
 {
@@ -44,9 +45,11 @@ namespace HoardeGame.Gameplay.Weapons
         /// <summary>
         /// Validates the weapon
         /// </summary>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for checking assets</param>
-        public void Validate(IResourceProvider resourceProvider)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public void Validate(GameServiceContainer serviceContainer)
         {
+            var resourceProvider = serviceContainer.GetService<IResourceProvider>();
+
             if (resourceProvider.GetTexture(Texture) == null)
             {
                 throw new FileNotFoundException($"Texture {Texture} of weapon {Id} does not exist!");
@@ -59,7 +62,7 @@ namespace HoardeGame.Gameplay.Weapons
 
             foreach (var bullet in Bullets)
             {
-                bullet.Validate(resourceProvider, Id);
+                bullet.Validate(serviceContainer, Id);
             }
         }
 

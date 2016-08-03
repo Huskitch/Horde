@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using HoardeGame.Resources;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.Gameplay.Cards
@@ -20,14 +21,16 @@ namespace HoardeGame.Gameplay.Cards
         private readonly Dictionary<string, Card> cards = new Dictionary<string, Card>();
         private readonly Dictionary<CardRarity, Texture2D> backgrounds = new Dictionary<CardRarity, Texture2D>();
         private readonly IResourceProvider resourceProvider;
+        private readonly GameServiceContainer serviceContainer;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CardManager"/> class.
         /// </summary>
-        /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
-        public CardManager(IResourceProvider resourceProvider)
+        /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
+        public CardManager(GameServiceContainer serviceContainer)
         {
-            this.resourceProvider = resourceProvider;
+            this.serviceContainer = serviceContainer;
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
         }
 
         /// <inheritdoc/>
@@ -56,9 +59,8 @@ namespace HoardeGame.Gameplay.Cards
 
             foreach (var card in cardList)
             {
-                card.Initialize(resourceProvider);
-                card.Texture = resourceProvider.GetTexture(card.TextureName);
-                card.Validate(resourceProvider);
+                card.Validate(serviceContainer);
+                card.Initialize(serviceContainer);
                 cards.Add(card.ID, card);
 
                 Debug.WriteLine($"Loaded card: {card.Name} ({card.ID})");
