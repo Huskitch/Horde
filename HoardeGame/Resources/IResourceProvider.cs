@@ -35,6 +35,13 @@ namespace HoardeGame.Resources
         SoundEffect GetSoundEffect(string key);
 
         /// <summary>
+        /// Gets an instance of <see cref="SoundEffect"/> with provided key
+        /// </summary>
+        /// <param name="key">Name of the <see cref="SoundEffect"/></param>
+        /// <returns><see cref="SoundEffectInstance"/> with matching key or null</returns>
+        SoundEffectInstance GetSoundEffectInstance(string key);
+
+        /// <summary>
         /// Gets a <see cref="Song"/> with provided key
         /// </summary>
         /// <param name="key">Name of the <see cref="Song"/></param>

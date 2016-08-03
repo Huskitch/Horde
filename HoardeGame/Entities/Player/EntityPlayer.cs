@@ -19,6 +19,7 @@ using HoardeGame.Graphics;
 using HoardeGame.Input;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -53,6 +54,9 @@ namespace HoardeGame.Entities.Player
 
         /// <inheritdoc/>
         public List<EntityWeapon> InventoryWeapons { get; set; }
+
+        /// <inheritdoc/>
+        public AudioListener Listener { get; } = new AudioListener();
 
         private readonly IResourceProvider resourceProvider;
         private readonly SinglePlayer singlePlayer;
@@ -138,6 +142,8 @@ namespace HoardeGame.Entities.Player
                 Health = 0;
                 return;
             }
+
+            Listener.Position = new Vector3(Position, 0);
 
             if (inputProvider.MouseState.RightButton == ButtonState.Pressed)
             {

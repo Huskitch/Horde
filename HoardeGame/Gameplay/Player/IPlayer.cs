@@ -7,6 +7,7 @@ using FarseerPhysics.Dynamics;
 using HoardeGame.Entities.Misc;
 using HoardeGame.Gameplay.Gems;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 
 namespace HoardeGame.Gameplay.Player
 {
@@ -55,6 +56,11 @@ namespace HoardeGame.Gameplay.Player
         /// Gets the physics body of the player
         /// </summary>
         Body Body { get; }
+
+        /// <summary>
+        /// Gets the player audio listener
+        /// </summary>
+        AudioListener Listener { get; }
 
         /// <summary>
         /// Determines whether the played being hit

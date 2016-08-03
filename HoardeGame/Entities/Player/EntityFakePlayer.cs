@@ -16,6 +16,7 @@ using HoardeGame.Gameplay.Weapons;
 using HoardeGame.Graphics;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.Entities.Player
@@ -39,6 +40,9 @@ namespace HoardeGame.Entities.Player
 
         /// <inheritdoc/>
         public List<EntityWeapon> InventoryWeapons { get; set; }
+
+        /// <inheritdoc/>
+        public AudioListener Listener { get; }
 
         private AnimatedSprite animator;
         private Directions direction;

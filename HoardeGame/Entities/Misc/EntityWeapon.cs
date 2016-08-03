@@ -8,10 +8,12 @@ using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using HoardeGame.Entities.Base;
 using HoardeGame.Gameplay.Level;
+using HoardeGame.Gameplay.Player;
 using HoardeGame.Gameplay.Weapons;
 using HoardeGame.Input;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -44,8 +46,10 @@ namespace HoardeGame.Entities.Misc
         private readonly DungeonLevel level;
         private readonly IResourceProvider resourceProvider;
         private readonly IInputProvider inputProvider;
+        private readonly IPlayerProvider playerProvider;
         private readonly GameServiceContainer serviceContainer;
         private readonly EntityBase owner;
+        private readonly AudioEmitter emitter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityWeapon"/> class.
@@ -63,9 +67,12 @@ namespace HoardeGame.Entities.Misc
 
             inputProvider = serviceContainer.GetService<IInputProvider>();
             resourceProvider = serviceContainer.GetService<IResourceProvider>();
+            playerProvider = serviceContainer.GetService<IPlayerProvider>();
 
             WeaponInfo = weapon;
             CurrentAmmoType = bullet ?? WeaponInfo.Bullets[0];
+
+            emitter = new AudioEmitter();
         }
 
         /// <summary>
@@ -79,6 +86,11 @@ namespace HoardeGame.Entities.Misc
             if (fireTimer > CurrentAmmoType.Delay)
             {
                 resourceProvider.GetSoundEffect("Fire").Play();
+
+                /*
+                instance.Apply3D(playerProvider.Player.Listener, emitter);
+                instance.Play();
+                */
 
                 BulletOwnershipInfo info = new BulletOwnershipInfo(friendly ? Faction.Player : Faction.Enemies, this);
 
@@ -94,6 +106,8 @@ namespace HoardeGame.Entities.Misc
         /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
+            emitter.Position = new Vector3(owner.Position, 0);
+
             fireTimer += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             for (int i = 0; i < bullets.Count; i++)
