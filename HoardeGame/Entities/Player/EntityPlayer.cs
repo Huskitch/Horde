@@ -31,6 +31,11 @@ namespace HoardeGame.Entities.Player
     public class EntityPlayer : EntityBase, IPlayer
     {
         /// <summary>
+        /// Count of inventory slots for the player (best results with 4)
+        /// </summary>
+        public const int MaxInventorySlots = 4;
+
+        /// <summary>
         /// Maximum health for the player
         /// </summary>
         public const int MaxHealth = 10;
@@ -53,7 +58,7 @@ namespace HoardeGame.Entities.Player
         public EntityWeapon Weapon { get; set; }
 
         /// <inheritdoc/>
-        public List<EntityWeapon> InventoryWeapons { get; set; }
+        public EntityWeapon[] InventoryWeapons { get; set; }
 
         /// <inheritdoc/>
         public AudioListener Listener { get; } = new AudioListener();
@@ -125,13 +130,15 @@ namespace HoardeGame.Entities.Player
             animator.AddAnimation("Idle", 32, 8, 5, 100);
             animator.SetDefaultAnimation("Idle");
 
-            InventoryWeapons = new List<EntityWeapon>(4);
+            InventoryWeapons = new EntityWeapon[MaxInventorySlots];
 
             currentWeapon = weaponProvider.GetWeapon("testWeapon");
             Weapon = new EntityWeapon(level, serviceContainer, this, currentWeapon)
             {
                 Ammo = 100
             };
+
+            InventoryWeapons[0] = Weapon;
         }
 
         /// <inheritdoc/>

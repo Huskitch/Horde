@@ -50,7 +50,7 @@ namespace HoardeGame.Gameplay.Player
         /// <summary>
         /// Gets or sets the weapons in the invenory of the player
         /// </summary>
-        List<EntityWeapon> InventoryWeapons { get; set; }
+        EntityWeapon[] InventoryWeapons { get; set; }
 
         /// <summary>
         /// Gets the physics body of the player

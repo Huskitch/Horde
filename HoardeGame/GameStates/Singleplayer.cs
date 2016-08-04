@@ -4,6 +4,8 @@
 
 using System.Linq;
 using FarseerPhysics;
+using HoardeGame.Entities.Base;
+using HoardeGame.Entities.Misc;
 using HoardeGame.Entities.Player;
 using HoardeGame.Extensions;
 using HoardeGame.Gameplay.Cards;
@@ -77,6 +79,8 @@ namespace HoardeGame.GameStates
         private Label fpsLabel;
         private int keyBlinkDuration;
 
+        private WeaponDisplay[] inventorySlots = new WeaponDisplay[EntityPlayer.MaxInventorySlots];
+
         private DepthStencilState barDepthStencilState;
         private DepthStencilState drillDepthStencilState;
 
@@ -139,6 +143,7 @@ namespace HoardeGame.GameStates
 
             Player = new EntityPlayer(dungeon, this, serviceContainer);
             dungeon.AddEntity((EntityPlayer)Player);
+            Player.InventoryWeapons[1] = new EntityWeapon(dungeon, serviceContainer, (EntityBase)Player, weaponProvider.GetWeapon("snakeWeapon"));
 
             Drill = new EntityDrill(dungeon, serviceContainer, this);
             dungeon.AddEntity(Drill);
@@ -159,7 +164,7 @@ namespace HoardeGame.GameStates
 
             ammoLabel = new Label(this, "ammoLabel")
             {
-                Position = new Vector2(20, graphicsDevice.PresentationParameters.BackBufferHeight - 115),
+                Position = new Vector2(20, 115),
                 Text = "Ammo: 100"
             };
 
@@ -229,6 +234,38 @@ namespace HoardeGame.GameStates
 
             playerHealthArmourBar.ApplyChanges();
             drillHealthArmourBar.ApplyChanges();
+
+            inventorySlots[0] = new WeaponDisplay(this, "inventorySlot0", resourceProvider)
+            {
+                Color = new Color(100, 100, 100, 100),
+                DisplayerdWeapon = Player.InventoryWeapons[0]?.WeaponInfo,
+                TargetRectangle = new Rectangle(110, 690, 150, 63),
+                ExtraText = "1"
+            };
+
+            inventorySlots[2] = new WeaponDisplay(this, "inventorySlot2", resourceProvider)
+            {
+                Color = new Color(100, 100, 100, 100),
+                DisplayerdWeapon = Player.InventoryWeapons[2]?.WeaponInfo,
+                TargetRectangle = new Rectangle(110, 826, 150, 63),
+                ExtraText = "3"
+            };
+
+            inventorySlots[3] = new WeaponDisplay(this, "inventorySlot3", resourceProvider)
+            {
+                Color = new Color(100, 100, 100, 100),
+                DisplayerdWeapon = Player.InventoryWeapons[3]?.WeaponInfo,
+                TargetRectangle = new Rectangle(13, 758, 150, 63),
+                ExtraText = "4"
+            };
+
+            inventorySlots[1] = new WeaponDisplay(this, "inventorySlot1", resourceProvider)
+            {
+                Color = new Color(100, 100, 100, 100),
+                DisplayerdWeapon = Player.InventoryWeapons[1]?.WeaponInfo,
+                TargetRectangle = new Rectangle(217, 758, 150, 63),
+                ExtraText = "2"
+            };
 
             AlphaTestEffect alphaTestEffect = new AlphaTestEffect(graphicsDevice)
             {
@@ -331,6 +368,26 @@ namespace HoardeGame.GameStates
             }
 
             keyLabel.Text = Player.Gems.Keys.ToString();
+
+            if (inputProvider.KeybindPressed("Weapon1"))
+            {
+                Player.Weapon = Player.InventoryWeapons[0];
+            }
+
+            if (inputProvider.KeybindPressed("Weapon2"))
+            {
+                Player.Weapon = Player.InventoryWeapons[1];
+            }
+
+            if (inputProvider.KeybindPressed("Weapon3"))
+            {
+                Player.Weapon = Player.InventoryWeapons[2];
+            }
+
+            if (inputProvider.KeybindPressed("Weapon4"))
+            {
+                Player.Weapon = Player.InventoryWeapons[3];
+            }
 
             if (!Drilling && inputProvider.KeybindPressed("PauseGame"))
             {
