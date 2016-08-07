@@ -12,6 +12,7 @@ using HoardeGame.GameStates;
 using HoardeGame.Graphics;
 using HoardeGame.Input;
 using HoardeGame.Resources;
+using HoardeGame.Settings;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -55,6 +56,7 @@ namespace HoardeGame
         private readonly IResourceProvider resourceProvider;
         private readonly IThemeProvider themeProvider;
         private readonly IWeaponProvider weaponProvider;
+        private readonly ISettingsService settingsService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Main"/> class.
@@ -81,6 +83,7 @@ namespace HoardeGame
             cardProvider = new CardManager(Services);
             themeProvider = new ThemeManager();
             weaponProvider = new WeaponManager();
+            settingsService = new SettingsManager();
             StateManager = new StateManager();
 
             Services.AddService(resourceProvider);
@@ -88,6 +91,7 @@ namespace HoardeGame
             Services.AddService(cardProvider);
             Services.AddService(themeProvider);
             Services.AddService(weaponProvider);
+            Services.AddService(settingsService);
             Services.AddService<ISpriteBatchService>(this);
             Services.AddService<IStateManagerService>(this);
 
@@ -108,6 +112,7 @@ namespace HoardeGame
             ((ThemeManager)themeProvider).LoadXmlFile("Content/THEMES.xml", Services);
             ((WeaponManager)weaponProvider).LoadXmlFile("Content/WEAPONS.xml", Services);
             ((InputManager)inputProvider).Init(Services);
+            settingsService.LoadSettings();
 
             string[] arguments = Environment.GetCommandLineArgs();
 
@@ -115,7 +120,9 @@ namespace HoardeGame
             MainMenu = new MainMenu(Services, this);
             MenuDemo = new MenuDemo(Services);
 
-            SoundEffect.MasterVolume = 0.5f;
+            SoundEffect.MasterVolume = settingsService.Settings.Volume;
+            graphics.IsFullScreen = settingsService.Settings.FullScreen;
+            graphics.ApplyChanges();
 
             if (arguments.FirstOrDefault(s => s.ToLower() == "-skipmenu") != null)
             {
@@ -139,8 +146,10 @@ namespace HoardeGame
         }
 
         /// <inheritdoc/>
-        protected override void UnloadContent()
+        protected override void OnExiting(object sender, EventArgs args)
         {
+            settingsService.SaveSettings();
+            base.OnExiting(sender, args);
         }
 
         /// <inheritdoc/>

@@ -9,6 +9,7 @@ using HoardeGame.Graphics;
 using HoardeGame.GUI;
 using HoardeGame.Input;
 using HoardeGame.Resources;
+using HoardeGame.Settings;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -28,6 +29,7 @@ namespace HoardeGame.GameStates
         private readonly Main main;
         private readonly StateManager stateManager;
         private readonly GameServiceContainer serviceContainer;
+        private readonly ISettingsService settingsService;
 
         private Button playButton;
         private Button exitButton;
@@ -48,6 +50,7 @@ namespace HoardeGame.GameStates
             resourceProvider = serviceContainer.GetService<IResourceProvider>();
             graphicsDevice = serviceContainer.GetService<IGraphicsDeviceService>().GraphicsDevice;
             stateManager = serviceContainer.GetService<IStateManagerService>().StateManager;
+            settingsService = serviceContainer.GetService<ISettingsService>();
         }
 
         /// <inheritdoc/>
@@ -121,6 +124,7 @@ namespace HoardeGame.GameStates
             DoCheck(gameTime, new Point(inputProvider.MouseState.X, inputProvider.MouseState.Y), inputProvider.LeftClicked);
 
             SoundEffect.MasterVolume = volumeSlider.Progress;
+            settingsService.Settings.Volume = volumeSlider.Progress;
 
             if (stateManager.GameStates.Contains(main.SinglePlayer))
             {
