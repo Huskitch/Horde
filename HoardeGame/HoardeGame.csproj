@@ -115,6 +115,8 @@
     <Compile Include="GUI\HealthArmourBar.cs" />
     <Compile Include="GUI\Label.cs" />
     <Compile Include="GUI\ProgressBar.cs" />
+    <Compile Include="GUI\ScrollBar.cs" />
+    <Compile Include="GUI\Slider.cs" />
     <Compile Include="GUI\WeaponDisplay.cs" />
     <Compile Include="Input\IInputProvider.cs" />
     <Compile Include="Input\InputManager.cs" />

@@ -14,6 +14,7 @@ using HoardeGame.Input;
 using HoardeGame.Resources;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame
@@ -114,6 +115,8 @@ namespace HoardeGame
             MainMenu = new MainMenu(Services, this);
             MenuDemo = new MenuDemo(Services);
 
+            SoundEffect.MasterVolume = 0.5f;
+
             if (arguments.FirstOrDefault(s => s.ToLower() == "-skipmenu") != null)
             {
                 StateManager.Push(MainMenu);
@@ -128,6 +131,14 @@ namespace HoardeGame
         }
 
         /// <inheritdoc/>
+        protected override void OnDeactivated(object sender, EventArgs args)
+        {
+            base.OnDeactivated(sender, args);
+            StateManager.Switch(MainMenu);
+            StateManager.Draw(null, 0);
+        }
+
+        /// <inheritdoc/>
         protected override void UnloadContent()
         {
         }
@@ -135,6 +146,11 @@ namespace HoardeGame
         /// <inheritdoc/>
         protected override void Update(GameTime gameTime)
         {
+            if (!IsActive)
+            {
+                return;
+            }
+
             inputProvider.Update(gameTime);
             StateManager.Update(gameTime);
 
@@ -144,6 +160,11 @@ namespace HoardeGame
         /// <inheritdoc/>
         protected override void Draw(GameTime gameTime)
         {
+            if (!IsActive)
+            {
+                return;
+            }
+
             StateManager.Draw(gameTime, 0);
 
             base.Draw(gameTime);

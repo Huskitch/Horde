@@ -11,6 +11,7 @@ using HoardeGame.Input;
 using HoardeGame.Resources;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.GameStates
@@ -26,9 +27,11 @@ namespace HoardeGame.GameStates
         private readonly GraphicsDevice graphicsDevice;
         private readonly Main main;
         private readonly StateManager stateManager;
+        private readonly GameServiceContainer serviceContainer;
 
         private Button playButton;
         private Button exitButton;
+        private Slider volumeSlider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainMenu"/> class.
@@ -38,6 +41,7 @@ namespace HoardeGame.GameStates
         public MainMenu(GameServiceContainer serviceContainer, Main main)
         {
             this.main = main;
+            this.serviceContainer = serviceContainer;
 
             spriteBatch = serviceContainer.GetService<ISpriteBatchService>().SpriteBatch;
             inputProvider = serviceContainer.GetService<IInputProvider>();
@@ -82,6 +86,21 @@ namespace HoardeGame.GameStates
                 Text = "Play [Enter / A]",
                 Position = new Vector2(20, graphicsDevice.Viewport.Height - resourceProvider.GetFont("SmallFont").LineSpacing * 3f)
             };
+
+            new Label(this, "volumeLabel")
+            {
+                Text = "Volume:",
+                Position = new Vector2(20, 60)
+            };
+
+            volumeSlider = new Slider(this, serviceContainer, "volumeSlider")
+            {
+                Position = new Vector2(117, 68),
+                Width = 200,
+                DrawText = true,
+                TextAppend = "%",
+                Progress = 0.5f
+            };
         }
 
         /// <inheritdoc/>
@@ -100,6 +119,8 @@ namespace HoardeGame.GameStates
             }
 
             DoCheck(gameTime, new Point(inputProvider.MouseState.X, inputProvider.MouseState.Y), inputProvider.LeftClicked);
+
+            SoundEffect.MasterVolume = volumeSlider.Progress;
 
             if (stateManager.GameStates.Contains(main.SinglePlayer))
             {
