@@ -21,11 +21,24 @@ namespace HoardeGame.GUI
         /// </summary>
         public ShopItem ShopItem { get; set; }
 
+        /// <summary>
+        /// Gets or sets the background colour of the display when the user hovers the mouse over it
+        /// </summary>
+        public Color MouseOverColor { get; set; } = new Color(150, 150, 150, 100);
+
+        /// <summary>
+        /// Gets or sets the background colour
+        /// </summary>
+        public Color BackgroundColor { get; set; } = new Color(100, 100, 100, 100);
+
         private readonly Texture2D background;
         private readonly Texture2D redGem;
         private readonly Texture2D greenGem;
         private readonly Texture2D blueGem;
         private readonly IPlayerProvider playerProvider;
+        private readonly SpriteFont font;
+
+        private Color color;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShopItemDisplay"/> class.
@@ -39,10 +52,13 @@ namespace HoardeGame.GUI
             IResourceProvider resourceProvider = serviceContainer.GetService<IResourceProvider>();
             playerProvider = serviceContainer.GetService<IPlayerProvider>();
 
+            font = resourceProvider.GetFont("SmallFont");
             background = resourceProvider.GetTexture("OneByOneEmpty");
             redGem = resourceProvider.GetTexture("GemAnimation");
             greenGem = resourceProvider.GetTexture("EmeraldSheet");
             blueGem = resourceProvider.GetTexture("DiamondSheet");
+
+            color = BackgroundColor;
         }
 
         /// <inheritdoc/>
@@ -53,9 +69,10 @@ namespace HoardeGame.GUI
                 return;
             }
 
-            if (new Rectangle(Position.ToPoint(), new Point(300, 104)).Contains(point))
+            if (new Rectangle(Position.ToPoint(), new Point(200, 104)).Contains(point))
             {
                 OnMouseOver?.Invoke();
+                color = MouseOverColor;
 
                 if (click)
                 {
@@ -73,6 +90,10 @@ namespace HoardeGame.GUI
                     }
                 }
             }
+            else
+            {
+                color = BackgroundColor;
+            }
         }
 
         /// <inheritdoc/>
@@ -83,17 +104,17 @@ namespace HoardeGame.GUI
                 return;
             }
 
-            spriteBatch.Draw(background, new Rectangle(Position.ToPoint(), new Point(300, 104)), new Color(100, 100, 100, 100));
+            spriteBatch.Draw(background, new Rectangle(Position.ToPoint(), new Point(200, 104)), color);
 
             if (ShopItem.Icon != null)
             {
-                spriteBatch.Draw(ShopItem.Icon, new Rectangle(Position.ToPoint() + new Point(0, 20), new Point(64, 64)), Color);
+                spriteBatch.Draw(ShopItem.Icon, new Rectangle(Position.ToPoint() + new Point(5, 20), new Point(64, 64)), Color);
             }
 
-            spriteBatch.DrawString(Font, ShopItem.Name, Position + new Vector2(64, 5), Color);
-            spriteBatch.DrawString(Font, ShopItem.Price?.RedGems.ToString(), Position + new Vector2(64, 30), Color);
-            spriteBatch.DrawString(Font, ShopItem.Price?.GreenGems.ToString(), Position + new Vector2(64, 55), Color);
-            spriteBatch.DrawString(Font, ShopItem.Price?.BlueGems.ToString(), Position + new Vector2(64, 80), Color);
+            spriteBatch.DrawString(font, ShopItem.Name, Position + new Vector2(74, 5), Color, 0f, Vector2.Zero, new Vector2(0.75f), SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, ShopItem.Price?.RedGems.ToString(), Position + new Vector2(74, 30), Color, 0f, Vector2.Zero, new Vector2(0.75f), SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, ShopItem.Price?.GreenGems.ToString(), Position + new Vector2(74, 55), Color, 0f, Vector2.Zero, new Vector2(0.75f), SpriteEffects.None, 0f);
+            spriteBatch.DrawString(font, ShopItem.Price?.BlueGems.ToString(), Position + new Vector2(74, 80), Color, 0f, Vector2.Zero, new Vector2(0.75f), SpriteEffects.None, 0f);
 
             spriteBatch.Draw(redGem, new Rectangle((int)Position.X + 90, (int)Position.Y + 27, 32, 32), new Rectangle(64, 0, 16, 16), Color.White);
             spriteBatch.Draw(greenGem, new Rectangle((int)Position.X + 90, (int)Position.Y + 52, 32, 32), new Rectangle(64, 0, 16, 16), Color.White);

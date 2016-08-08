@@ -44,11 +44,14 @@ namespace HoardeGame.Entities.Player
 
         private readonly IInputProvider inputProvider;
         private readonly IResourceProvider resourceProvider;
+        private readonly GameServiceContainer serviceContainer;
         private readonly SinglePlayer sp;
         private readonly Game game;
-
-        private readonly ScrollBar shopScrollBar;
         private readonly List<ShopItemDisplay> items = new List<ShopItemDisplay>();
+
+        private const int Collumns = 6;
+
+        private int lastID;
 
         // This probably isn't the best solution since you can't swap out sp for an interface but having both sp and playerProvider seems useless
 
@@ -63,7 +66,9 @@ namespace HoardeGame.Entities.Player
             resourceProvider = serviceContainer.GetService<IResourceProvider>();
             inputProvider = serviceContainer.GetService<IInputProvider>();
             game = serviceContainer.GetService<Game>();
+
             this.sp = sp;
+            this.serviceContainer = serviceContainer;
 
             Health = MaxHealth;
             Shield = MaxShield;
@@ -74,42 +79,29 @@ namespace HoardeGame.Entities.Player
             Body.IsStatic = true;
             Body.Position = sp.Player.Position;
 
-            shopScrollBar = new ScrollBar(sp, serviceContainer, "shopScrollBar")
-            {
-                Position = new Vector2(500, 100),
-                PinColor = Color.CadetBlue,
-                Height = 300,
-                Visibility = HiddenState.Hidden
-            };
-
             IWeaponProvider weaponProvider = serviceContainer.GetService<IWeaponProvider>();
 
-            items.Add(new ShopItemDisplay(sp, serviceContainer, "testItem")
+            AddItem(new ShopItem
             {
-                ShopItem = new ShopItem
+                Icon = resourceProvider.GetTexture("testweapon"),
+                Name = "GOD IS DEAD",
+                Price = new GemInfo
                 {
-                    Icon = resourceProvider.GetTexture("testweapon"),
-                    Name = "GOD IS DEAD",
-                    Price = new GemInfo
-                    {
-                        BlueGems = 10,
-                        RedGems = 5,
-                        GreenGems = 1
-                    },
-                    OnBought = player =>
-                    {
-                        // TODO: Dis is gonna blow up if you use it on fakeplayer
-                        player.AddWeapon(new EntityWeapon(level, serviceContainer, player as EntityPlayer, weaponProvider.GetWeapon("fakeWeapon")));
-                        return true;
-                    }
+                    BlueGems = 10,
+                    RedGems = 5,
+                    GreenGems = 1
                 },
-                Position = new Vector2(500, 500),
-                Visibility = HiddenState.Hidden
+                OnBought = player =>
+                {
+                    // TODO: Dis is gonna blow up if you use it on fakeplayer
+                    player.AddWeapon(new EntityWeapon(level, serviceContainer, player as EntityPlayer, weaponProvider.GetWeapon("fakeWeapon")));
+                    return true;
+                }
             });
 
-            items.Add(new ShopItemDisplay(sp, serviceContainer, "testItem2")
+            for (int i = 0; i < 29; i++)
             {
-                ShopItem = new ShopItem
+                AddItem(new ShopItem
                 {
                     Icon = resourceProvider.GetTexture("Health"),
                     Name = "Health potion",
@@ -126,16 +118,12 @@ namespace HoardeGame.Entities.Player
                         {
                             Name = "Debug item",
                             Texture = "Health",
-                            OnUse = player1 =>
-                            {
-                                player1.Health = EntityPlayer.MaxHealth;
-                            }
+                            OnUse = player1 => { player1.Health = EntityPlayer.MaxHealth; }
                         });
                     }
-                },
-                Position = new Vector2(500, 700),
-                Visibility = HiddenState.Hidden
-            });
+                });
+            }
+
         }
 
         /// <summary>
@@ -145,8 +133,6 @@ namespace HoardeGame.Entities.Player
         {
             sp.Shopping = true;
             game.IsMouseVisible = true;
-
-            shopScrollBar.Visibility = HiddenState.Visible;
 
             foreach (ShopItemDisplay t in items)
             {
@@ -161,8 +147,6 @@ namespace HoardeGame.Entities.Player
         {
             sp.Shopping = false;
             game.IsMouseVisible = false;
-
-            shopScrollBar.Visibility = HiddenState.Hidden;
 
             foreach (ShopItemDisplay t in items)
             {
@@ -191,6 +175,18 @@ namespace HoardeGame.Entities.Player
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position) - new Vector2(32, 32);
             SpriteBatch.Draw(resourceProvider.GetTexture("Drill"), screenPos, Color.White);
+        }
+
+        private void AddItem(ShopItem item)
+        {
+            items.Add(new ShopItemDisplay(sp, serviceContainer, "shopItem" + lastID)
+            {
+                ShopItem = item,
+                Position = new Vector2(95 + 210 * (lastID % Collumns), 140 + 110 * (lastID / Collumns)),
+                Visibility = HiddenState.Hidden
+            });
+
+            lastID++;
         }
     }
 }
