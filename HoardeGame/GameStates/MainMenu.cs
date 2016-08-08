@@ -101,7 +101,7 @@ namespace HoardeGame.GameStates
                 Width = 200,
                 DrawText = true,
                 TextAppend = "%",
-                Progress = 0.5f
+                Progress = settingsService.Settings.Volume
             };
         }
 

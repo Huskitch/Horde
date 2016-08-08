@@ -21,7 +21,7 @@ namespace HoardeGame.Entities.Enemies
     public class EntityScarab : EntityBaseEnemy
     {
         private readonly AnimatedSprite animator;
-        private readonly GameServiceContainer serviceContainer;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityScarab"/> class.
         /// </summary>
@@ -35,8 +35,6 @@ namespace HoardeGame.Entities.Enemies
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
-
-            this.serviceContainer = serviceContainer;
 
             Damage = 1;
             Health = 10;
@@ -84,7 +82,6 @@ namespace HoardeGame.Entities.Enemies
             {
                 animator.DrawAnimation("FlapLeft", screenPos, Color.White, parameter, CurrentBlinkFrame);
             }
-
         }
     }
 }

@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Xml.Serialization;
