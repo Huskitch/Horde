@@ -13,7 +13,7 @@
         <SpawnRate>3</SpawnRate>
       </EntitySpawnInfo>
       <EntitySpawnInfo>
-        <EntityType>HoardeGame.Entities.Enemies.EntitySnake</EntityType>
+        <EntityType>HoardeGame.Entities.Enemies.EntityScarab</EntityType>
         <MinClusterSize>3</MinClusterSize>
         <MaxClusterSize>10</MaxClusterSize>
         <SpawnRate>3</SpawnRate>
