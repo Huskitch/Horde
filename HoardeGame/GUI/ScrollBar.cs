@@ -7,6 +7,7 @@ using HoardeGame.Resources;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace HoardeGame.GUI
 {
@@ -31,7 +32,7 @@ namespace HoardeGame.GUI
                 scrollBar.X = (int)value.X;
                 scrollBar.Y = (int)value.Y;
                 scrollBar = new Rectangle((int)value.X, (int)value.Y, 10, scrollBar.Height);
-                hitBox = new Rectangle((int)value.X, (int)value.Y, 10, scrollBar.Height + 10);
+                hitBox = new Rectangle((int)value.X, (int)value.Y - 10, 10, scrollBar.Height + 20);
             }
         }
 
@@ -49,9 +50,19 @@ namespace HoardeGame.GUI
             set
             {
                 scrollBar.Height = value;
-                hitBox.Height = scrollBar.Height + 10;
+                hitBox.Height = scrollBar.Height + 20;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the colour of the draggable pin
+        /// </summary>
+        public Color PinColor { get; set; } = Color.Gray;
+
+        /// <summary>
+        /// Gets or sets the progress (0f - 1f)
+        /// </summary>
+        public float Progress { get; set; }
 
         private readonly Texture2D sliderTexture;
         private readonly IInputProvider inputProvider;
@@ -73,9 +84,42 @@ namespace HoardeGame.GUI
         }
 
         /// <inheritdoc/>
+        public override void Check(GameTime gameTime, Point point, bool click)
+        {
+            if (Visibility == HiddenState.Hidden | Visibility == HiddenState.Disabled)
+            {
+                return;
+            }
+
+            if (!hitBox.Contains(point))
+            {
+                return;
+            }
+
+            OnMouseOver?.Invoke();
+
+            if (inputProvider.MouseState.LeftButton != ButtonState.Pressed)
+            {
+                return;
+            }
+
+            OnClick?.Invoke();
+
+            Progress = (point.Y - scrollBar.Y) / (float)scrollBar.Height;
+
+            Progress = MathHelper.Clamp(Progress, 0f, 1f);
+        }
+
+        /// <inheritdoc/>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, float interpolation)
         {
-            base.Draw(gameTime, spriteBatch, interpolation);
+            if (Visibility == HiddenState.Hidden)
+            {
+                return;
+            }
+
+            spriteBatch.Draw(sliderTexture, Position, null, Color, 0, Vector2.Zero, new Vector2(10, scrollBar.Height), SpriteEffects.None, 0);
+            spriteBatch.Draw(sliderTexture, Position + new Vector2(0, (scrollBar.Height - 10) * Progress), null, PinColor, 0, Vector2.Zero, new Vector2(10, 10), SpriteEffects.None, 0);
         }
     }
 }
