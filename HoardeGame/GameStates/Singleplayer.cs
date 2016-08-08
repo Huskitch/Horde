@@ -377,26 +377,6 @@ namespace HoardeGame.GameStates
             }
 
             keyLabel.Text = Player.Gems.Keys.ToString();
-
-            if (inputProvider.KeybindPressed("Weapon1"))
-            {
-                Player.Weapon = Player.InventoryWeapons[0];
-            }
-
-            if (inputProvider.KeybindPressed("Weapon2"))
-            {
-                Player.Weapon = Player.InventoryWeapons[1];
-            }
-
-            if (inputProvider.KeybindPressed("Weapon3"))
-            {
-                Player.Weapon = Player.InventoryWeapons[2];
-            }
-
-            if (inputProvider.KeybindPressed("Weapon4"))
-            {
-                Player.Weapon = Player.InventoryWeapons[3];
-            }
         }
 
         /// <inheritdoc/>

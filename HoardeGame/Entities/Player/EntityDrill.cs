@@ -7,9 +7,11 @@ using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Entities.Base;
+using HoardeGame.Entities.Misc;
 using HoardeGame.Gameplay.Gems;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Shop;
+using HoardeGame.Gameplay.Weapons;
 using HoardeGame.GameStates;
 using HoardeGame.GUI;
 using HoardeGame.Input;
@@ -80,6 +82,8 @@ namespace HoardeGame.Entities.Player
                 Visibility = HiddenState.Hidden
             };
 
+            IWeaponProvider weaponProvider = serviceContainer.GetService<IWeaponProvider>();
+
             testShopItemDisplay = new ShopItemDisplay(sp, serviceContainer, "testItem")
             {
                 ShopItem = new ShopItem
@@ -91,6 +95,11 @@ namespace HoardeGame.Entities.Player
                         BlueGems = 10,
                         RedGems = 5,
                         GreenGems = 1
+                    },
+                    OnBought = player =>
+                    {
+                        // TODO: Dis is gonna blow up if you use it on fakeplayer
+                        player.AddWeapon(new EntityWeapon(level, serviceContainer, player as EntityPlayer, weaponProvider.GetWeapon("fakeWeapon")));
                     }
                 },
                 Position = new Vector2(500, 500),

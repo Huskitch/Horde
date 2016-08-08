@@ -71,10 +71,9 @@ namespace HoardeGame.Input
             keybinds.Add("PauseGame", () => KeyPressed(Keys.Escape) || ButtonPressed(Buttons.Start));
             keybinds.Add("ExitPausedGame", () => ButtonPressed(Buttons.B));
             keybinds.Add("ExitGame", () => ButtonPressed(Buttons.B) || KeyPressed(Keys.Escape));
-            keybinds.Add("Weapon1", () => ButtonPressed(Buttons.DPadUp) || KeyPressed(Keys.D1));
-            keybinds.Add("Weapon2", () => ButtonPressed(Buttons.DPadRight) || KeyPressed(Keys.D2));
-            keybinds.Add("Weapon3", () => ButtonPressed(Buttons.DPadDown) || KeyPressed(Keys.D3));
-            keybinds.Add("Weapon4", () => ButtonPressed(Buttons.DPadLeft) || KeyPressed(Keys.D4));
+            keybinds.Add("Weapon1", () => KeyPressed(Keys.D1));
+            keybinds.Add("Weapon2", () => KeyPressed(Keys.D2));
+            keybinds.Add("SwitchWeapon", () => ButtonPressed(Buttons.Y));
 
             Rectangle viewport = serviceContainer.GetService<IGraphicsDeviceService>().GraphicsDevice.Viewport.Bounds;
             screenCenter = new Point(viewport.Width / 2, viewport.Height / 2);

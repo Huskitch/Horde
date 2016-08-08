@@ -5,6 +5,7 @@
 using FarseerPhysics.Dynamics;
 using HoardeGame.Entities.Misc;
 using HoardeGame.Gameplay.Gems;
+using HoardeGame.Gameplay.Weapons;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 
@@ -71,5 +72,11 @@ namespace HoardeGame.Gameplay.Player
         /// Hits the player
         /// </summary>
         void Hit();
+
+        /// <summary>
+        /// Adds an weapon to players inventory as the inactive weapon
+        /// </summary>
+        /// <param name="weapon"><see cref="EntityWeapon"/> weapon to add</param>
+        void AddWeapon(EntityWeapon weapon);
     }
 }
