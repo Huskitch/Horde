@@ -54,7 +54,7 @@ namespace HoardeGame.Entities.Player
         }
 
         /// <inheritdoc/>
-        public void AddItem(Consumeable consumeable)
+        public bool AddItem(Consumeable consumeable)
         {
             throw new NotImplementedException();
         }

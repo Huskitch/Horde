@@ -17,7 +17,8 @@ namespace HoardeGame.Gameplay.Shop
         /// Delegate for buying items
         /// </summary>
         /// <param name="player"><see cref="IPlayer"/> the player entity</param>
-        public delegate void BuyDelegate(IPlayer player);
+        /// <returns>Whether the transaction was successful</returns>
+        public delegate bool BuyDelegate(IPlayer player);
 
         /// <summary>
         /// Gets or sets the name of the item

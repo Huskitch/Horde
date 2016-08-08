@@ -8,6 +8,7 @@ using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Entities.Base;
 using HoardeGame.Entities.Misc;
+using HoardeGame.Gameplay.Consumeables;
 using HoardeGame.Gameplay.Gems;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Shop;
@@ -47,8 +48,7 @@ namespace HoardeGame.Entities.Player
         private readonly Game game;
 
         private readonly ScrollBar shopScrollBar;
-        private readonly List<ShopItem> items = new List<ShopItem>();
-        private readonly ShopItemDisplay testShopItemDisplay;
+        private readonly List<ShopItemDisplay> items = new List<ShopItemDisplay>();
 
         // This probably isn't the best solution since you can't swap out sp for an interface but having both sp and playerProvider seems useless
 
@@ -84,7 +84,7 @@ namespace HoardeGame.Entities.Player
 
             IWeaponProvider weaponProvider = serviceContainer.GetService<IWeaponProvider>();
 
-            testShopItemDisplay = new ShopItemDisplay(sp, serviceContainer, "testItem")
+            items.Add(new ShopItemDisplay(sp, serviceContainer, "testItem")
             {
                 ShopItem = new ShopItem
                 {
@@ -100,11 +100,42 @@ namespace HoardeGame.Entities.Player
                     {
                         // TODO: Dis is gonna blow up if you use it on fakeplayer
                         player.AddWeapon(new EntityWeapon(level, serviceContainer, player as EntityPlayer, weaponProvider.GetWeapon("fakeWeapon")));
+                        return true;
                     }
                 },
                 Position = new Vector2(500, 500),
                 Visibility = HiddenState.Hidden
-            };
+            });
+
+            items.Add(new ShopItemDisplay(sp, serviceContainer, "testItem2")
+            {
+                ShopItem = new ShopItem
+                {
+                    Icon = resourceProvider.GetTexture("Health"),
+                    Name = "Health potion",
+                    Price = new GemInfo
+                    {
+                        BlueGems = 0,
+                        RedGems = 3,
+                        GreenGems = 0
+                    },
+                    OnBought = player =>
+                    {
+                        // TODO: Dis is gonna blow up if you use it on fakeplayer
+                        return player.AddItem(new Consumeable
+                        {
+                            Name = "Debug item",
+                            Texture = "Health",
+                            OnUse = player1 =>
+                            {
+                                player1.Health = EntityPlayer.MaxHealth;
+                            }
+                        });
+                    }
+                },
+                Position = new Vector2(500, 700),
+                Visibility = HiddenState.Hidden
+            });
         }
 
         /// <summary>
@@ -116,7 +147,11 @@ namespace HoardeGame.Entities.Player
             game.IsMouseVisible = true;
 
             shopScrollBar.Visibility = HiddenState.Visible;
-            testShopItemDisplay.Visibility = HiddenState.Visible;
+
+            foreach (ShopItemDisplay t in items)
+            {
+                t.Visibility = HiddenState.Visible;
+            }
         }
 
         /// <summary>
@@ -128,7 +163,11 @@ namespace HoardeGame.Entities.Player
             game.IsMouseVisible = false;
 
             shopScrollBar.Visibility = HiddenState.Hidden;
-            testShopItemDisplay.Visibility = HiddenState.Hidden;
+
+            foreach (ShopItemDisplay t in items)
+            {
+                t.Visibility = HiddenState.Hidden;
+            }
         }
 
         /// <inheritdoc/>

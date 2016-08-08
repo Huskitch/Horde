@@ -149,16 +149,6 @@ namespace HoardeGame.GameStates
 
             Player = new EntityPlayer(dungeon, this, serviceContainer);
             dungeon.AddEntity((EntityPlayer)Player);
-            Player.InventoryWeapons[1] = new EntityWeapon(dungeon, serviceContainer, (EntityBase)Player, weaponProvider.GetWeapon("snakeWeapon"));
-            Player.InventoryItems[0] = new Consumeable
-            {
-                Name = "Debug item",
-                Texture = "Health",
-                OnUse = player =>
-                {
-                    player.Health = EntityPlayer.MaxHealth;
-                }
-            };
 
             Drill = new EntityDrill(dungeon, serviceContainer, this);
             dungeon.AddEntity(Drill);
@@ -377,7 +367,7 @@ namespace HoardeGame.GameStates
 
             for (int i = 0; i < EntityPlayer.MaxWeaponSlots; i++)
             {
-                weaponInventorySlots[i].DisplayedWeapon = Player.InventoryWeapons[i].WeaponInfo;
+                weaponInventorySlots[i].DisplayedWeapon = Player.InventoryWeapons[i]?.WeaponInfo;
             }
 
             if (keyBlinkDuration > 0)

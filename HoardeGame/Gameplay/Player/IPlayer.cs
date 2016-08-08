@@ -89,6 +89,7 @@ namespace HoardeGame.Gameplay.Player
         /// Adds an item to the player's inventory
         /// </summary>
         /// <param name="consumeable"><see cref="Consumeable"/> item to add</param>
-        void AddItem(Consumeable consumeable);
+        /// <returns>Whether the item was added or not</returns>
+        bool AddItem(Consumeable consumeable);
     }
 }

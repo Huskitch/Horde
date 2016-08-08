@@ -161,16 +161,18 @@ namespace HoardeGame.Entities.Player
         }
 
         /// <inheritdoc/>
-        public void AddItem(Consumeable consumeable)
+        public bool AddItem(Consumeable consumeable)
         {
             for (int i = 0; i < MaxItemSlots; i++)
             {
                 if (InventoryItems[i] == null)
                 {
                     InventoryItems[i] = consumeable;
-                    return;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         /// <inheritdoc/>

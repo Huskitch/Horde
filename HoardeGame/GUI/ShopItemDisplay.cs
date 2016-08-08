@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using HoardeGame.Gameplay.Player;
 using HoardeGame.Gameplay.Shop;
 using HoardeGame.Resources;
 using HoardeGame.State;
@@ -24,6 +25,7 @@ namespace HoardeGame.GUI
         private readonly Texture2D redGem;
         private readonly Texture2D greenGem;
         private readonly Texture2D blueGem;
+        private readonly IPlayerProvider playerProvider;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShopItemDisplay"/> class.
@@ -35,6 +37,8 @@ namespace HoardeGame.GUI
         public ShopItemDisplay(GameState state, GameServiceContainer serviceContainer, string id, bool noSub = false) : base(state, id, noSub)
         {
             IResourceProvider resourceProvider = serviceContainer.GetService<IResourceProvider>();
+            playerProvider = serviceContainer.GetService<IPlayerProvider>();
+
             background = resourceProvider.GetTexture("OneByOneEmpty");
             redGem = resourceProvider.GetTexture("GemAnimation");
             greenGem = resourceProvider.GetTexture("EmeraldSheet");
@@ -57,7 +61,16 @@ namespace HoardeGame.GUI
                 {
                     OnClick?.Invoke();
 
-                    // TODO: BUY THE THING
+                    if (ShopItem?.Price?.RedGems <= playerProvider.Player.Gems.RedGems && ShopItem?.Price?.GreenGems <= playerProvider.Player.Gems.GreenGems && ShopItem?.Price?.BlueGems <= playerProvider.Player.Gems.BlueGems)
+                    {
+                        bool? bought = ShopItem?.OnBought?.Invoke(playerProvider.Player);
+                        if (bought.HasValue && bought.Value)
+                        {
+                            playerProvider.Player.Gems.RedGems -= ShopItem.Price.RedGems;
+                            playerProvider.Player.Gems.GreenGems -= ShopItem.Price.GreenGems;
+                            playerProvider.Player.Gems.BlueGems -= ShopItem.Price.BlueGems;
+                        }
+                    }
                 }
             }
         }
