@@ -1,8 +1,8 @@
-﻿// <copyright file="WeaponDisplay.cs" company="Kuub Studios">
+﻿// <copyright file="ConsumeableDisplay.cs" company="Kuub Studios">
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using HoardeGame.Gameplay.Weapons;
+using HoardeGame.Gameplay.Consumeables;
 using HoardeGame.Resources;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
@@ -11,14 +11,14 @@ using Microsoft.Xna.Framework.Graphics;
 namespace HoardeGame.GUI
 {
     /// <summary>
-    /// Control displaying a weapon an it's name
+    /// Control displaying a consumeable an it's name
     /// </summary>
-    public class WeaponDisplay : GuiBase
+    public class ConsumeableDisplay : GuiBase
     {
         /// <summary>
         /// Gets or sets the weapon to be displayed
         /// </summary>
-        public WeaponInfo DisplayedWeapon { get; set; }
+        public Consumeable DisplayedItem { get; set; }
 
         /// <summary>
         /// Gets or sets extra text in the bottom right of this control
@@ -33,13 +33,13 @@ namespace HoardeGame.GUI
         private readonly IResourceProvider resourceProvider;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="WeaponDisplay"/> class.
+        /// Initializes a new instance of the <see cref="ConsumeableDisplay"/> class.
         /// </summary>
         /// <param name="state"><see cref="GameState"/> to which this button belongs</param>
         /// <param name="id">ID of this control for debugging</param>
         /// <param name="resourceProvider"><see cref="IResourceProvider"/> for loading resources</param>
         /// <param name="noSub">Whether to subscribe to events in gamestate</param>
-        public WeaponDisplay(GameState state, string id, IResourceProvider resourceProvider, bool noSub = false) : base(state, id, noSub)
+        public ConsumeableDisplay(GameState state, string id, IResourceProvider resourceProvider, bool noSub = false) : base(state, id, noSub)
         {
             this.resourceProvider = resourceProvider;
         }
@@ -47,7 +47,7 @@ namespace HoardeGame.GUI
         /// <inheritdoc/>
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch, float interpolation)
         {
-            var texture = resourceProvider.GetTexture(DisplayedWeapon?.Texture ?? string.Empty);
+            var texture = resourceProvider.GetTexture(DisplayedItem?.Texture ?? string.Empty);
             Rectangle targetWeaponRectangle = TargetRectangle;
 
             if (texture?.Width == texture?.Height)
@@ -57,12 +57,12 @@ namespace HoardeGame.GUI
 
             spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), TargetRectangle, Color);
 
-            if (DisplayedWeapon != null)
+            if (DisplayedItem != null)
             {
                 spriteBatch.Draw(texture, targetWeaponRectangle, Color.White);
             }
 
-            spriteBatch.DrawString(resourceProvider.GetFont("SmallFont"), DisplayedWeapon?.Name ?? "Empty", TargetRectangle.Location.ToVector2() + new Vector2(2, TargetRectangle.Height - 23), Color.White, 0f, Vector2.Zero, new Vector2(0.75f, 0.75f), SpriteEffects.None, 0f);
+            spriteBatch.DrawString(resourceProvider.GetFont("SmallFont"), DisplayedItem?.Name ?? "Empty", TargetRectangle.Location.ToVector2() + new Vector2(2, TargetRectangle.Height - 23), Color.White, 0f, Vector2.Zero, new Vector2(0.75f, 0.75f), SpriteEffects.None, 0f);
             spriteBatch.DrawString(resourceProvider.GetFont("SmallFont"), ExtraText, (TargetRectangle.Location + TargetRectangle.Size).ToVector2() - new Vector2(15, 20), Color.White, 0f, Vector2.Zero, new Vector2(0.75f, 0.75f), SpriteEffects.None, 0f);
         }
     }

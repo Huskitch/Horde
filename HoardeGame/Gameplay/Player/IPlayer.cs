@@ -4,6 +4,7 @@
 
 using FarseerPhysics.Dynamics;
 using HoardeGame.Entities.Misc;
+using HoardeGame.Gameplay.Consumeables;
 using HoardeGame.Gameplay.Gems;
 using HoardeGame.Gameplay.Weapons;
 using Microsoft.Xna.Framework;
@@ -53,6 +54,11 @@ namespace HoardeGame.Gameplay.Player
         EntityWeapon[] InventoryWeapons { get; set; }
 
         /// <summary>
+        /// Gets or sets the items in the inventory of the player
+        /// </summary>
+        Consumeable[] InventoryItems { get; set; }
+
+        /// <summary>
         /// Gets the physics body of the player
         /// </summary>
         Body Body { get; }
@@ -74,9 +80,15 @@ namespace HoardeGame.Gameplay.Player
         void Hit();
 
         /// <summary>
-        /// Adds an weapon to players inventory as the inactive weapon
+        /// Adds an weapon to player's inventory as the inactive weapon
         /// </summary>
         /// <param name="weapon"><see cref="EntityWeapon"/> weapon to add</param>
         void AddWeapon(EntityWeapon weapon);
+
+        /// <summary>
+        /// Adds an item to the player's inventory
+        /// </summary>
+        /// <param name="consumeable"><see cref="Consumeable"/> item to add</param>
+        void AddItem(Consumeable consumeable);
     }
 }

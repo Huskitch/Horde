@@ -9,6 +9,7 @@ using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Factories;
 using HoardeGame.Entities.Base;
 using HoardeGame.Entities.Misc;
+using HoardeGame.Gameplay.Consumeables;
 using HoardeGame.Gameplay.Gems;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Player;
@@ -30,13 +31,18 @@ namespace HoardeGame.Entities.Player
     public class EntityPlayer : EntityBase, IPlayer
     {
         /// <summary>
-        /// Count of inventory slots for the player (best results with 2)
+        /// Count of inventory slots to be occupied by weapons
         /// BUT I LIKED MY DPAD SELECTION
         /// NEVER FORGET
         /// NEVER FORGIVE
         /// WE ARE KUUBNONYMOUS
         /// </summary>
-        public const int MaxInventorySlots = 4;
+        public const int MaxWeaponSlots = 2;
+
+        /// <summary>
+        /// Count of inventory slots to be occupied by items
+        /// </summary>
+        public const int MaxItemSlots = 2;
 
         /// <summary>
         /// Maximum health for the player
@@ -62,6 +68,9 @@ namespace HoardeGame.Entities.Player
 
         /// <inheritdoc/>
         public EntityWeapon[] InventoryWeapons { get; set; }
+
+        /// <inheritdoc/>
+        public Consumeable[] InventoryItems { get; set; }
 
         /// <inheritdoc/>
         public AudioListener Listener { get; } = new AudioListener();
@@ -133,7 +142,8 @@ namespace HoardeGame.Entities.Player
             animator.AddAnimation("Idle", 32, 8, 5, 100);
             animator.SetDefaultAnimation("Idle");
 
-            InventoryWeapons = new EntityWeapon[MaxInventorySlots];
+            InventoryWeapons = new EntityWeapon[MaxWeaponSlots];
+            InventoryItems = new Consumeable[MaxItemSlots];
 
             currentWeapon = weaponProvider.GetWeapon("testWeapon");
             Weapon = new EntityWeapon(level, serviceContainer, this, currentWeapon)
@@ -148,6 +158,19 @@ namespace HoardeGame.Entities.Player
         public void AddWeapon(EntityWeapon weapon)
         {
             InventoryWeapons[1] = weapon;
+        }
+
+        /// <inheritdoc/>
+        public void AddItem(Consumeable consumeable)
+        {
+            for (int i = 0; i < MaxItemSlots; i++)
+            {
+                if (InventoryItems[i] == null)
+                {
+                    InventoryItems[i] = consumeable;
+                    return;
+                }
+            }
         }
 
         /// <inheritdoc/>
@@ -175,6 +198,18 @@ namespace HoardeGame.Entities.Player
                 {
                     Weapon = InventoryWeapons[1];
                 }
+            }
+
+            if (inputProvider.KeybindPressed("Item1"))
+            {
+                InventoryItems[0]?.OnUse?.Invoke(this);
+                InventoryItems[0] = null;
+            }
+
+            if (inputProvider.KeybindPressed("Item2"))
+            {
+                InventoryItems[1]?.OnUse?.Invoke(this);
+                InventoryItems[1] = null;
             }
 
             if (inputProvider.KeybindPressed("SwitchWeapon"))

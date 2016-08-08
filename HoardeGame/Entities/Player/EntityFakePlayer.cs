@@ -8,6 +8,7 @@ using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Entities.Base;
 using HoardeGame.Entities.Misc;
+using HoardeGame.Gameplay.Consumeables;
 using HoardeGame.Gameplay.Gems;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Player;
@@ -41,10 +42,19 @@ namespace HoardeGame.Entities.Player
         public EntityWeapon[] InventoryWeapons { get; set; }
 
         /// <inheritdoc/>
+        public Consumeable[] InventoryItems { get; set; }
+
+        /// <inheritdoc/>
         public AudioListener Listener { get; }
 
         /// <inheritdoc/>
         public void AddWeapon(EntityWeapon weapon)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void AddItem(Consumeable consumeable)
         {
             throw new NotImplementedException();
         }

@@ -75,6 +75,10 @@ namespace HoardeGame.Input
             keybinds.Add("Weapon2", () => KeyPressed(Keys.D2));
             keybinds.Add("SwitchWeapon", () => ButtonPressed(Buttons.Y));
 
+            // TODO: Add controller bindings for items
+            keybinds.Add("Item1", () => KeyPressed(Keys.D3));
+            keybinds.Add("Item2", () => KeyPressed(Keys.D4));
+
             Rectangle viewport = serviceContainer.GetService<IGraphicsDeviceService>().GraphicsDevice.Viewport.Bounds;
             screenCenter = new Point(viewport.Width / 2, viewport.Height / 2);
         }
