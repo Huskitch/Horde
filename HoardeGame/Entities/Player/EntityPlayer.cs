@@ -30,7 +30,11 @@ namespace HoardeGame.Entities.Player
     public class EntityPlayer : EntityBase, IPlayer
     {
         /// <summary>
-        /// Count of inventory slots for the player (best results with 4)
+        /// Count of inventory slots for the player (best results with 2)
+        /// BUT I LIKED MY DPAD SELECTION
+        /// NEVER FORGET
+        /// NEVER FORGIVE
+        /// WE ARE KUUBNONYMOUS
         /// </summary>
         public const int MaxInventorySlots = 4;
 
@@ -141,6 +145,12 @@ namespace HoardeGame.Entities.Player
         }
 
         /// <inheritdoc/>
+        public void AddWeapon(EntityWeapon weapon)
+        {
+            InventoryWeapons[1] = weapon;
+        }
+
+        /// <inheritdoc/>
         public override void Update(GameTime gameTime)
         {
             if (Dead)
@@ -150,6 +160,35 @@ namespace HoardeGame.Entities.Player
             }
 
             Listener.Position = new Vector3(Position, 0);
+
+            if (inputProvider.KeybindPressed("Weapon1"))
+            {
+                if (InventoryWeapons[0] != null)
+                {
+                    Weapon = InventoryWeapons[0];
+                }
+            }
+
+            if (inputProvider.KeybindPressed("Weapon2"))
+            {
+                if (InventoryWeapons[1] != null)
+                {
+                    Weapon = InventoryWeapons[1];
+                }
+            }
+
+            if (inputProvider.KeybindPressed("SwitchWeapon"))
+            {
+                if (Weapon == InventoryWeapons[0] && InventoryWeapons[1] != null)
+                {
+                    Weapon = InventoryWeapons[1];
+                }
+
+                if (Weapon == InventoryWeapons[1] && InventoryWeapons[0] != null)
+                {
+                    Weapon = InventoryWeapons[0];
+                }
+            }
 
             if (inputProvider.MouseState.RightButton == ButtonState.Pressed && !singlePlayer.Shopping && !singlePlayer.Drilling)
             {

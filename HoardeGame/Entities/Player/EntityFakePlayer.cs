@@ -43,6 +43,12 @@ namespace HoardeGame.Entities.Player
         /// <inheritdoc/>
         public AudioListener Listener { get; }
 
+        /// <inheritdoc/>
+        public void AddWeapon(EntityWeapon weapon)
+        {
+            throw new NotImplementedException();
+        }
+
         private AnimatedSprite animator;
         private Directions direction;
 
