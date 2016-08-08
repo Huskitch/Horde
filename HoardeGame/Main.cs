@@ -114,7 +114,7 @@ namespace HoardeGame
             MainMenu = new MainMenu(Services, this);
             MenuDemo = new MenuDemo(Services);
 
-            if (arguments.FirstOrDefault(s => s.ToLower() == "-skipmenu") != null)
+            if (arguments.FirstOrDefault(s => s.ToLower() == "-skipmenu") == null)
             {
                 StateManager.Push(MainMenu);
                 StateManager.Push(SinglePlayer);
