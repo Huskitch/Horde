@@ -8,6 +8,7 @@ using FarseerPhysics.Factories;
 using HoardeGame.Entities.Base;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.GameStates;
+using HoardeGame.GUI;
 using HoardeGame.Input;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
@@ -38,6 +39,9 @@ namespace HoardeGame.Entities.Player
         private readonly IInputProvider inputProvider;
         private readonly IResourceProvider resourceProvider;
         private readonly SinglePlayer sp;
+        private readonly Game game;
+
+        private ScrollBar shopScrollBar;
 
         // This probably isn't the best solution since you can't swap out sp for an interface but having both sp and playerProvider seems useless
 
@@ -51,6 +55,7 @@ namespace HoardeGame.Entities.Player
         {
             resourceProvider = serviceContainer.GetService<IResourceProvider>();
             inputProvider = serviceContainer.GetService<IInputProvider>();
+            game = serviceContainer.GetService<Game>();
             this.sp = sp;
 
             Health = MaxHealth;
@@ -61,6 +66,14 @@ namespace HoardeGame.Entities.Player
             Body.CollidesWith = Category.All;
             Body.IsStatic = true;
             Body.Position = sp.Player.Position;
+
+            shopScrollBar = new ScrollBar(sp, serviceContainer, "shopScrollBar")
+            {
+                Position = new Vector2(500, 100),
+                PinColor = Color.CadetBlue,
+                Height = 300,
+                Visibility = HiddenState.Hidden
+            };
         }
 
         /// <summary>
@@ -68,7 +81,21 @@ namespace HoardeGame.Entities.Player
         /// </summary>
         public void Activate()
         {
-            sp.Drilling = true;
+            sp.Shopping = true;
+            game.IsMouseVisible = true;
+
+            shopScrollBar.Visibility = HiddenState.Visible;
+        }
+
+        /// <summary>
+        /// Deactivates the drill
+        /// </summary>
+        public void Deactivate()
+        {
+            sp.Shopping = false;
+            game.IsMouseVisible = false;
+
+            shopScrollBar.Visibility = HiddenState.Hidden;
         }
 
         /// <inheritdoc/>
@@ -77,6 +104,11 @@ namespace HoardeGame.Entities.Player
             if (Vector2.Distance(sp.Player.Position, Position) < 3 && inputProvider.KeybindPressed("Activate") && !sp.Player.Dead)
             {
                 Activate();
+            }
+
+            if (sp.Shopping && inputProvider.KeybindPressed("PauseGame") && !sp.Player.Dead)
+            {
+                Deactivate();
             }
 
             base.Update(gameTime);

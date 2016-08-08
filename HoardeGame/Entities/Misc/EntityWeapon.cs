@@ -15,7 +15,6 @@ using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace HoardeGame.Entities.Misc
 {
@@ -37,6 +36,12 @@ namespace HoardeGame.Entities.Misc
         /// Gets or sets the amount of bullets this weapon has left to fire
         /// </summary>
         public int Ammo { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the laser should be drawn
+        /// This doesnt do anything on weapons without lasers
+        /// </summary>
+        public bool ShowLaser { get; set; }
 
         /// <summary>
         /// Gets or sets the current weapon info
@@ -133,25 +138,22 @@ namespace HoardeGame.Entities.Misc
                 bullet.Draw(parameter);
             }
 
-            if (WeaponInfo.HasLaserPointer)
+            if (WeaponInfo.HasLaserPointer && ShowLaser)
             {
-                if (inputProvider.MouseState.RightButton == ButtonState.Pressed)
-                {
-                    Level.World.RayCast(
-                        DetermineRayCast,
-                        owner.Position,
-                        owner.Position + ConvertUnits.ToSimUnits(new Vector2(16)) + 100 * owner.ShootingDirection);
+                Level.World.RayCast(
+                    DetermineRayCast,
+                    owner.Position,
+                    owner.Position + ConvertUnits.ToSimUnits(new Vector2(16)) + 100 * owner.ShootingDirection);
 
-                    SpriteBatch.Draw(
-                        resourceProvider.GetTexture("OneByOneEmpty"),
-                        new Rectangle((int)owner.ScreenPosition.X + 16, (int)owner.ScreenPosition.Y + 16, GetPointerDistance(), 1),
-                        null,
-                        Color.White,
-                        (float)Math.Atan2(owner.ShootingDirection.Y, owner.ShootingDirection.X),
-                        Vector2.Zero,
-                        SpriteEffects.None,
-                        0f);
-                }
+                SpriteBatch.Draw(
+                    resourceProvider.GetTexture("OneByOneEmpty"),
+                    new Rectangle((int)owner.ScreenPosition.X + 16, (int)owner.ScreenPosition.Y + 16, GetPointerDistance(), 1),
+                    null,
+                    Color.White,
+                    (float)Math.Atan2(owner.ShootingDirection.Y, owner.ShootingDirection.X),
+                    Vector2.Zero,
+                    SpriteEffects.None,
+                    0f);
             }
 
             base.Draw(parameter);

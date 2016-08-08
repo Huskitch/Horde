@@ -3,7 +3,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Dynamics.Contacts;
@@ -152,13 +151,15 @@ namespace HoardeGame.Entities.Player
 
             Listener.Position = new Vector3(Position, 0);
 
-            if (inputProvider.MouseState.RightButton == ButtonState.Pressed)
+            if (inputProvider.MouseState.RightButton == ButtonState.Pressed && !singlePlayer.Shopping && !singlePlayer.Drilling)
             {
                 singlePlayer.Camera.Zoom = MathHelper.Lerp(3.5f, 3f, 0.001f);
+                Weapon.ShowLaser = true;
             }
             else
             {
                 singlePlayer.Camera.Zoom = MathHelper.Lerp(3f, 3.5f, 0.001f);
+                Weapon.ShowLaser = false;
             }
 
             Vector2 velocity = new Vector2(inputProvider.GamePadState.ThumbSticks.Left.X, -inputProvider.GamePadState.ThumbSticks.Left.Y);
@@ -204,7 +205,7 @@ namespace HoardeGame.Entities.Player
                 direction = GetDirection(ShootingDirection);
             }
 
-            if ((inputProvider.MouseState.LeftButton == ButtonState.Pressed || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Weapon.Ammo > 0)
+            if ((inputProvider.MouseState.LeftButton == ButtonState.Pressed || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Weapon.Ammo > 0 && !singlePlayer.Shopping && !singlePlayer.Drilling)
             {
                 float offset = MathHelper.ToRadians(currentWeapon.Bullets[0].Offset) +
                                MathHelper.ToRadians(rng.Next(0, currentWeapon.Bullets[0].Spread));

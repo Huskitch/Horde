@@ -2,7 +2,6 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using System.Linq;
 using System.Reflection;
 using HoardeGame.Extensions;
 using HoardeGame.Graphics;
@@ -180,11 +179,14 @@ namespace HoardeGame.GameStates
 
         private void Play()
         {
-            main.IsMouseVisible = false;
+            if (!main.SinglePlayer.Drilling && !main.SinglePlayer.Shopping)
+            {
+                main.IsMouseVisible = false;
+            }
 
             if (stateManager.GameStates.Contains(main.SinglePlayer))
             {
-                stateManager.Switch(stateManager.GameStates.First(state => state.GetType() == typeof(SinglePlayer)));
+                stateManager.Switch(main.SinglePlayer);
             }
             else
             {

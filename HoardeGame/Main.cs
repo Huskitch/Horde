@@ -94,6 +94,7 @@ namespace HoardeGame
             Services.AddService(settingsService);
             Services.AddService<ISpriteBatchService>(this);
             Services.AddService<IStateManagerService>(this);
+            Services.AddService<Game>(this);
 
             inputProvider.LockCursor = false;
 

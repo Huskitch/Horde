@@ -2,7 +2,6 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using System.Collections.Generic;
 using FarseerPhysics.Dynamics;
 using HoardeGame.Entities.Misc;
 using HoardeGame.Gameplay.Gems;

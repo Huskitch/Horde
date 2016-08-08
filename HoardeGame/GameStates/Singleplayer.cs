@@ -20,7 +20,6 @@ using HoardeGame.Resources;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace HoardeGame.GameStates
 {
@@ -33,6 +32,11 @@ namespace HoardeGame.GameStates
         /// Gets or sets a value indicating whether the player is drilling
         /// </summary>
         public bool Drilling { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player is shopping
+        /// </summary>
+        public bool Shopping { get; set; }
 
         /// <summary>
         /// Gets the player entity
@@ -329,6 +333,11 @@ namespace HoardeGame.GameStates
                 return;
             }
 
+            if (!Shopping && inputProvider.KeybindPressed("PauseGame"))
+            {
+                stateManager.Switch(stateManager.GameStates.First(state => state.GetType() == typeof(MainMenu)));
+            }
+
             DoCheck(gameTime, new Point(inputProvider.MouseState.X, inputProvider.MouseState.Y), inputProvider.LeftClicked);
 
             dungeon.Update(gameTime);
@@ -388,16 +397,6 @@ namespace HoardeGame.GameStates
             {
                 Player.Weapon = Player.InventoryWeapons[3];
             }
-
-            if (!Drilling && inputProvider.KeybindPressed("PauseGame"))
-            {
-                stateManager.Switch(stateManager.GameStates.First(state => state.GetType() == typeof(MainMenu)));
-            }
-
-            if (Drilling && (inputProvider.KeyPressed(Keys.Escape) || inputProvider.ButtonPressed(Buttons.B)))
-            {
-                Drilling = false;
-            }
         }
 
         /// <inheritdoc/>
@@ -430,6 +429,12 @@ namespace HoardeGame.GameStates
             // GUI SPRITEBATCH
             using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone))
             {
+                // SHOP
+                if (Shopping)
+                {
+                    spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), screenRectangle, new Color(0, 0, 0, 150));
+                }
+
                 DoDraw(gameTime, spriteBatch, interp);
 
                 if (Vector2.Distance(Player.Position, Drill.Position) < 3)
