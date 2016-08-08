@@ -9,6 +9,7 @@ using HoardeGame.Entities.Misc;
 using HoardeGame.Entities.Player;
 using HoardeGame.Extensions;
 using HoardeGame.Gameplay.Cards;
+using HoardeGame.Gameplay.Consumeables;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Player;
 using HoardeGame.Gameplay.Themes;
@@ -83,7 +84,8 @@ namespace HoardeGame.GameStates
         private Label fpsLabel;
         private int keyBlinkDuration;
 
-        private WeaponDisplay[] inventorySlots = new WeaponDisplay[EntityPlayer.MaxInventorySlots];
+        private WeaponDisplay[] weaponInventorySlots = new WeaponDisplay[EntityPlayer.MaxWeaponSlots];
+        private ConsumeableDisplay[] itemInventorySlots = new ConsumeableDisplay[EntityPlayer.MaxItemSlots];
 
         private DepthStencilState barDepthStencilState;
         private DepthStencilState drillDepthStencilState;
@@ -148,6 +150,15 @@ namespace HoardeGame.GameStates
             Player = new EntityPlayer(dungeon, this, serviceContainer);
             dungeon.AddEntity((EntityPlayer)Player);
             Player.InventoryWeapons[1] = new EntityWeapon(dungeon, serviceContainer, (EntityBase)Player, weaponProvider.GetWeapon("snakeWeapon"));
+            Player.InventoryItems[0] = new Consumeable
+            {
+                Name = "Debug item",
+                Texture = "Health",
+                OnUse = player =>
+                {
+                    player.Health = EntityPlayer.MaxHealth;
+                }
+            };
 
             Drill = new EntityDrill(dungeon, serviceContainer, this);
             dungeon.AddEntity(Drill);
@@ -239,34 +250,34 @@ namespace HoardeGame.GameStates
             playerHealthArmourBar.ApplyChanges();
             drillHealthArmourBar.ApplyChanges();
 
-            inventorySlots[0] = new WeaponDisplay(this, "inventorySlot0", resourceProvider)
+            weaponInventorySlots[0] = new WeaponDisplay(this, "inventorySlot0", resourceProvider)
             {
                 Color = new Color(100, 100, 100, 100),
-                DisplayerdWeapon = Player.InventoryWeapons[0]?.WeaponInfo,
+                DisplayedWeapon = Player.InventoryWeapons[0]?.WeaponInfo,
                 TargetRectangle = new Rectangle(110, 690, 150, 63),
                 ExtraText = "1"
             };
 
-            inventorySlots[2] = new WeaponDisplay(this, "inventorySlot2", resourceProvider)
+            itemInventorySlots[0] = new ConsumeableDisplay(this, "inventorySlot2", resourceProvider)
             {
                 Color = new Color(100, 100, 100, 100),
-                DisplayerdWeapon = Player.InventoryWeapons[2]?.WeaponInfo,
+                DisplayedItem = Player.InventoryItems[0],
                 TargetRectangle = new Rectangle(110, 826, 150, 63),
                 ExtraText = "3"
             };
 
-            inventorySlots[3] = new WeaponDisplay(this, "inventorySlot3", resourceProvider)
+            itemInventorySlots[1] = new ConsumeableDisplay(this, "inventorySlot3", resourceProvider)
             {
                 Color = new Color(100, 100, 100, 100),
-                DisplayerdWeapon = Player.InventoryWeapons[3]?.WeaponInfo,
+                DisplayedItem = Player.InventoryItems[1],
                 TargetRectangle = new Rectangle(13, 758, 150, 63),
                 ExtraText = "4"
             };
 
-            inventorySlots[1] = new WeaponDisplay(this, "inventorySlot1", resourceProvider)
+            weaponInventorySlots[1] = new WeaponDisplay(this, "inventorySlot1", resourceProvider)
             {
                 Color = new Color(100, 100, 100, 100),
-                DisplayerdWeapon = Player.InventoryWeapons[1]?.WeaponInfo,
+                DisplayedWeapon = Player.InventoryWeapons[1]?.WeaponInfo,
                 TargetRectangle = new Rectangle(217, 758, 150, 63),
                 ExtraText = "2"
             };
@@ -358,6 +369,16 @@ namespace HoardeGame.GameStates
             diamondLabel.Text = Player.Gems.BlueGems.ToString();
 
             fpsLabel.Text = $"{gameTime.ElapsedGameTime.Ticks / 10000f} ms";
+
+            for (int i = 0; i < EntityPlayer.MaxItemSlots; i++)
+            {
+                itemInventorySlots[i].DisplayedItem = Player.InventoryItems[i];
+            }
+
+            for (int i = 0; i < EntityPlayer.MaxWeaponSlots; i++)
+            {
+                weaponInventorySlots[i].DisplayedWeapon = Player.InventoryWeapons[i].WeaponInfo;
+            }
 
             if (keyBlinkDuration > 0)
             {
