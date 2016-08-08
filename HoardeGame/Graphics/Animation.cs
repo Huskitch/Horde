@@ -67,7 +67,7 @@ namespace HoardeGame.Graphics
                 {
                     if (!Looping)
                     {
-                        framePosition = 1;
+                        framePosition = 0;
                     }
                 }
 

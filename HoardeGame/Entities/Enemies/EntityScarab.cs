@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// <copyright file="EntityScarab.cs" company="Kuub Studios">
+// Copyright (c) Kuub Studios. All rights reserved.
+// </copyright>
+
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
@@ -16,12 +15,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame.Entities.Enemies
 {
+    /// <summary>
+    /// Entity scarab enemy
+    /// </summary>
     public class EntityScarab : EntityBaseEnemy
     {
         private readonly AnimatedSprite animator;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HoardeGame.Entities.Enemies.EntityBat"/> class.
+        /// Initializes a new instance of the <see cref="EntityScarab"/> class.
         /// </summary>
         /// <param name="level"><see cref="DungeonLevel"/> to place this entity in</param>
         /// <param name="serviceContainer"><see cref="GameServiceContainer"/> for resolving DI</param>
