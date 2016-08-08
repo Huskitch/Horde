@@ -89,6 +89,7 @@
     <Compile Include="Entities\Player\EntityPlayer.cs" />
     <Compile Include="Entities\Enemies\EntityShootingSnake.cs" />
     <Compile Include="Entities\Enemies\EntitySnake.cs" />
+    <Compile Include="Gameplay\Shop\ShopItem.cs" />
     <Compile Include="Gameplay\Weapons\BulletInfo.cs" />
     <Compile Include="Gameplay\Weapons\BulletOwnershipInfo.cs" />
     <Compile Include="Gameplay\Gems\GemDropInfo.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="GUI\Label.cs" />
     <Compile Include="GUI\ProgressBar.cs" />
     <Compile Include="GUI\ScrollBar.cs" />
+    <Compile Include="GUI\ShopItemDisplay.cs" />
     <Compile Include="GUI\Slider.cs" />
     <Compile Include="GUI\WeaponDisplay.cs" />
     <Compile Include="Input\IInputProvider.cs" />

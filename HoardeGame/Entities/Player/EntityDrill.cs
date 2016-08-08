@@ -2,11 +2,14 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System.Collections.Generic;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Entities.Base;
+using HoardeGame.Gameplay.Gems;
 using HoardeGame.Gameplay.Level;
+using HoardeGame.Gameplay.Shop;
 using HoardeGame.GameStates;
 using HoardeGame.GUI;
 using HoardeGame.Input;
@@ -41,7 +44,9 @@ namespace HoardeGame.Entities.Player
         private readonly SinglePlayer sp;
         private readonly Game game;
 
-        private ScrollBar shopScrollBar;
+        private readonly ScrollBar shopScrollBar;
+        private readonly List<ShopItem> items = new List<ShopItem>();
+        private readonly ShopItemDisplay testShopItemDisplay;
 
         // This probably isn't the best solution since you can't swap out sp for an interface but having both sp and playerProvider seems useless
 
@@ -74,6 +79,23 @@ namespace HoardeGame.Entities.Player
                 Height = 300,
                 Visibility = HiddenState.Hidden
             };
+
+            testShopItemDisplay = new ShopItemDisplay(sp, serviceContainer, "testItem")
+            {
+                ShopItem = new ShopItem
+                {
+                    Icon = resourceProvider.GetTexture("testweapon"),
+                    Name = "GOD IS DEAD",
+                    Price = new GemInfo
+                    {
+                        BlueGems = 10,
+                        RedGems = 5,
+                        GreenGems = 1
+                    }
+                },
+                Position = new Vector2(500, 500),
+                Visibility = HiddenState.Hidden
+            };
         }
 
         /// <summary>
@@ -85,6 +107,7 @@ namespace HoardeGame.Entities.Player
             game.IsMouseVisible = true;
 
             shopScrollBar.Visibility = HiddenState.Visible;
+            testShopItemDisplay.Visibility = HiddenState.Visible;
         }
 
         /// <summary>
@@ -96,6 +119,7 @@ namespace HoardeGame.Entities.Player
             game.IsMouseVisible = false;
 
             shopScrollBar.Visibility = HiddenState.Hidden;
+            testShopItemDisplay.Visibility = HiddenState.Hidden;
         }
 
         /// <inheritdoc/>

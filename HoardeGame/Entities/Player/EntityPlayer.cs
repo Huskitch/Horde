@@ -162,6 +162,14 @@ namespace HoardeGame.Entities.Player
                 Weapon.ShowLaser = false;
             }
 
+            if (singlePlayer.Shopping || singlePlayer.Drilling)
+            {
+                animator.Update(gameTime);
+                Weapon.Update(gameTime);
+
+                return;
+            }
+
             Vector2 velocity = new Vector2(inputProvider.GamePadState.ThumbSticks.Left.X, -inputProvider.GamePadState.ThumbSticks.Left.Y);
 
             if (inputProvider.KeyboardState.IsKeyDown(Keys.S))
@@ -205,7 +213,7 @@ namespace HoardeGame.Entities.Player
                 direction = GetDirection(ShootingDirection);
             }
 
-            if ((inputProvider.MouseState.LeftButton == ButtonState.Pressed || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Weapon.Ammo > 0 && !singlePlayer.Shopping && !singlePlayer.Drilling)
+            if ((inputProvider.MouseState.LeftButton == ButtonState.Pressed || inputProvider.GamePadState.IsButtonDown(Buttons.RightShoulder)) && Weapon.Ammo > 0)
             {
                 float offset = MathHelper.ToRadians(currentWeapon.Bullets[0].Offset) +
                                MathHelper.ToRadians(rng.Next(0, currentWeapon.Bullets[0].Spread));
