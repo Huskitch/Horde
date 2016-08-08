@@ -82,7 +82,7 @@ namespace HoardeGame.GUI
                 slider.X = (int)value.X;
                 slider.Y = (int)value.Y;
                 slider = new Rectangle((int)value.X, (int)value.Y, slider.Width, 10);
-                hitBox = new Rectangle((int)value.X, (int)value.Y, slider.Width + 10, 10);
+                hitBox = new Rectangle((int)value.X - 10, (int)value.Y, slider.Width + 20, 10);
             }
         }
 
@@ -100,7 +100,7 @@ namespace HoardeGame.GUI
             set
             {
                 slider.Width = value;
-                hitBox.Width = slider.Width + 10;
+                hitBox.Width = slider.Width + 20;
             }
         }
 
@@ -128,10 +128,7 @@ namespace HoardeGame.GUI
 
             Progress = (point.X - slider.X) / (float)slider.Width;
 
-            if (Progress > 1)
-            {
-                Progress = 1;
-            }
+            Progress = MathHelper.Clamp(Progress, 0f, 1f);
         }
 
         /// <inheritdoc/>
