@@ -125,6 +125,7 @@ namespace HoardeGame
             graphics.IsFullScreen = settingsService.Settings.FullScreen;
             graphics.ApplyChanges();
 
+            if (arguments.FirstOrDefault(s => s.ToLower() == "-skipmenu") != null)
             {
                 StateManager.Push(MainMenu);
                 StateManager.Push(SinglePlayer);
