@@ -21,7 +21,7 @@ namespace HoardeGame.Entities.Enemies
     public class EntityScarab : EntityBaseEnemy
     {
         private readonly AnimatedSprite animator;
-
+        private readonly GameServiceContainer serviceContainer;
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityScarab"/> class.
         /// </summary>
@@ -35,6 +35,8 @@ namespace HoardeGame.Entities.Enemies
             Body.BodyType = BodyType.Dynamic;
             Body.LinearDamping = 20f;
             Body.FixedRotation = true;
+
+            this.serviceContainer = serviceContainer;
 
             Damage = 1;
             Health = 10;
@@ -58,7 +60,8 @@ namespace HoardeGame.Entities.Enemies
             };
 
             animator = new AnimatedSprite(serviceContainer.GetService<IResourceProvider>().GetTexture("Scarab"), serviceContainer);
-            animator.AddAnimation("Flap", 32, 0, 1, 100);
+            animator.AddAnimation("FlapRight", 64, 0, 3, 100);
+            animator.AddAnimation("FlapLeft", 64, 1, 3, 100);
         }
 
         /// <inheritdoc/>
@@ -72,7 +75,16 @@ namespace HoardeGame.Entities.Enemies
         public override void Draw(EffectParameter parameter)
         {
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
-            animator.DrawAnimation("Flap", screenPos, Color.White, parameter, CurrentBlinkFrame);
+
+            if (PlayerProvider.Player.Position.X > Position.X)
+            {
+                animator.DrawAnimation("FlapRight", screenPos, Color.White, parameter, CurrentBlinkFrame);
+            }
+            else
+            {
+                animator.DrawAnimation("FlapLeft", screenPos, Color.White, parameter, CurrentBlinkFrame);
+            }
+
         }
     }
 }
