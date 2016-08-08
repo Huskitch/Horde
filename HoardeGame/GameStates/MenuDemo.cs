@@ -50,6 +50,9 @@ namespace HoardeGame.GameStates
             resourceProvider = serviceContainer.GetService<IResourceProvider>();
             graphicsDevice = serviceContainer.GetService<IGraphicsDeviceService>().GraphicsDevice;
 
+            serviceContainer.RemoveService(typeof(IPlayerProvider));
+            serviceContainer.AddService<IPlayerProvider>(this);
+
             camera = new Camera
             {
                 Zoom = 3f,

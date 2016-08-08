@@ -2,12 +2,16 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System.Collections.Generic;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
 using HoardeGame.Entities.Base;
+using HoardeGame.Gameplay.Gems;
 using HoardeGame.Gameplay.Level;
+using HoardeGame.Gameplay.Shop;
 using HoardeGame.GameStates;
+using HoardeGame.GUI;
 using HoardeGame.Input;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
@@ -38,6 +42,11 @@ namespace HoardeGame.Entities.Player
         private readonly IInputProvider inputProvider;
         private readonly IResourceProvider resourceProvider;
         private readonly SinglePlayer sp;
+        private readonly Game game;
+
+        private readonly ScrollBar shopScrollBar;
+        private readonly List<ShopItem> items = new List<ShopItem>();
+        private readonly ShopItemDisplay testShopItemDisplay;
 
         // This probably isn't the best solution since you can't swap out sp for an interface but having both sp and playerProvider seems useless
 
@@ -51,6 +60,7 @@ namespace HoardeGame.Entities.Player
         {
             resourceProvider = serviceContainer.GetService<IResourceProvider>();
             inputProvider = serviceContainer.GetService<IInputProvider>();
+            game = serviceContainer.GetService<Game>();
             this.sp = sp;
 
             Health = MaxHealth;
@@ -61,6 +71,31 @@ namespace HoardeGame.Entities.Player
             Body.CollidesWith = Category.All;
             Body.IsStatic = true;
             Body.Position = sp.Player.Position;
+
+            shopScrollBar = new ScrollBar(sp, serviceContainer, "shopScrollBar")
+            {
+                Position = new Vector2(500, 100),
+                PinColor = Color.CadetBlue,
+                Height = 300,
+                Visibility = HiddenState.Hidden
+            };
+
+            testShopItemDisplay = new ShopItemDisplay(sp, serviceContainer, "testItem")
+            {
+                ShopItem = new ShopItem
+                {
+                    Icon = resourceProvider.GetTexture("testweapon"),
+                    Name = "GOD IS DEAD",
+                    Price = new GemInfo
+                    {
+                        BlueGems = 10,
+                        RedGems = 5,
+                        GreenGems = 1
+                    }
+                },
+                Position = new Vector2(500, 500),
+                Visibility = HiddenState.Hidden
+            };
         }
 
         /// <summary>
@@ -68,7 +103,23 @@ namespace HoardeGame.Entities.Player
         /// </summary>
         public void Activate()
         {
-            sp.Drilling = true;
+            sp.Shopping = true;
+            game.IsMouseVisible = true;
+
+            shopScrollBar.Visibility = HiddenState.Visible;
+            testShopItemDisplay.Visibility = HiddenState.Visible;
+        }
+
+        /// <summary>
+        /// Deactivates the drill
+        /// </summary>
+        public void Deactivate()
+        {
+            sp.Shopping = false;
+            game.IsMouseVisible = false;
+
+            shopScrollBar.Visibility = HiddenState.Hidden;
+            testShopItemDisplay.Visibility = HiddenState.Hidden;
         }
 
         /// <inheritdoc/>
@@ -77,6 +128,11 @@ namespace HoardeGame.Entities.Player
             if (Vector2.Distance(sp.Player.Position, Position) < 3 && inputProvider.KeybindPressed("Activate") && !sp.Player.Dead)
             {
                 Activate();
+            }
+
+            if (sp.Shopping && inputProvider.KeybindPressed("PauseGame") && !sp.Player.Dead)
+            {
+                Deactivate();
             }
 
             base.Update(gameTime);

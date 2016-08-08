@@ -12,8 +12,10 @@ using HoardeGame.GameStates;
 using HoardeGame.Graphics;
 using HoardeGame.Input;
 using HoardeGame.Resources;
+using HoardeGame.Settings;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace HoardeGame
@@ -54,6 +56,7 @@ namespace HoardeGame
         private readonly IResourceProvider resourceProvider;
         private readonly IThemeProvider themeProvider;
         private readonly IWeaponProvider weaponProvider;
+        private readonly ISettingsService settingsService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Main"/> class.
@@ -73,13 +76,14 @@ namespace HoardeGame
             graphics.ApplyChanges();
 
             Window.Title = "HORDE PROTOTYPE";
-            IsMouseVisible = false;
+            IsMouseVisible = true;
 
             resourceProvider = new ResourceManager();
             inputProvider = new InputManager();
             cardProvider = new CardManager(Services);
             themeProvider = new ThemeManager();
             weaponProvider = new WeaponManager();
+            settingsService = new SettingsManager();
             StateManager = new StateManager();
 
             Services.AddService(resourceProvider);
@@ -87,8 +91,10 @@ namespace HoardeGame
             Services.AddService(cardProvider);
             Services.AddService(themeProvider);
             Services.AddService(weaponProvider);
+            Services.AddService(settingsService);
             Services.AddService<ISpriteBatchService>(this);
             Services.AddService<IStateManagerService>(this);
+            Services.AddService<Game>(this);
 
             inputProvider.LockCursor = false;
 
@@ -107,6 +113,7 @@ namespace HoardeGame
             ((ThemeManager)themeProvider).LoadXmlFile("Content/THEMES.xml", Services);
             ((WeaponManager)weaponProvider).LoadXmlFile("Content/WEAPONS.xml", Services);
             ((InputManager)inputProvider).Init(Services);
+            settingsService.LoadSettings();
 
             string[] arguments = Environment.GetCommandLineArgs();
 
@@ -114,10 +121,14 @@ namespace HoardeGame
             MainMenu = new MainMenu(Services, this);
             MenuDemo = new MenuDemo(Services);
 
-            if (arguments.FirstOrDefault(s => s.ToLower() == "-skipmenu") == null)
+            SoundEffect.MasterVolume = settingsService.Settings.Volume;
+            graphics.IsFullScreen = settingsService.Settings.FullScreen;
+            graphics.ApplyChanges();
+
             {
                 StateManager.Push(MainMenu);
                 StateManager.Push(SinglePlayer);
+                IsMouseVisible = false;
             }
             else
             {
@@ -127,13 +138,28 @@ namespace HoardeGame
         }
 
         /// <inheritdoc/>
-        protected override void UnloadContent()
+        protected override void OnDeactivated(object sender, EventArgs args)
         {
+            base.OnDeactivated(sender, args);
+            StateManager.Switch(MainMenu);
+            StateManager.Draw(null, 0);
+        }
+
+        /// <inheritdoc/>
+        protected override void OnExiting(object sender, EventArgs args)
+        {
+            settingsService.SaveSettings();
+            base.OnExiting(sender, args);
         }
 
         /// <inheritdoc/>
         protected override void Update(GameTime gameTime)
         {
+            if (!IsActive)
+            {
+                return;
+            }
+
             inputProvider.Update(gameTime);
             StateManager.Update(gameTime);
 
@@ -143,6 +169,11 @@ namespace HoardeGame
         /// <inheritdoc/>
         protected override void Draw(GameTime gameTime)
         {
+            if (!IsActive)
+            {
+                return;
+            }
+
             StateManager.Draw(gameTime, 0);
 
             base.Draw(gameTime);

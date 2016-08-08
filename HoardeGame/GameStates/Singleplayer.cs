@@ -4,6 +4,8 @@
 
 using System.Linq;
 using FarseerPhysics;
+using HoardeGame.Entities.Base;
+using HoardeGame.Entities.Misc;
 using HoardeGame.Entities.Player;
 using HoardeGame.Extensions;
 using HoardeGame.Gameplay.Cards;
@@ -18,7 +20,6 @@ using HoardeGame.Resources;
 using HoardeGame.State;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace HoardeGame.GameStates
 {
@@ -31,6 +32,11 @@ namespace HoardeGame.GameStates
         /// Gets or sets a value indicating whether the player is drilling
         /// </summary>
         public bool Drilling { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the player is shopping
+        /// </summary>
+        public bool Shopping { get; set; }
 
         /// <summary>
         /// Gets the player entity
@@ -76,6 +82,8 @@ namespace HoardeGame.GameStates
         private Label keyLabel;
         private Label fpsLabel;
         private int keyBlinkDuration;
+
+        private WeaponDisplay[] inventorySlots = new WeaponDisplay[EntityPlayer.MaxInventorySlots];
 
         private DepthStencilState barDepthStencilState;
         private DepthStencilState drillDepthStencilState;
@@ -131,12 +139,15 @@ namespace HoardeGame.GameStates
         public override void Start()
         {
             Paused = false;
+            serviceContainer.RemoveService(typeof(IPlayerProvider));
+            serviceContainer.AddService<IPlayerProvider>(this);
 
             dungeon = new DungeonLevel(serviceContainer, themeProvider.GetTheme("temple"));
             dungeon.GenerateLevel(64, 64, 40);
 
             Player = new EntityPlayer(dungeon, this, serviceContainer);
             dungeon.AddEntity((EntityPlayer)Player);
+            Player.InventoryWeapons[1] = new EntityWeapon(dungeon, serviceContainer, (EntityBase)Player, weaponProvider.GetWeapon("snakeWeapon"));
 
             Drill = new EntityDrill(dungeon, serviceContainer, this);
             dungeon.AddEntity(Drill);
@@ -157,7 +168,7 @@ namespace HoardeGame.GameStates
 
             ammoLabel = new Label(this, "ammoLabel")
             {
-                Position = new Vector2(20, graphicsDevice.PresentationParameters.BackBufferHeight - 115),
+                Position = new Vector2(20, 115),
                 Text = "Ammo: 100"
             };
 
@@ -228,6 +239,38 @@ namespace HoardeGame.GameStates
             playerHealthArmourBar.ApplyChanges();
             drillHealthArmourBar.ApplyChanges();
 
+            inventorySlots[0] = new WeaponDisplay(this, "inventorySlot0", resourceProvider)
+            {
+                Color = new Color(100, 100, 100, 100),
+                DisplayerdWeapon = Player.InventoryWeapons[0]?.WeaponInfo,
+                TargetRectangle = new Rectangle(110, 690, 150, 63),
+                ExtraText = "1"
+            };
+
+            inventorySlots[2] = new WeaponDisplay(this, "inventorySlot2", resourceProvider)
+            {
+                Color = new Color(100, 100, 100, 100),
+                DisplayerdWeapon = Player.InventoryWeapons[2]?.WeaponInfo,
+                TargetRectangle = new Rectangle(110, 826, 150, 63),
+                ExtraText = "3"
+            };
+
+            inventorySlots[3] = new WeaponDisplay(this, "inventorySlot3", resourceProvider)
+            {
+                Color = new Color(100, 100, 100, 100),
+                DisplayerdWeapon = Player.InventoryWeapons[3]?.WeaponInfo,
+                TargetRectangle = new Rectangle(13, 758, 150, 63),
+                ExtraText = "4"
+            };
+
+            inventorySlots[1] = new WeaponDisplay(this, "inventorySlot1", resourceProvider)
+            {
+                Color = new Color(100, 100, 100, 100),
+                DisplayerdWeapon = Player.InventoryWeapons[1]?.WeaponInfo,
+                TargetRectangle = new Rectangle(217, 758, 150, 63),
+                ExtraText = "2"
+            };
+
             AlphaTestEffect alphaTestEffect = new AlphaTestEffect(graphicsDevice)
             {
                 DiffuseColor = Color.White.ToVector3(),
@@ -290,6 +333,11 @@ namespace HoardeGame.GameStates
                 return;
             }
 
+            if (!Shopping && inputProvider.KeybindPressed("PauseGame"))
+            {
+                stateManager.Switch(stateManager.GameStates.First(state => state.GetType() == typeof(MainMenu)));
+            }
+
             DoCheck(gameTime, new Point(inputProvider.MouseState.X, inputProvider.MouseState.Y), inputProvider.LeftClicked);
 
             dungeon.Update(gameTime);
@@ -330,14 +378,24 @@ namespace HoardeGame.GameStates
 
             keyLabel.Text = Player.Gems.Keys.ToString();
 
-            if (!Drilling && inputProvider.KeybindPressed("PauseGame"))
+            if (inputProvider.KeybindPressed("Weapon1"))
             {
-                stateManager.Switch(stateManager.GameStates.First(state => state.GetType() == typeof(MainMenu)));
+                Player.Weapon = Player.InventoryWeapons[0];
             }
 
-            if (Drilling && (inputProvider.KeyPressed(Keys.Escape) || inputProvider.ButtonPressed(Buttons.B)))
+            if (inputProvider.KeybindPressed("Weapon2"))
             {
-                Drilling = false;
+                Player.Weapon = Player.InventoryWeapons[1];
+            }
+
+            if (inputProvider.KeybindPressed("Weapon3"))
+            {
+                Player.Weapon = Player.InventoryWeapons[2];
+            }
+
+            if (inputProvider.KeybindPressed("Weapon4"))
+            {
+                Player.Weapon = Player.InventoryWeapons[3];
             }
         }
 
@@ -371,6 +429,12 @@ namespace HoardeGame.GameStates
             // GUI SPRITEBATCH
             using (spriteBatch.Use(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone))
             {
+                // SHOP
+                if (Shopping)
+                {
+                    spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), screenRectangle, new Color(0, 0, 0, 150));
+                }
+
                 DoDraw(gameTime, spriteBatch, interp);
 
                 if (Vector2.Distance(Player.Position, Drill.Position) < 3)

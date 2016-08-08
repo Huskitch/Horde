@@ -3,7 +3,6 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
 using FarseerPhysics;
 using FarseerPhysics.Dynamics;
 using FarseerPhysics.Factories;
@@ -39,7 +38,7 @@ namespace HoardeGame.Entities.Player
         public EntityWeapon Weapon { get; set; }
 
         /// <inheritdoc/>
-        public List<EntityWeapon> InventoryWeapons { get; set; }
+        public EntityWeapon[] InventoryWeapons { get; set; }
 
         /// <inheritdoc/>
         public AudioListener Listener { get; }

@@ -2,7 +2,6 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
-using System.Collections.Generic;
 using FarseerPhysics.Dynamics;
 using HoardeGame.Entities.Misc;
 using HoardeGame.Gameplay.Gems;
@@ -50,7 +49,7 @@ namespace HoardeGame.Gameplay.Player
         /// <summary>
         /// Gets or sets the weapons in the invenory of the player
         /// </summary>
-        List<EntityWeapon> InventoryWeapons { get; set; }
+        EntityWeapon[] InventoryWeapons { get; set; }
 
         /// <summary>
         /// Gets the physics body of the player

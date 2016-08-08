@@ -89,6 +89,7 @@
     <Compile Include="Entities\Player\EntityPlayer.cs" />
     <Compile Include="Entities\Enemies\EntityShootingSnake.cs" />
     <Compile Include="Entities\Enemies\EntitySnake.cs" />
+    <Compile Include="Gameplay\Shop\ShopItem.cs" />
     <Compile Include="Gameplay\Weapons\BulletInfo.cs" />
     <Compile Include="Gameplay\Weapons\BulletOwnershipInfo.cs" />
     <Compile Include="Gameplay\Gems\GemDropInfo.cs" />
@@ -115,6 +116,10 @@
     <Compile Include="GUI\HealthArmourBar.cs" />
     <Compile Include="GUI\Label.cs" />
     <Compile Include="GUI\ProgressBar.cs" />
+    <Compile Include="GUI\ScrollBar.cs" />
+    <Compile Include="GUI\ShopItemDisplay.cs" />
+    <Compile Include="GUI\Slider.cs" />
+    <Compile Include="GUI\WeaponDisplay.cs" />
     <Compile Include="Input\IInputProvider.cs" />
     <Compile Include="Input\InputManager.cs" />
     <Compile Include="Gameplay\Level\DungeonLevel.cs" />
@@ -126,6 +131,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\IResourceProvider.cs" />
     <Compile Include="Resources\ResourceManager.cs" />
+    <Compile Include="Settings\ISettingsService.cs" />
+    <Compile Include="Settings\Settings.cs" />
+    <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="State\GameState.cs" />
     <Compile Include="State\IStateManagerService.cs" />
     <Compile Include="State\StateManager.cs" />
@@ -153,6 +161,9 @@
     <Content Include="Content\CARDS.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\SETTINGS.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\THEMES.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -165,6 +176,9 @@
     <None Include="app.config" />
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="Content\CARDS.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Content\SETTINGS.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Content\WEAPONS.xsd">
