@@ -205,12 +205,22 @@ namespace HoardeGame.Entities.Player
             if (inputProvider.KeybindPressed("Item1"))
             {
                 InventoryItems[0]?.OnUse?.Invoke(this);
+                if (InventoryItems[0] != null)
+                {
+                    resourceProvider.GetSoundEffect("Consume").Play();
+                }
+
                 InventoryItems[0] = null;
             }
 
             if (inputProvider.KeybindPressed("Item2"))
             {
                 InventoryItems[1]?.OnUse?.Invoke(this);
+                if (InventoryItems[1] != null)
+                {
+                    resourceProvider.GetSoundEffect("Consume").Play();
+                }
+
                 InventoryItems[1] = null;
             }
 

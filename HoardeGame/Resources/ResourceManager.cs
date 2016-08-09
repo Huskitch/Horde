@@ -153,6 +153,8 @@ namespace HoardeGame.Resources
             sounds.Add("Hurt", content.Load<SoundEffect>("SFX/Hurt"));
             sounds.Add("PlayerDeath", content.Load<SoundEffect>("SFX/PlayerDeath"));
             sounds.Add("ArmourGone", content.Load<SoundEffect>("SFX/ArmourGone"));
+            sounds.Add("Bought", content.Load<SoundEffect>("SFX/201159__kiddpark__cash-register"));
+            sounds.Add("Consume", content.Load<SoundEffect>("SFX/consume"));
         }
 
         /// <summary>

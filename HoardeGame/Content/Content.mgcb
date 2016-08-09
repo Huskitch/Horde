@@ -409,3 +409,15 @@
 /processorParam:TextureFormat=Color
 /build:Art/Scarab.png
 
+#begin SFX/201159__kiddpark__cash-register.mp3
+/importer:Mp3Importer
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/201159__kiddpark__cash-register.mp3
+
+#begin SFX/consume.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SFX/consume.wav
+

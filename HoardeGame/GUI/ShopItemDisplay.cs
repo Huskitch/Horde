@@ -36,6 +36,7 @@ namespace HoardeGame.GUI
         private readonly Texture2D greenGem;
         private readonly Texture2D blueGem;
         private readonly IPlayerProvider playerProvider;
+        private readonly IResourceProvider resourceProvider;
         private readonly SpriteFont font;
 
         private Color color;
@@ -49,7 +50,7 @@ namespace HoardeGame.GUI
         /// <param name="noSub">Whether to subscribe to events in gamestate</param>
         public ShopItemDisplay(GameState state, GameServiceContainer serviceContainer, string id, bool noSub = false) : base(state, id, noSub)
         {
-            IResourceProvider resourceProvider = serviceContainer.GetService<IResourceProvider>();
+            resourceProvider = serviceContainer.GetService<IResourceProvider>();
             playerProvider = serviceContainer.GetService<IPlayerProvider>();
 
             font = resourceProvider.GetFont("SmallFont");
@@ -86,6 +87,7 @@ namespace HoardeGame.GUI
                             playerProvider.Player.Gems.RedGems -= ShopItem.Price.RedGems;
                             playerProvider.Player.Gems.GreenGems -= ShopItem.Price.GreenGems;
                             playerProvider.Player.Gems.BlueGems -= ShopItem.Price.BlueGems;
+                            resourceProvider.GetSoundEffect("Bought").Play();
                         }
                     }
                 }
