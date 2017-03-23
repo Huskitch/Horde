@@ -46,14 +46,14 @@ namespace HoardeGame.Entities.Enemies
                     RedGems = 3,
                     GreenGems = 2,
                     BlueGems = 1,
-                    Keys = 0
+                    Keys = 1
                 },
                 MaxDrop =
                 {
                     RedGems = 6,
                     GreenGems = 4,
                     BlueGems = 2,
-                    Keys = 0
+                    Keys = 1
                 }
             };
 

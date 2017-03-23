@@ -2,6 +2,7 @@
 // Copyright (c) Kuub Studios. All rights reserved.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -70,6 +71,20 @@ namespace HoardeGame.Gameplay.Weapons
         public WeaponInfo GetWeapon(string name)
         {
             return !Weapons.ContainsKey(name) ? null : Weapons[name];
+        }
+
+        /// <inheritdoc/>
+        public WeaponInfo GetRandomWeapon(WeaponType type)
+        {
+            var matched = Weapons.Where(weapon => type == WeaponType.Any || weapon.Value.WeaponType == type);
+            if (matched.Count() == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return matched.ElementAt(new Random().Next(matched.Count())).Value;
+            }
         }
     }
 }

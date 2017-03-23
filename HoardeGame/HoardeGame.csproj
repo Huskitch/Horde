@@ -73,6 +73,7 @@
     <Compile Include="Entities\Base\EntityBase.cs" />
     <Compile Include="Entities\Base\EntityBaseEnemy.cs" />
     <Compile Include="Entities\Base\EntityBaseShootingEnemy.cs" />
+    <Compile Include="Entities\Drops\EntityWeaponDrop.cs" />
     <Compile Include="Entities\Enemies\EntityBat.cs" />
     <Compile Include="Entities\Enemies\EntityScarab.cs" />
     <Compile Include="Entities\Misc\EntityBullet.cs" />

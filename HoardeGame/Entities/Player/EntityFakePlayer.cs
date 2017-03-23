@@ -56,7 +56,7 @@ namespace HoardeGame.Entities.Player
         /// <inheritdoc/>
         public bool AddItem(Consumeable consumeable)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         private AnimatedSprite animator;

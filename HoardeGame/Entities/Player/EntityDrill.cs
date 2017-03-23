@@ -37,6 +37,8 @@ namespace HoardeGame.Entities.Player
         /// </summary>
         public const int MaxShield = 100;
 
+        private const int Collumns = 6;
+
         /// <summary>
         /// Gets or sets the shield of the drill
         /// </summary>
@@ -48,8 +50,6 @@ namespace HoardeGame.Entities.Player
         private readonly SinglePlayer sp;
         private readonly Game game;
         private readonly List<ShopItemDisplay> items = new List<ShopItemDisplay>();
-
-        private const int Collumns = 6;
 
         private int lastID;
 
@@ -93,7 +93,6 @@ namespace HoardeGame.Entities.Player
                 },
                 OnBought = player =>
                 {
-                    // TODO: Dis is gonna blow up if you use it on fakeplayer
                     player.AddWeapon(new EntityWeapon(level, serviceContainer, player as EntityPlayer, weaponProvider.GetWeapon("fakeWeapon")));
                     return true;
                 }
@@ -113,7 +112,6 @@ namespace HoardeGame.Entities.Player
                     },
                     OnBought = player =>
                     {
-                        // TODO: Dis is gonna blow up if you use it on fakeplayer
                         return player.AddItem(new Consumeable
                         {
                             Name = "Debug item",
@@ -123,7 +121,6 @@ namespace HoardeGame.Entities.Player
                     }
                 });
             }
-
         }
 
         /// <summary>
@@ -162,7 +159,7 @@ namespace HoardeGame.Entities.Player
                 Activate();
             }
 
-            if (sp.Shopping && inputProvider.KeybindPressed("PauseGame") && !sp.Player.Dead)
+            if (sp.Shopping && inputProvider.KeybindPressed("Back") && !sp.Player.Dead)
             {
                 Deactivate();
             }

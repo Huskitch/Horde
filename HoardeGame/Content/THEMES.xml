@@ -38,7 +38,7 @@
           <BlueGems>3</BlueGems>
         </MaxDrop>
       </Gems>
-      <WeaponType></WeaponType>
+      <WeaponType>Any</WeaponType>
       <WeaponDropChance>100</WeaponDropChance>
       <WeaponDropType>Random</WeaponDropType>
     </ChestInfo>

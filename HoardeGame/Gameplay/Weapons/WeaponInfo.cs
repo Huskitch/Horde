@@ -12,6 +12,33 @@ using Microsoft.Xna.Framework;
 namespace HoardeGame.Gameplay.Weapons
 {
     /// <summary>
+    /// Definition of weapon types
+    /// </summary>
+    [Flags]
+    public enum WeaponType
+    {
+        /// <summary>
+        /// All pistol-like weapons
+        /// </summary>
+        Pistol,
+
+        /// <summary>
+        /// All shotgun-like weapons
+        /// </summary>
+        Shotgun,
+
+        /// <summary>
+        /// All weapons which use fire
+        /// </summary>
+        Fire,
+
+        /// <summary>
+        /// Matches all weapons
+        /// </summary>
+        Any
+    }
+
+    /// <summary>
     /// Definition of a weapon
     /// </summary>
     public class WeaponInfo
@@ -41,6 +68,11 @@ namespace HoardeGame.Gameplay.Weapons
         /// Gets or sets the list of fireable bullets
         /// </summary>
         public List<BulletInfo> Bullets { get; set; }
+
+        /// <summary>
+        /// Gets or sets the weapon type
+        /// </summary>
+        public WeaponType WeaponType { get; set; }
 
         /// <summary>
         /// Validates the weapon

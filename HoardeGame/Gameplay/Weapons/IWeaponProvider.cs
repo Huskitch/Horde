@@ -22,5 +22,12 @@ namespace HoardeGame.Gameplay.Weapons
         /// <param name="name">Name of the weapon</param>
         /// <returns><see cref="WeaponInfo"/> or null</returns>
         WeaponInfo GetWeapon(string name);
+
+        /// <summary>
+        /// Gets a random <see cref="WeaponInfo"/> with an optional filter
+        /// </summary>
+        /// <param name="type">Filter for types</param>
+        /// <returns>A random <see cref="WeaponInfo"/> or null</returns>
+        WeaponInfo GetRandomWeapon(WeaponType type);
     }
 }

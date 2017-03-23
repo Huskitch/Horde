@@ -13,6 +13,7 @@ using HoardeGame.Extensions;
 using HoardeGame.Gameplay.Level;
 using HoardeGame.Gameplay.Player;
 using HoardeGame.Gameplay.Themes;
+using HoardeGame.Gameplay.Weapons;
 using HoardeGame.Graphics;
 using HoardeGame.Input;
 using HoardeGame.Resources;
@@ -29,6 +30,7 @@ namespace HoardeGame.Entities.World
         private readonly IResourceProvider resourceProvider;
         private readonly IPlayerProvider playerProvider;
         private readonly IInputProvider inputProvider;
+        private readonly IWeaponProvider weaponProvider;
         private readonly GameServiceContainer serviceContainer;
         private readonly ChestInfo info;
         private readonly List<string> contentsList = new List<string>();
@@ -53,6 +55,7 @@ namespace HoardeGame.Entities.World
             resourceProvider = serviceContainer.GetService<IResourceProvider>();
             playerProvider = serviceContainer.GetService<IPlayerProvider>();
             inputProvider = serviceContainer.GetService<IInputProvider>();
+            weaponProvider = serviceContainer.GetService<IWeaponProvider>();
 
             FixtureFactory.AttachRectangle(ConvertUnits.ToSimUnits(25), ConvertUnits.ToSimUnits(25), 1f, Vector2.Zero, Body);
             Body.Position = level.GetSpawnPosition(2);
@@ -220,7 +223,36 @@ namespace HoardeGame.Entities.World
                 }
             }
 
-            // TODO: IMPLEMENT WEAPON DROPS
+            if (info.WeaponDropType != ChestInfo.WeaponChance.None && random.Next(1, 101) < info.WeaponDropChance)
+            {
+                switch (info.WeaponDropType)
+                {
+                    case ChestInfo.WeaponChance.Random:
+                        WeaponType type;
+                        Enum.TryParse(info.WeaponType, out type);
+                        EntityWeaponDrop weapon = new EntityWeaponDrop(Level, serviceContainer)
+                        {
+                            Weapon = weaponProvider.GetRandomWeapon(type),
+                            Body =
+                            {
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                            }
+                        };
+                        Level.AddEntity(weapon);
+                        break;
+                    case ChestInfo.WeaponChance.Specific:
+                        EntityWeaponDrop specificWeapon = new EntityWeaponDrop(Level, serviceContainer)
+                        {
+                            Weapon = weaponProvider.GetWeapon(info.WeaponType),
+                            Body =
+                            {
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                            }
+                        };
+                        Level.AddEntity(specificWeapon);
+                        break;
+                }
+            }
         }
 
         /// <inheritdoc/>
