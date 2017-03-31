@@ -174,7 +174,7 @@ namespace HoardeGame.Gameplay.Level
                     {
                         Type enemyType = Type.GetType(spawns.EntityType);
                         var instance = Activator.CreateInstance(enemyType, this, serviceContainer) as EntityBaseEnemy;
-                        Vector2 randomVector2 = random.Vector2(0, 0, 0.25f, 0.25f);
+                        Vector2 randomVector2 = random.NextVector2(0, 0, 0.25f, 0.25f);
                         instance.Body.Position = spawnPos + randomVector2;
                         World.Step(10);
                         Console.WriteLine($"{j + 1} / {clusterSize} ({spawnPos})");

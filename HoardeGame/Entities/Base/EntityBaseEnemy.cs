@@ -144,7 +144,7 @@ namespace HoardeGame.Entities.Base
                         {
                             Body =
                             {
-                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                             }
                         };
 
@@ -157,7 +157,7 @@ namespace HoardeGame.Entities.Base
                         {
                             Body =
                             {
-                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                             }
                         };
 
@@ -170,7 +170,7 @@ namespace HoardeGame.Entities.Base
                         {
                             Body =
                             {
-                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                             }
                         };
 
@@ -183,7 +183,7 @@ namespace HoardeGame.Entities.Base
                         {
                             Body =
                             {
-                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                             }
                         };
 
@@ -193,55 +193,7 @@ namespace HoardeGame.Entities.Base
             }
             else if (fixtureB.CollisionCategories == Category.Cat1 && !PlayerProvider.Player.IsHit() && Damage > 0)
             {
-                EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, serviceContainer)
-                {
-                    Color = Color.Red,
-                    Damage = Damage,
-                    LifeTime = 60,
-                    Body =
-                    {
-                        Position = PlayerProvider.Player.Position + new Vector2((float)rng.NextDouble(), (float)rng.NextDouble())
-                    },
-                    Velocity = -new Vector2(-0.01f, 0.01f)
-                };
-
-                Level.AddEntity(flyingDamageIndicator);
-
-                PlayerProvider.Player.Hit();
-                resourceProvider.GetSoundEffect("Hurt").Play();
-
-                if (PlayerProvider.Player.Armour > 0)
-                {
-                    int remainingDamage = Damage - PlayerProvider.Player.Armour;
-                    PlayerProvider.Player.Armour -= Damage;
-
-                    if (remainingDamage > 0)
-                    {
-                        PlayerProvider.Player.Health -= remainingDamage;
-                    }
-
-                    if (PlayerProvider.Player.Armour == 0)
-                    {
-                        resourceProvider.GetSoundEffect("ArmourGone").Play();
-                    }
-                }
-                else
-                {
-                    PlayerProvider.Player.Health -= Damage;
-                }
-
-                if (PlayerProvider.Player.Armour < 0)
-                {
-                    PlayerProvider.Player.Armour = 0;
-                }
-
-                if (PlayerProvider.Player.Health <= 0)
-                {
-                    Health = 0;
-                    PlayerProvider.Player.Dead = true;
-                    PlayerProvider.Player.Body.CollidesWith = Category.None;
-                    resourceProvider.GetSoundEffect("PlayerDeath").Play();
-                }
+                PlayerProvider.Player.Damage(Damage);
             }
         }
     }

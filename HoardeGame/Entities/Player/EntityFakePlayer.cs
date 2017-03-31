@@ -186,6 +186,12 @@ namespace HoardeGame.Entities.Player
             base.Draw(parameter);
         }
 
+        /// <inheritdoc/>
+        public void Damage(int damage)
+        {
+            throw new NotImplementedException();
+        }
+
         private Directions GetDirection(Vector2 velocity)
         {
             return (Directions)(((int)Math.Round(Math.Atan2(-velocity.Y, velocity.X) / (2 * Math.PI / 8)) + 8) % 8);

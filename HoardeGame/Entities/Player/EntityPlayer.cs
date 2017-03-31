@@ -9,6 +9,7 @@ using FarseerPhysics.Dynamics.Contacts;
 using FarseerPhysics.Factories;
 using HoardeGame.Entities.Base;
 using HoardeGame.Entities.Misc;
+using HoardeGame.Extensions;
 using HoardeGame.Gameplay.Consumeables;
 using HoardeGame.Gameplay.Gems;
 using HoardeGame.Gameplay.Level;
@@ -16,6 +17,7 @@ using HoardeGame.Gameplay.Player;
 using HoardeGame.Gameplay.Weapons;
 using HoardeGame.GameStates;
 using HoardeGame.Graphics;
+using HoardeGame.Graphics.ParticleSystem;
 using HoardeGame.Input;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
@@ -98,6 +100,7 @@ namespace HoardeGame.Entities.Player
         private IInputProvider inputProvider;
         private WeaponInfo currentWeapon;
         private GraphicsDevice graphicsDevice;
+        private ParticleSystem particleSystem;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EntityPlayer"/> class.
@@ -114,6 +117,11 @@ namespace HoardeGame.Entities.Player
             resourceProvider = serviceContainer.GetService<IResourceProvider>();
             weaponProvider = serviceContainer.GetService<IWeaponProvider>();
             graphicsDevice = serviceContainer.GetService<IGraphicsDeviceService>().GraphicsDevice;
+
+            particleSystem = new ParticleSystem(this, serviceContainer)
+            {
+                Offset = new Vector2(16, 32)
+            };
 
             FixtureFactory.AttachCircle(ConvertUnits.ToSimUnits(10), 1f, Body);
             Body.Position = Level.GetSpawnPosition();
@@ -184,6 +192,7 @@ namespace HoardeGame.Entities.Player
                 return;
             }
 
+            particleSystem.Update(gameTime);
             Listener.Position = new Vector3(Position, 0);
 
             if (inputProvider.KeybindPressed("Weapon1"))
@@ -296,6 +305,15 @@ namespace HoardeGame.Entities.Player
 
             if (velocity != Vector2.Zero)
             {
+                particleSystem.AddParticle(new Particle()
+                {
+                    Color = Color.SaddleBrown,
+                    Size = rng.NextFloat(1.5f, 2f),
+                    Lifetime = 300,
+                    Velocity = velocity * -1 + rng.NextVector2(0, 0, 0.5f, 0.5f),
+                    Position = rng.NextVector2(-2, -2, 2, 2) + new Vector2(0, -4)
+                });
+
                 direction = GetDirection(ShootingDirection);
             }
 
@@ -331,6 +349,8 @@ namespace HoardeGame.Entities.Player
             }
 
             Vector2 screenPos = ConvertUnits.ToDisplayUnits(Position);
+
+            particleSystem.Draw(parameter);
 
             if (Velocity.Length() < 0.1f)
             {
@@ -370,6 +390,76 @@ namespace HoardeGame.Entities.Player
             Weapon.Draw(parameter);
 
             base.Draw(parameter);
+        }
+
+        /// <inheritdoc/>
+        public void Damage(int damage)
+        {
+            EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, serviceContainer)
+            {
+                Color = Color.Red,
+                Damage = damage,
+                LifeTime = 60,
+                Body =
+                    {
+                        Position = Position + new Vector2((float)rng.NextDouble(), (float)rng.NextDouble())
+                    },
+                Velocity = -new Vector2(-0.01f, 0.01f)
+            };
+
+            Level.AddEntity(flyingDamageIndicator);
+
+            int particles = rng.Next(10);
+            for (int i = 0; i < particles; i++)
+            {
+                particleSystem.AddParticle(new Particle()
+                {
+                    Velocity = rng.NextVector2(-1, -1, 1, 1),
+                    Color = Color.Red,
+                    Lifetime = 300,
+                    Size = rng.NextFloat(1, 2),
+                });
+            }
+
+            resourceProvider.GetSoundEffect("Hurt").Play();
+
+            if (Armour > 0)
+            {
+                int remainingDamage = damage - Armour;
+                Armour -= damage;
+
+                if (remainingDamage > 0)
+                {
+                    Health -= remainingDamage;
+                }
+
+                if (Armour == 0)
+                {
+                    resourceProvider.GetSoundEffect("ArmourGone").Play();
+                }
+            }
+            else
+            {
+                Health -= damage;
+            }
+
+            if (Armour < 0)
+            {
+                Armour = 0;
+            }
+
+            if (Health <= 0)
+            {
+                Health = 0;
+                Dead = true;
+                Body.CollidesWith = Category.None;
+                resourceProvider.GetSoundEffect("PlayerDeath").Play();
+            }
+
+            if (!IsHit())
+            {
+                Hit();
+            }
         }
 
         private Directions GetDirection(Vector2 velocity)
@@ -416,59 +506,7 @@ namespace HoardeGame.Entities.Player
 
             if (fixtureB.CollisionCategories == Category.Cat2 && !IsHit() && ((BulletOwnershipInfo)fixtureB.Body.UserData).Faction == Faction.Enemies)
             {
-                EntityFlyingDamageIndicator flyingDamageIndicator = new EntityFlyingDamageIndicator(Level, serviceContainer)
-                {
-                    Color = Color.Red,
-                    Damage = ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmoType.Damage,
-                    LifeTime = 60,
-                    Body =
-                    {
-                        Position = Position + new Vector2((float)rng.NextDouble(), (float)rng.NextDouble())
-                    },
-                    Velocity = -new Vector2(-0.01f, 0.01f)
-                };
-
-                Level.AddEntity(flyingDamageIndicator);
-
-                resourceProvider.GetSoundEffect("Hurt").Play();
-
-                if (Armour > 0)
-                {
-                    int remainingDamage = ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmoType.Damage - Armour;
-                    Armour -= ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmoType.Damage;
-
-                    if (remainingDamage > 0)
-                    {
-                        Health -= remainingDamage;
-                    }
-
-                    if (Armour == 0)
-                    {
-                        resourceProvider.GetSoundEffect("ArmourGone").Play();
-                    }
-                }
-                else
-                {
-                    Health -= ((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmoType.Damage;
-                }
-
-                if (Armour < 0)
-                {
-                    Armour = 0;
-                }
-
-                if (Health <= 0)
-                {
-                    Health = 0;
-                    Dead = true;
-                    Body.CollidesWith = Category.None;
-                    resourceProvider.GetSoundEffect("PlayerDeath").Play();
-                }
-
-                if (!IsHit())
-                {
-                    Hit();
-                }
+                Damage(((BulletOwnershipInfo)fixtureB.Body.UserData).Weapon.CurrentAmmoType.Damage);
             }
 
             return true;

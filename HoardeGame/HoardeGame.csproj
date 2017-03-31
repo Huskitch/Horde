@@ -91,6 +91,7 @@
     <Compile Include="Entities\Player\EntityPlayer.cs" />
     <Compile Include="Entities\Enemies\EntityShootingSnake.cs" />
     <Compile Include="Entities\Enemies\EntitySnake.cs" />
+    <Compile Include="Extensions\Vector2Extensions.cs" />
     <Compile Include="Gameplay\Consumeables\Consumeable.cs" />
     <Compile Include="Gameplay\Shop\ShopItem.cs" />
     <Compile Include="Gameplay\Weapons\BulletInfo.cs" />
@@ -114,6 +115,8 @@
     <Compile Include="Graphics\Camera.cs" />
     <Compile Include="Graphics\IDrawable.cs" />
     <Compile Include="Graphics\ISpriteBatchService.cs" />
+    <Compile Include="Graphics\ParticleSystem\Particle.cs" />
+    <Compile Include="Graphics\ParticleSystem\ParticleSystem.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\GuiBase.cs" />
     <Compile Include="GUI\HealthArmourBar.cs" />

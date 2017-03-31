@@ -125,7 +125,7 @@ namespace HoardeGame.Entities.World
                     {
                         Body =
                             {
-                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                             }
                     };
 
@@ -143,7 +143,7 @@ namespace HoardeGame.Entities.World
                     {
                         Body =
                             {
-                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                             }
                     };
 
@@ -161,7 +161,7 @@ namespace HoardeGame.Entities.World
                     {
                         Body =
                             {
-                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                             }
                     };
 
@@ -179,7 +179,7 @@ namespace HoardeGame.Entities.World
                     {
                         Body =
                             {
-                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                             }
                     };
 
@@ -197,7 +197,7 @@ namespace HoardeGame.Entities.World
                     {
                         Body =
                             {
-                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                             }
                     };
 
@@ -215,7 +215,7 @@ namespace HoardeGame.Entities.World
                     {
                         Body =
                             {
-                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                             }
                     };
 
@@ -235,7 +235,7 @@ namespace HoardeGame.Entities.World
                             Weapon = weaponProvider.GetRandomWeapon(type),
                             Body =
                             {
-                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                             }
                         };
                         Level.AddEntity(weapon);
@@ -246,7 +246,7 @@ namespace HoardeGame.Entities.World
                             Weapon = weaponProvider.GetWeapon(info.WeaponType),
                             Body =
                             {
-                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                                Position = Position + ConvertUnits.ToSimUnits(new Vector2(8, 8)) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                             }
                         };
                         Level.AddEntity(specificWeapon);

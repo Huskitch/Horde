@@ -75,9 +75,10 @@ namespace HoardeGame.Gameplay.Player
         bool IsHit();
 
         /// <summary>
-        /// Hits the player
+        /// Damages the player
         /// </summary>
-        void Hit();
+        /// <param name="damage">Amount of damage</param>
+        void Damage(int damage);
 
         /// <summary>
         /// Adds an weapon to player's inventory as the inactive weapon

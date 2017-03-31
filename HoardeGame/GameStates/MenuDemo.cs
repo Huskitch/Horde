@@ -95,7 +95,7 @@ namespace HoardeGame.GameStates
                 {
                     Body =
                     {
-                        Position = new Vector2(13, 5) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                        Position = new Vector2(13, 5) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                     }
                 };
 
@@ -108,7 +108,7 @@ namespace HoardeGame.GameStates
                 {
                     Body =
                     {
-                        Position = new Vector2(13, 5) + random.Vector2(-0.3f, -0.3f, 0.3f, 0.3f)
+                        Position = new Vector2(13, 5) + random.NextVector2(-0.3f, -0.3f, 0.3f, 0.3f)
                     }
                 };
 
