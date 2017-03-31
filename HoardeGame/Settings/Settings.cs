@@ -15,6 +15,11 @@ namespace HoardeGame.Settings
         public float Volume { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether particle effects are enabled
+        /// </summary>
+        public bool ParticleEffects { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the game should be fullscreen or windowed
         /// </summary>
         public bool FullScreen { get; set; }

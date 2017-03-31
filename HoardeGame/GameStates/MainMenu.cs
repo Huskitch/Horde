@@ -32,6 +32,7 @@ namespace HoardeGame.GameStates
 
         private Button playButton;
         private Button exitButton;
+        private Button particleButton;
         private Slider volumeSlider;
 
         /// <summary>
@@ -102,6 +103,14 @@ namespace HoardeGame.GameStates
                 DrawText = true,
                 TextAppend = "%",
                 Progress = settingsService.Settings.Volume
+            };
+
+            particleButton = new Button(this, "particleButton")
+            {
+                Color = Color.White,
+                OnClick = ToggleParticleEffects,
+                Text = settingsService.Settings.ParticleEffects ? "Particles: On" : "Particles: Off",
+                Position = new Vector2(20, graphicsDevice.Viewport.Height - resourceProvider.GetFont("SmallFont").LineSpacing * 6f)
             };
         }
 
@@ -175,6 +184,12 @@ namespace HoardeGame.GameStates
                 spriteBatch.Draw(resourceProvider.GetTexture("OneByOneEmpty"), graphicsDevice.Viewport.Bounds, new Color(0, 0, 0, 150));
                 DoDraw(gameTime, spriteBatch, interpolation);
             }
+        }
+
+        private void ToggleParticleEffects()
+        {
+            settingsService.Settings.ParticleEffects = !settingsService.Settings.ParticleEffects;
+            particleButton.Text = settingsService.Settings.ParticleEffects ? "Particles: On" : "Particles: Off";
         }
 
         private void Play()

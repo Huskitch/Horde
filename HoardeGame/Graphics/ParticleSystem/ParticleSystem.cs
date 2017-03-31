@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using HoardeGame.Resources;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using HoardeGame.Settings;
 
 namespace HoardeGame.Graphics.ParticleSystem
 {
@@ -41,6 +42,7 @@ namespace HoardeGame.Graphics.ParticleSystem
         private SpriteBatch spriteBatch;
         private IDrawable parent;
         private Texture2D texture;
+        private Settings.Settings settings;
 
         /// <summary>
         /// Adds a particle
@@ -48,6 +50,11 @@ namespace HoardeGame.Graphics.ParticleSystem
         /// <param name="particle">Particle to add</param>
         public void AddParticle(Particle particle)
         {
+            if (!settings.ParticleEffects)
+            {
+                return;
+            }
+
             if (Particles.Count == MaxParticles)
             {
                 Particles.RemoveAt(0);
@@ -62,6 +69,11 @@ namespace HoardeGame.Graphics.ParticleSystem
         /// <param name="param">Does nothing</param>
         public void Draw(EffectParameter param)
         {
+            if (!settings.ParticleEffects)
+            {
+                return;
+            }
+
             foreach (var particle in Particles)
             {
                 spriteBatch.Draw(texture, particle.Position + ScreenPosition + Offset, null, null, null, 0, new Vector2(particle.Size), particle.Color);
@@ -74,6 +86,12 @@ namespace HoardeGame.Graphics.ParticleSystem
         /// <param name="time"><see cref="GameTime"/></param>
         public void Update(GameTime time)
         {
+            if (!settings.ParticleEffects)
+            {
+                Particles.Clear();
+                return;
+            }
+
             Particles.RemoveAll(particle => particle.IsDead);
 
             foreach (var particle in Particles)
@@ -92,6 +110,7 @@ namespace HoardeGame.Graphics.ParticleSystem
         {
             spriteBatch = serviceContainer.GetService<ISpriteBatchService>().SpriteBatch;
             texture = serviceContainer.GetService<IResourceProvider>().GetTexture("OneByOneEmpty");
+            settings = serviceContainer.GetService<ISettingsService>().Settings;
             this.parent = parent;
         }
     }

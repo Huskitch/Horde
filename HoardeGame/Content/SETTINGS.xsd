@@ -5,6 +5,7 @@
       <xsd:sequence>
         <xsd:element name="Volume" type="xsd:decimal" />
         <xsd:element name="FullScreen" type="xsd:boolean" />
+        <xsd:element name="ParticleEffects" type="xsd:boolean" />
       </xsd:sequence>
     </xsd:complexType>
   </xsd:element>
